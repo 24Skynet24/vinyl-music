@@ -1,12 +1,10 @@
-import PlayerControls from "../widgets/Player/ui/PlayerControls"
-import PlayerDisk from "../widgets/Player/ui/PlayerDisk"
+import { Player } from "../widgets/Player"
 
 function App() {
   return (
     <>
     <main className="bg-gradient-1 w-full h-screen">
-      <PlayerDisk isPlaying/>
-      <PlayerControls/>
+      <Player/>
     </main>
     </>
   )
