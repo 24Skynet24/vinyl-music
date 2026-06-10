@@ -1,14 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { PlayerTimeLineType } from "../types";
 
 function PlayerTimeLine({ duration }: PlayerTimeLineType) {
+    const barRef = useRef<HTMLDivElement | null>(null);
+
     const [progress, setProgress] = useState(0);
     const [hoverProgress, setHoverProgress] = useState<number | null>(null);
     const [isDragging, setIsDragging] = useState(false);
 
-    const barRef = useRef<HTMLDivElement | null>(null);
-
-    const getPercent = (clientX: number): number => {
+    // 📐 convert pointer position → percent
+    const getPercent = (clientX: number) => {
         if (!barRef.current) return 0;
 
         const rect = barRef.current.getBoundingClientRect();
@@ -17,62 +18,7 @@ function PlayerTimeLine({ duration }: PlayerTimeLineType) {
         return Math.max(0, Math.min(1, x / rect.width));
     };
 
-    const updateProgress = (clientX: number): void => {
-        setProgress(getPercent(clientX));
-    };
-
-    // 🖱 start drag
-    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>): void => {
-        setIsDragging(true);
-        updateProgress(e.clientX);
-    };
-
-    // 🖱 click
-    const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
-        updateProgress(e.clientX);
-    };
-
-    // 🧠 global drag
-    useEffect(() => {
-        if (!isDragging) return;
-
-        const onMove = (e: MouseEvent) => {
-            updateProgress(e.clientX);
-        };
-
-        const onUp = () => {
-            setIsDragging(false);
-        };
-
-        window.addEventListener("mousemove", onMove);
-        window.addEventListener("mouseup", onUp);
-
-        return () => {
-            window.removeEventListener("mousemove", onMove);
-            window.removeEventListener("mouseup", onUp);
-        };
-    }, [isDragging]);
-
-    // hover (disabled during drag)
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>): void => {
-        if (isDragging) return;
-        setHoverProgress(getPercent(e.clientX));
-    };
-
-    const handleMouseLeave = (): void => {
-        if (isDragging) return;
-        setHoverProgress(null);
-    };
-
-    // 🎯 active (important fix)
-    const activeProgress = isDragging
-        ? progress
-        : hoverProgress;
-
-    const activeTime =
-        activeProgress !== null ? activeProgress * duration : null;
-
-    const formatTime = (sec: number): string => {
+    const formatTime = (sec: number) => {
         if (!isFinite(sec)) return "00:00";
 
         const m = Math.floor(sec / 60);
@@ -81,20 +27,71 @@ function PlayerTimeLine({ duration }: PlayerTimeLineType) {
         return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
     };
 
+    // 🎯 unified update
+    const updateFromClientX = (clientX: number) => {
+        const v = getPercent(clientX);
+        setProgress(v);
+    };
+
+    // 🟠 drag start
+    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+        setIsDragging(true);
+        setHoverProgress(null);
+        updateFromClientX(e.clientX);
+
+        // 💡 captures pointer outside element (important fix)
+        e.currentTarget.setPointerCapture(e.pointerId);
+    };
+
+    // 🧠 drag move (works even outside bar)
+    const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (!isDragging) return;
+        updateFromClientX(e.clientX);
+    };
+
+    // 🧹 drag end
+    const handlePointerUp = () => {
+        setIsDragging(false);
+        setHoverProgress(null);
+    };
+
+    // 👀 hover (disabled during drag)
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (isDragging) return;
+        setHoverProgress(getPercent(e.clientX));
+    };
+
+    const handleMouseLeave = () => {
+        if (isDragging) return;
+        setHoverProgress(null);
+    };
+
+    // 🎯 active UI source of truth
+    const activeProgress = isDragging ? progress : hoverProgress;
+
+    const activeTime =
+        activeProgress !== null ? activeProgress * duration : null;
+
     return (
         <article className="flex flex-col gap-[12px] w-[703px]">
+            {/* TIME */}
             <div className="flex items-center justify-between w-full text-[32px] tracking-[1px] select-none">
                 <span className="text-orange-main">00:00</span>
-                <span className="text-white-main">{formatTime(duration)}</span>
+                <span className="text-white-main">
+                    {formatTime(duration)}
+                </span>
             </div>
 
+            {/* BAR */}
             <div
                 ref={barRef}
                 className="w-full h-[12px] relative bg-black-main cursor-pointer shadow-[2px_4px_10px_#fffee9]"
-                onMouseDown={handleMouseDown}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerUp}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
-                onClick={handleClick}
             >
                 {/* 🟠 progress */}
                 <span
@@ -102,6 +99,7 @@ function PlayerTimeLine({ duration }: PlayerTimeLineType) {
                     style={{ width: `${progress * 100}%` }}
                 />
 
+                {/* ⚫ hover preview */}
                 <span
                     className="absolute z-0 h-full bg-gray-main left-0 top-0"
                     style={{
@@ -110,9 +108,10 @@ function PlayerTimeLine({ duration }: PlayerTimeLineType) {
                     }}
                 />
 
+                {/* ⏱ tooltip */}
                 {activeProgress !== null && (
                     <div
-                        className="absolute bottom-[18px] -translate-x-1/2 text-[12px] text-white-main bg-black-main px-2 py-1 rounded select-none"
+                        className="absolute bottom-[18px] -translate-x-1/2 text-[12px] text-white-main bg-black-main px-2 py-1 rounded"
                         style={{
                             left: `${activeProgress * 100}%`,
                         }}
