@@ -2,6 +2,7 @@ import PlayerControls from "./PlayerControls"
 import PlayerDisk from "./PlayerDisk"
 import PlayerInfoText from "./PlayerInfoText"
 import PlayerTimeLine from "./PlayerTimeLine"
+import PlayerVolume from "./PlayerVolume"
 
 function Player () {
     return (
@@ -16,6 +17,7 @@ function Player () {
                         year="1999"
                     />
                     <PlayerTimeLine duration={60} isPlaying/>
+                    <PlayerVolume/>
                 </div>
             </div>
             <PlayerControls/>
