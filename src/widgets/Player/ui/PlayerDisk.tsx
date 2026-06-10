@@ -2,7 +2,7 @@ import { PlayerDiskType } from "../types"
 
 function PlayerDisk ({isPlaying}: PlayerDiskType) {
     return (
-        <article className="mx-[50px] mb-[50px] w-[603px] h-[556px] relative">
+        <article className="w-[603px] h-[556px] relative">
 
             <div className="w-[500px] h-[500px] absolute left-0 bottom-0">
                 <svg className={`${isPlaying ? 'disk-playing' : 'disk-stop'} w-full h-full`} viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
