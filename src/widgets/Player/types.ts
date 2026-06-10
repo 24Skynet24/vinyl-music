@@ -8,3 +8,8 @@ export interface PlayerInfoTextType {
     albumName?: string;
     year?: string | number;
 }
+
+export interface PlayerTimeLineType {
+    duration: number
+    isPlaying: boolean
+}
