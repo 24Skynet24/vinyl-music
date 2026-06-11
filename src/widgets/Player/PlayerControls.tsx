@@ -11,6 +11,10 @@ function PlayerControls() {
 
     return (
         <article className="flex items-center gap-[20px]">
+            <RandomButton
+                isRandom={isRandom}
+                onClick={() => setIsRandom((prev) => !prev)}
+            />
             <NextPrevButton isPrev onClick={() => {}} />
             <PlayButton
                 isPlaying={isPlaying}
@@ -20,10 +24,6 @@ function PlayerControls() {
             <RepeatButton
                 isRepeat={isRepeat}
                 onClick={() => setIsRepeat((prev) => !prev)}
-            />
-            <RandomButton
-                isRandom={isRandom}
-                onClick={() => setIsRandom((prev) => !prev)}
             />
         </article>
     )

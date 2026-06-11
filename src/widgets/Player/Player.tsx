@@ -6,8 +6,8 @@ import PlayerVolume from "./PlayerVolume"
 
 function Player () {
     return (
-        <section>
-            <div className="flex items-center gap-[64px]">
+        <section className="max-h-[700px]">
+            <div className="flex items-center gap-[64px] mb-[64px]">
                 <PlayerDisk isPlaying/>
                 <div className="flex flex-col gap-[32px]">
                     <PlayerInfoText
@@ -17,10 +17,14 @@ function Player () {
                         year="1999"
                     />
                     <PlayerTimeLine duration={60} isPlaying/>
-                    <PlayerVolume/>
                 </div>
             </div>
-            <PlayerControls/>
+            <div className="flex items-end justify-between">
+                <div className="pl-[64px]">
+                    <PlayerControls/>
+                </div>
+                <PlayerVolume/>
+            </div>
         </section>
     )
 }

@@ -73,7 +73,7 @@ function PlayerTimeLine({ duration }: PlayerTimeLineProps) {
         activeProgress !== null ? activeProgress * duration : null;
 
     return (
-        <article className="flex flex-col gap-[12px] w-[703px]">
+        <article className="flex flex-col gap-[12px] w-full">
             {/* TIME */}
             <div className="flex items-center justify-between w-full text-[32px] tracking-[1px] select-none">
                 <span className="text-orange-main">00:00</span>
