@@ -8,7 +8,7 @@ function Player () {
     return (
         <section className="max-h-[700px]">
             <div className="flex items-center gap-[64px] mb-[64px]">
-                <PlayerDisk isPlaying/>
+                <PlayerDisk isPlaying={false}/>
                 <div className="flex flex-col gap-[32px]">
                     <PlayerInfoText
                         musicName="Miki Matsubara Stay with me"
@@ -16,7 +16,7 @@ function Player () {
                         albumName="Miki Matsubara Best Collection"
                         year="1999"
                     />
-                    <PlayerTimeLine duration={60} isPlaying/>
+                    <PlayerTimeLine duration={60} isPlaying={false}/>
                 </div>
             </div>
             <div className="flex items-end justify-between">
