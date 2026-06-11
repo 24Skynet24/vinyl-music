@@ -13,6 +13,7 @@ export interface NextPrevButtonProps extends DefaultButtonType {
 
 export interface RepeatButtonProps extends DefaultButtonType {
   isRepeat: boolean
+  isRepeatOne: boolean
 }
 
 export interface RandomButtonProps extends DefaultButtonType {

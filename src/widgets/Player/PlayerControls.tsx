@@ -27,7 +27,7 @@ function PlayerControls() {
             
             <NextPrevButton onClick={nextTrack} />
             
-            <RepeatButton isRepeat={isRepeat || isRepeatOne} onClick={toggleRepeat} />
+            <RepeatButton isRepeat={isRepeat} isRepeatOne={isRepeatOne} onClick={toggleRepeat} />
         </article>
     )
 }
