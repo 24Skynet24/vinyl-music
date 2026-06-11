@@ -1,88 +1,74 @@
-import { useRef, useState } from "react";
-import { PlayerTimeLineProps } from "./model/types";
+import { useRef, useState } from "react"
+import { useAudioStore } from "./model/audioStore"
 
-function PlayerTimeLine({ duration }: PlayerTimeLineProps) {
-    const barRef = useRef<HTMLDivElement | null>(null);
+function PlayerTimeLine() {
+    const barRef = useRef<HTMLDivElement | null>(null)
+    
+    const currentTime = useAudioStore((state) => state.currentTime)
+    const duration = useAudioStore((state) => state.duration)
+    const setCurrentTime = useAudioStore((state) => state.setCurrentTime)
 
-    const [progress, setProgress] = useState(0);
-    const [hoverProgress, setHoverProgress] = useState<number | null>(null);
-    const [isDragging, setIsDragging] = useState(false);
+    const [hoverProgress, setHoverProgress] = useState<number | null>(null)
+    const [isDragging, setIsDragging] = useState(false)
 
-    // 📐 convert pointer position → percent
+    const currentProgress = currentTime / duration
+
     const getPercent = (clientX: number) => {
-        if (!barRef.current) return 0;
-
-        const rect = barRef.current.getBoundingClientRect();
-        const x = clientX - rect.left;
-
-        return Math.max(0, Math.min(1, x / rect.width));
-    };
+        if (!barRef.current) return 0
+        const rect = barRef.current.getBoundingClientRect()
+        const x = clientX - rect.left
+        return Math.max(0, Math.min(1, x / rect.width))
+    }
 
     const formatTime = (sec: number) => {
-        if (!isFinite(sec)) return "00:00";
+        if (!isFinite(sec)) return "00:00"
+        const m = Math.floor(sec / 60)
+        const s = Math.floor(sec % 60)
+        return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
+    }
 
-        const m = Math.floor(sec / 60);
-        const s = Math.floor(sec % 60);
-
-        return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-    };
-
-    // 🎯 unified update
     const updateFromClientX = (clientX: number) => {
-        const v = getPercent(clientX);
-        setProgress(v);
-    };
+        const percent = getPercent(clientX)
+        setCurrentTime(percent * duration)
+    }
 
-    // 🟠 drag start
     const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-        setIsDragging(true);
-        setHoverProgress(null);
-        updateFromClientX(e.clientX);
+        setIsDragging(true)
+        setHoverProgress(null)
+        updateFromClientX(e.clientX)
+        e.currentTarget.setPointerCapture(e.pointerId)
+    }
 
-        // 💡 captures pointer outside element (important fix)
-        e.currentTarget.setPointerCapture(e.pointerId);
-    };
-
-    // 🧠 drag move (works even outside bar)
     const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-        if (!isDragging) return;
-        updateFromClientX(e.clientX);
-    };
+        if (!isDragging) return
+        updateFromClientX(e.clientX)
+    }
 
-    // 🧹 drag end
     const handlePointerUp = () => {
-        setIsDragging(false);
-        setHoverProgress(null);
-    };
+        setIsDragging(false)
+        setHoverProgress(null)
+    }
 
-    // 👀 hover (disabled during drag)
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (isDragging) return;
-        setHoverProgress(getPercent(e.clientX));
-    };
+        if (isDragging) return
+        setHoverProgress(getPercent(e.clientX))
+    }
 
     const handleMouseLeave = () => {
-        if (isDragging) return;
-        setHoverProgress(null);
-    };
+        if (isDragging) return
+        setHoverProgress(null)
+    }
 
-    // 🎯 active UI source of truth
-    const activeProgress = isDragging ? progress : hoverProgress;
-
-    const activeTime =
-        activeProgress !== null ? activeProgress * duration : null;
+    const activeProgress = isDragging ? currentProgress : hoverProgress
+    const activeTime = activeProgress !== null ? activeProgress * duration : null
 
     return (
         <article className="flex flex-col gap-[12px] w-full">
-            {/* TIME */}
             <div className="flex items-center justify-between w-full text-[32px] tracking-[1px] select-none">
-                <span className="text-orange-main">00:00</span>
-                <span className="text-white-main">
-                    {formatTime(duration)}
-                </span>
+                <span className="text-orange-main">{formatTime(currentTime)}</span>
+                <span className="text-white-main">{formatTime(duration)}</span>
             </div>
 
-            {/* BAR */}
             <div
                 ref={barRef}
                 className="w-full h-[12px] relative bg-black-main cursor-pointer shadow-[2px_4px_10px_#fffee9]"
@@ -93,13 +79,11 @@ function PlayerTimeLine({ duration }: PlayerTimeLineProps) {
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
             >
-                {/* 🟠 progress */}
                 <span
                     className="absolute z-10 h-full bg-orange-main left-0 top-0 shadow-[2px_4px_10px_#d7452c]"
-                    style={{ width: `${progress * 100}%` }}
+                    style={{ width: `${currentProgress * 100}%` }}
                 />
 
-                {/* ⚫ hover preview */}
                 <span
                     className="absolute z-0 h-full bg-gray-main left-0 top-0"
                     style={{
@@ -108,20 +92,17 @@ function PlayerTimeLine({ duration }: PlayerTimeLineProps) {
                     }}
                 />
 
-                {/* ⏱ tooltip */}
                 {activeProgress !== null && (
                     <div
                         className="absolute bottom-[18px] -translate-x-1/2 text-[12px] text-white-main bg-black-main px-2 py-1 rounded"
-                        style={{
-                            left: `${activeProgress * 100}%`,
-                        }}
+                        style={{ left: `${activeProgress * 100}%` }}
                     >
                         {formatTime(activeTime!)}
                     </div>
                 )}
             </div>
         </article>
-    );
+    )
 }
 
-export default PlayerTimeLine;
+export default PlayerTimeLine
