@@ -1,6 +1,6 @@
-import { PlayerInfoTextType } from "../types"
+import { PlayerInfoTextProps } from "./model/types"
 
-function PlayerInfoText ({musicName, authorName, albumName, year}: PlayerInfoTextType) {
+function PlayerInfoText ({musicName, authorName, albumName, year}: PlayerInfoTextProps) {
     return (
         <article className="max-w-[986px] flex flex-col gap-[16px]">
             <h1 className="uppercase text-white-main text-[96px] select-none">

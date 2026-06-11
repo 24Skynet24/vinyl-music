@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
-import { PlayerTimeLineType } from "../types";
+import { PlayerTimeLineProps } from "./model/types";
 
-function PlayerTimeLine({ duration }: PlayerTimeLineType) {
+function PlayerTimeLine({ duration }: PlayerTimeLineProps) {
     const barRef = useRef<HTMLDivElement | null>(null);
 
     const [progress, setProgress] = useState(0);

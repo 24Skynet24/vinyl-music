@@ -1,23 +1,20 @@
-export interface DefaultButtonType {
-    onClick: () => void
-}
-
-export interface ControlButtonType extends DefaultButtonType {
-    control: "prev" | "next" | "repeat" | "repeat-one" | "random"
+import { ButtonHTMLAttributes } from 'react'
+export interface DefaultButtonType extends ButtonHTMLAttributes<HTMLButtonElement> {
+  onClick: () => void
 }
 
 export interface PlayButtonProps extends DefaultButtonType {
-    isPlaying: boolean
+  isPlaying: boolean
 }
 
 export interface NextPrevButtonProps extends DefaultButtonType {
-    isPrev?: boolean
+  isPrev?: boolean
 }
 
 export interface RepeatButtonProps extends DefaultButtonType {
-    isRepeat: boolean
+  isRepeat: boolean
 }
 
 export interface RandomButtonProps extends DefaultButtonType {
-    isRandom: boolean
+  isRandom: boolean
 }

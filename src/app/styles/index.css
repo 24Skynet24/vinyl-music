@@ -1,4 +1,83 @@
 @import "tailwindcss";
-@import "./colors.css";
-@import "./classes.css";
-@import "./fonts.css";
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.cdnfonts.com/css/futura-pt');
+
+@theme {
+  --color-orange-main: #d7452c;
+  --color-white-main: #fffee9;
+  --color-black-main: #181818;
+  --color-gray-main: #999999;
+  
+  --background-image-gradient-1: linear-gradient(to right, #251f1f 30%, #44403d 100%);
+
+  --font-bebas: 'Bebas Neue', sans-serif;
+  --font-futura: 'Futura PT', sans-serif;
+
+  --animate-tonearm-out: tonearm-out .25s ease-in-out forwards;
+  --animate-tonearm-in: tonearm-in .25s ease-in-out forwards;
+  --animate-disk-playing: disk-playing 10s linear infinite;
+  --animate-disk-stop: disk-stop .25s ease-in-out forwards;
+}
+
+@layer base {
+  * {
+    font-family: var(--font-bebas);
+  }
+}
+
+.press-btn {
+  @apply transition-transform duration-150 ease-out active:scale-95;
+}
+
+.control-btn {
+  @apply flex items-center justify-center relative w-16 h-16;
+  box-shadow: 0 0 10px var(--color-orange-main);
+}
+
+.control-btn div {
+  @apply absolute left-0 top-0 z-10 flex items-center justify-center bg-black-main border-4 border-orange-main w-full h-full cursor-pointer;
+}
+
+.control-btn span {
+  @apply absolute right-[-3px] top-[3px] w-full h-full z-0 block bg-orange-main;
+}
+
+.tonearm-out {
+  transition: transform .25s;
+  animation: tonearm-out .25s ease-in-out forwards;
+  transform: rotate(40deg); 
+}
+
+.tonearm-in {
+  transition: transform .25s;
+  animation: tonearm-in .25s ease-in-out forwards;
+  transform: rotate(6deg);
+}
+
+.disk-playing {
+  animation: disk-playing 10s linear infinite;
+}
+
+.disk-stop {
+  animation: disk-stop .25s ease-in-out forwards;
+}
+
+@keyframes tonearm-out {
+  0% { transform: rotate(6deg); }
+  100% { transform: rotate(40deg); }
+}
+
+@keyframes tonearm-in {
+  0% { transform: rotate(40deg); }
+  100% { transform: rotate(6deg); }
+}
+
+@keyframes disk-playing {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes disk-stop {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
