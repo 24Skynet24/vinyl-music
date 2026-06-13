@@ -1,5 +1,6 @@
 import { useRef, useState } from "react"
 import { useAudioStore } from "./model/audioStore"
+import { formatTime } from "../../shared/lib"
 
 function PlayerTimeLine() {
     const barRef = useRef<HTMLDivElement | null>(null)
@@ -18,13 +19,6 @@ function PlayerTimeLine() {
         const rect = barRef.current.getBoundingClientRect()
         const x = clientX - rect.left
         return Math.max(0, Math.min(1, x / rect.width))
-    }
-
-    const formatTime = (sec: number) => {
-        if (!isFinite(sec)) return "00:00"
-        const m = Math.floor(sec / 60)
-        const s = Math.floor(sec % 60)
-        return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
     }
 
     const updateFromClientX = (clientX: number) => {
