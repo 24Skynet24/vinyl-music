@@ -1,12 +1,13 @@
 import PlayerControls from "./PlayerControls"
 import PlayerDisk from "./PlayerDisk"
 import PlayerInfoText from "./PlayerInfoText"
+import PlayerPlayList from "./PlayerPlayList"
 import PlayerTimeLine from "./PlayerTimeLine"
 import PlayerVolume from "./PlayerVolume"
 
 function Player () {
     return (
-        <section className="max-h-[700px]">
+        <section>
             <div className="flex items-center gap-[64px] mb-[64px]">
                 <PlayerDisk />
                 <div className="flex flex-col gap-[32px]">
@@ -24,6 +25,9 @@ function Player () {
                     <PlayerControls/>
                 </div>
                 <PlayerVolume/>
+            </div>
+            <div className="mt-[124px]">
+                <PlayerPlayList/>
             </div>
         </section>
     )
