@@ -25,6 +25,16 @@
   }
 }
 
+body {
+  @apply bg-gradient-1;
+}
+
+.text-hidden {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .press-btn {
   @apply transition-transform duration-150 ease-out active:scale-95;
 }

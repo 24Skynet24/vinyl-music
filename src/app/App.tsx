@@ -4,7 +4,7 @@ import { Player } from "../widgets/Player"
 function App() {
   return (
     <>
-    <main className="bg-gradient-1 w-full h-screen">
+    <main className="w-full pb-[32px]">
       <Header/>
       <div className="w-full flex items-center justify-center">
         <Player/>
