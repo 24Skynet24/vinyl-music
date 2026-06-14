@@ -8,7 +8,7 @@ function PlayerPlayList () {
                     id="0"
                     title="Sean Dagher, Sean Dagher Sean Dagher"
                     duration={173}
-                    isPlaying={true}
+                    isSelected={true}
                     authorName="Sean Dagher, Sean Dagher Sean Dagher"
                     albumName="Sean Dagher, Sean Dagher Sean Dagher"
                     onClick={() => console.log(1)}
@@ -18,7 +18,7 @@ function PlayerPlayList () {
                     id="1"
                     title="Sean Dagher, Sean Dagher Sean Dagher"
                     duration={180}
-                    isPlaying={false}
+                    isSelected={false}
                     authorName="Sean Dagher, Sean Dagher Sean Dagher"
                     albumName="Sean Dagher, Sean Dagher Sean Dagher"
                     onClick={() => console.log(2)}

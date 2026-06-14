@@ -2,11 +2,11 @@ export interface TrackType {
     id: string
     title: string
     duration: number
-    isPlaying: boolean
+
+    isSelected?: boolean
     img?: string
     authorName?: string
     albumName?: string
-
     year?: string
     
     src?: string
