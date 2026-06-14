@@ -1,28 +1,27 @@
+import { useAudioStore } from "./model/audioStore"
 import PlayListItem from "../../shared/ui/Listes/PlayListItem"
 
 function PlayerPlayList () {
+    const playList = useAudioStore((state) => state.playList)
+    const currentIndex = useAudioStore((state) => state.currentIndex)
+    const selectTrack = useAudioStore((state) => state.selectTrack)
+
     return (
         <section>
             <ul className="flex flex-col gap-[32px]">
-                <PlayListItem
-                    id="0"
-                    title="Sean Dagher, Sean Dagher Sean Dagher"
-                    duration={173}
-                    isSelected={true}
-                    authorName="Sean Dagher, Sean Dagher Sean Dagher"
-                    albumName="Sean Dagher, Sean Dagher Sean Dagher"
-                    onClick={() => console.log(1)}
-                />
-
-                <PlayListItem
-                    id="1"
-                    title="Sean Dagher, Sean Dagher Sean Dagher"
-                    duration={180}
-                    isSelected={false}
-                    authorName="Sean Dagher, Sean Dagher Sean Dagher"
-                    albumName="Sean Dagher, Sean Dagher Sean Dagher"
-                    onClick={() => console.log(2)}
-                />
+                {playList.map((track, index) => (
+                    <PlayListItem
+                        key={track.id}
+                        id={track.id}
+                        title={track.title}
+                        duration={track.duration}
+                        isSelected={index === currentIndex}
+                        artist={track.artist}
+                        album={track.album}
+                        img={track.img}
+                        onClick={() => selectTrack(index)}
+                    />
+                ))}
             </ul>
         </section>
     )

@@ -1,11 +1,13 @@
+import { TrackType } from "../../../shared"
+
 export interface PlayerDiskProps {
   isPlaying: boolean
 }
 
 export interface PlayerInfoTextProps {
   title: string
-  authorName?: string
-  albumName?: string
+  artist?: string
+  album?: string
   year?: string | number
 }
 
@@ -22,7 +24,9 @@ export interface AudioState {
   isRepeat: boolean
   isRepeatOne: boolean
 
-
+  playList: TrackType[]
+  currentIndex: number
+  
   togglePlay: () => void
   toggleRandom: () => void
   toggleRepeat: () => void
@@ -30,5 +34,6 @@ export interface AudioState {
   tickProgress: () => void
   
   prevTrack: () => void
-  nextTrack: () => void
+  nextTrack: (autoNext?: boolean) => void
+  selectTrack: (index: number) => void
 }

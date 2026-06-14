@@ -3,7 +3,7 @@ import { formatTime } from "../../lib"
 
 import cover from "../../assets/img/cover.png"
 
-function PlayListItem ({title, duration, isSelected, img, authorName, albumName, onClick}: PlayListItemProps) {
+function PlayListItem ({title, duration, isSelected, img, artist, album, onClick}: PlayListItemProps) {
     return (
         <div className="w-full h-[64px] bg-black-main cursor-pointer select-none" onClick={onClick}>
             <div className="flex items-center justify-between w-full h-full text-white-main pr-[24px]">
@@ -15,17 +15,17 @@ function PlayListItem ({title, duration, isSelected, img, authorName, albumName,
                         <h5 className={`${isSelected && "text-orange-main"} text-[24px] text-hidden`}>
                             {title}
                         </h5>
-                        {authorName && 
+                        {artist && 
                             <span className="text-gray-main text-[10px] text-hidden block">
-                                {authorName}
+                                {artist}
                             </span>
                         }
                     </div>
                 </div>
 
-                {albumName && 
+                {album && 
                     <span className="text-[20px] text-hidden max-w-[600px]">
-                        {albumName}
+                        {album}
                     </span>
                 }
 

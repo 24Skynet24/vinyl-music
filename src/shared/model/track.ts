@@ -2,13 +2,10 @@ export interface TrackType {
     id: string
     title: string
     duration: number
-
-    isSelected?: boolean
-    img?: string
-    authorName?: string
-    albumName?: string
+    artist?: string // Скорректировано
+    album?: string  // Скорректировано
     year?: string
-    
+    img?: string
     src?: string
     bitrate?: number
     trackNumber?: number
