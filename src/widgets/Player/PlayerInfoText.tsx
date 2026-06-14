@@ -1,10 +1,10 @@
 import { PlayerInfoTextProps } from "./model/types"
 
-function PlayerInfoText ({musicName, authorName, albumName, year}: PlayerInfoTextProps) {
+function PlayerInfoText ({title, authorName, albumName, year}: PlayerInfoTextProps) {
     return (
         <article className="max-w-[986px] flex flex-col gap-[16px]">
             <h1 className="uppercase text-white-main text-[96px] select-none">
-                {musicName}
+                {title}
             </h1>
             {authorName && (
                 <h2 className="text-orange-main uppercase text-[48px] select-none">

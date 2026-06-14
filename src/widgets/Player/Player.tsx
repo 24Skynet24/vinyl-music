@@ -12,7 +12,7 @@ function Player () {
                 <PlayerDisk />
                 <div className="flex flex-col gap-[32px]">
                     <PlayerInfoText
-                        musicName="Miki Matsubara Stay with me"
+                        title="Miki Matsubara Stay with me"
                         authorName="Miki Matsubara"
                         albumName="Miki Matsubara Best Collection"
                         year="1999"

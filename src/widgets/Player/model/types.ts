@@ -3,7 +3,7 @@ export interface PlayerDiskProps {
 }
 
 export interface PlayerInfoTextProps {
-  musicName: string
+  title: string
   authorName?: string
   albumName?: string
   year?: string | number
