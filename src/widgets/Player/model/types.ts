@@ -24,8 +24,10 @@ export interface AudioState {
   isRepeat: boolean
   isRepeatOne: boolean
 
-  playList: TrackType[]
   currentIndex: number
+  historyIndex: number
+  history: number[]
+  playList: TrackType[]
   
   togglePlay: () => void
   toggleRandom: () => void
