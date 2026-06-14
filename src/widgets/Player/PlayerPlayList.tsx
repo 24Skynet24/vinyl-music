@@ -5,7 +5,8 @@ function PlayerPlayList () {
         <section>
             <ul className="flex flex-col gap-[32px]">
                 <PlayListItem
-                    musicName="Sean Dagher, Sean Dagher Sean Dagher"
+                    id="0"
+                    title="Sean Dagher, Sean Dagher Sean Dagher"
                     duration={173}
                     isPlaying={true}
                     authorName="Sean Dagher, Sean Dagher Sean Dagher"
@@ -14,7 +15,8 @@ function PlayerPlayList () {
                 />
 
                 <PlayListItem
-                    musicName="Sean Dagher, Sean Dagher Sean Dagher"
+                    id="1"
+                    title="Sean Dagher, Sean Dagher Sean Dagher"
                     duration={180}
                     isPlaying={false}
                     authorName="Sean Dagher, Sean Dagher Sean Dagher"

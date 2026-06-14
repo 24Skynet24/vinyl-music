@@ -3,7 +3,7 @@ import { formatTime } from "../../lib"
 
 import cover from "../../assets/img/cover.png"
 
-function PlayListItem ({musicName, duration, isPlaying, img, authorName, albumName, onClick}: PlayListItemProps) {
+function PlayListItem ({title, duration, isPlaying, img, authorName, albumName, onClick}: PlayListItemProps) {
     return (
         <div className="w-full h-[64px] bg-black-main cursor-pointer select-none" onClick={onClick}>
             <div className="flex items-center justify-between w-full h-full text-white-main pr-[24px]">
@@ -13,7 +13,7 @@ function PlayListItem ({musicName, duration, isPlaying, img, authorName, albumNa
                     </div>
                     <div className="max-w-[500px]">
                         <h5 className={`${isPlaying && "text-orange-main"} text-[24px] text-hidden`}>
-                            {musicName}
+                            {title}
                         </h5>
                         {authorName && 
                             <span className="text-gray-main text-[10px] text-hidden block">

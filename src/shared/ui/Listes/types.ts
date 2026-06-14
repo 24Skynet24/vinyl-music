@@ -1,10 +1,5 @@
-export interface PlayListItemProps {
-    musicName: string
-    duration: number
-    isPlaying: boolean
-    img?: string
-    authorName?: string
-    albumName?: string
-    
+import { TrackType } from "../../model/track"
+
+export interface PlayListItemProps extends TrackType {
     onClick: () => void
 }
