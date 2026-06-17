@@ -19,3 +19,8 @@ export interface RepeatButtonProps extends DefaultButtonType {
 export interface RandomButtonProps extends DefaultButtonType {
   isRandom: boolean
 }
+
+export interface NavSidebarButtonPros extends DefaultButtonType {
+  isPlaying?: boolean
+  view?: string // playlists, musics (current playlist)
+}
