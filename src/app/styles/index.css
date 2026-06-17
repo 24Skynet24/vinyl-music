@@ -72,6 +72,10 @@ body {
   animation: disk-stop .25s ease-in-out forwards;
 }
 
+.music-playing {
+  animation: disk-playing 3s linear infinite;
+}
+
 @keyframes tonearm-out {
   0% { transform: rotate(6deg); }
   100% { transform: rotate(40deg); }
