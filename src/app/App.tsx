@@ -2,7 +2,7 @@ import { NavigationSidebar } from "../widgets/NavigationSidebar"
 import { Player } from "../widgets/Player"
 // import { Header } from "../widgets/Header"
 // import EditPlayList from "../features/EditPlaylist/EditPlayList"
-import Blackout from "../shared/ui/Overlays/Blackout"
+// import Blackout from "../shared/ui/Overlays/Blackout"
 // import { SlidingPanel } from "../widgets/SlidingPanel"
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
     <>
     <main className="w-full pb-[32px]">
       {/* <EditPlayList/> */}
-      <Blackout/>
+      {/* <Blackout/> */}
       {/* <SlidingPanel/> */}
       {/* <Header/> */}
       <div className="w-full flex justify-between">
