@@ -35,6 +35,13 @@ body {
   text-overflow: ellipsis;
 }
 
+.text-hidden-multiline {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+}
+
 .press-btn {
   @apply transition-transform duration-150 ease-out active:scale-95;
 }
