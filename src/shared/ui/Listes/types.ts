@@ -14,7 +14,13 @@ export interface PlayListItemProps  {
     isSelected: boolean
     description?: string
     img?: string
+    
+    isEditTrack?: boolean
+    isHaveTrack?: boolean
 
     onDelete?: () => void
     onEdit?: () => void
+
+    onAddTrack?: () => void
+    onRemoveTrack?: () => void
 }
