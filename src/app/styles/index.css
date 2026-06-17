@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import url('https://fonts.cdnfonts.com/css/futura-pt');
+@import "./animations.css";
 
 @theme {
   --color-orange-main: #d7452c;
@@ -23,6 +24,10 @@
   * {
     font-family: var(--font-bebas);
   }
+}
+
+html {
+  overflow: hidden;
 }
 
 body {
@@ -57,57 +62,4 @@ body {
 
 .control-btn span {
   @apply absolute right-[-3px] top-[3px] w-full h-full z-0 block bg-orange-main;
-}
-
-.tonearm-out {
-  transition: transform .25s;
-  animation: tonearm-out .25s ease-in-out forwards;
-  transform: rotate(40deg); 
-}
-
-.tonearm-in {
-  transition: transform .25s;
-  animation: tonearm-in .25s ease-in-out forwards;
-  transform: rotate(6deg);
-}
-
-.disk-playing {
-  animation: disk-playing 10s linear infinite;
-}
-
-.disk-stop {
-  animation: disk-stop .25s ease-in-out forwards;
-}
-
-.music-playing {
-  animation: disk-playing 3s linear infinite;
-}
-
-.fade-show {
-  animation: show .25s;
-}
-
-@keyframes tonearm-out {
-  0% { transform: rotate(6deg); }
-  100% { transform: rotate(40deg); }
-}
-
-@keyframes tonearm-in {
-  0% { transform: rotate(40deg); }
-  100% { transform: rotate(6deg); }
-}
-
-@keyframes disk-playing {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@keyframes disk-stop {
-  0% { transform: rotate(360deg); }
-  100% { transform: rotate(0deg); }
-}
-
-@keyframes show {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
 }
