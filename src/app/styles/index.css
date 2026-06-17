@@ -83,6 +83,10 @@ body {
   animation: disk-playing 3s linear infinite;
 }
 
+.fade-show {
+  animation: show .25s;
+}
+
 @keyframes tonearm-out {
   0% { transform: rotate(6deg); }
   100% { transform: rotate(40deg); }
@@ -101,4 +105,9 @@ body {
 @keyframes disk-stop {
   0% { transform: rotate(360deg); }
   100% { transform: rotate(0deg); }
+}
+
+@keyframes show {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
