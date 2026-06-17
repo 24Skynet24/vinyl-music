@@ -24,3 +24,7 @@ export interface NavSidebarButtonPros extends DefaultButtonType {
   isPlaying?: boolean
   view?: string // playlists, musics (current playlist)
 }
+
+export interface TextButtonProps extends DefaultButtonType {
+  text: string
+}
