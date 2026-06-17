@@ -2,7 +2,6 @@ import { useAudioStore } from "./model/audioStore"
 import PlayerControls from "./PlayerControls"
 import PlayerDisk from "./PlayerDisk"
 import PlayerInfoText from "./PlayerInfoText"
-// import PlayerPlayList from "./PlayerPlayList"
 import PlayerTimeLine from "./PlayerTimeLine"
 import PlayerVolume from "./PlayerVolume"
 
@@ -33,9 +32,6 @@ function Player () {
                 </div>
                 <PlayerVolume/>
             </div>
-            {/* <div className="mt-[124px]">
-                <PlayerPlayList/>
-            </div> */}
         </section>
     )
 }
