@@ -11,7 +11,7 @@ function NavSidebarSearch ({onSearch, onSort}: NavSidebarSearchProps) {
 
             <div className="flex-1">
                 <input
-                    className="w-full h-full placeholder:text-white-main text-white-main outline-none text-[12px] font-futura border-b"
+                    className="w-full h-full placeholder:text-white-main text-white-main outline-none text-[18px] font-futura border-b"
                     type="text"
                     placeholder="Search (title, artist or album)..."
                 />
