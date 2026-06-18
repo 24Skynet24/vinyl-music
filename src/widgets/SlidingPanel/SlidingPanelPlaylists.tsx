@@ -1,6 +1,7 @@
 import PlayListItem from "../../shared/ui/Listes/PlayListItem"
+import { SlidingPanelPlaylistsProps } from "./model/types"
 
-function SlidingPanelPlaylists() {
+function SlidingPanelPlaylists({ onEdit }: SlidingPanelPlaylistsProps) {
     return (
         <ul className="flex flex-col gap-[32px]">
             <li>
@@ -10,7 +11,7 @@ function SlidingPanelPlaylists() {
                     musicCount={0}
                     isSelected={true}
                     description="All your musics"
-                    onEdit={() => {}}
+                    onEdit={onEdit}
                 />
             </li>
             <li>
@@ -19,7 +20,7 @@ function SlidingPanelPlaylists() {
                     title="Playlist 1"
                     musicCount={0}
                     isSelected={false}
-                    onEdit={() => {}}
+                    onEdit={onEdit}
                     onDelete={() => {}}
                 />
             </li>

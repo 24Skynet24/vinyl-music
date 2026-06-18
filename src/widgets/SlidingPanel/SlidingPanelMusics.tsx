@@ -1,7 +1,8 @@
 import { useAudioStore } from "../Player/model/audioStore"
 import PlayListTrack from "../../shared/ui/Listes/PlayListTrack"
+import { SlidingPanelMusicsProps } from "./model/types"
 
-function SlidingPanelMusics() {
+function SlidingPanelMusics({ onEditTrack }: SlidingPanelMusicsProps) {
     const playList = useAudioStore((state) => state.playList)
     const currentIndex = useAudioStore((state) => state.currentIndex)
     const selectTrack = useAudioStore((state) => state.selectTrack)
@@ -9,9 +10,8 @@ function SlidingPanelMusics() {
     return (
         <ul className="flex flex-col gap-[32px]">
             {playList.map((track, index) => (
-                <li>
+                <li key={`musics-${index}`}>
                     <PlayListTrack
-                        key={track.id}
                         id={track.id}
                         title={track.title}
                         duration={track.duration}
@@ -20,7 +20,7 @@ function SlidingPanelMusics() {
                         album={track.album}
                         img={track.img}
                         onClick={() => selectTrack(index)}
-                        editPlaylist={() => {}}
+                        editPlaylist={onEditTrack}
                     />
                 </li>
             ))}

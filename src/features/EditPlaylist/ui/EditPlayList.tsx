@@ -1,12 +1,11 @@
-import Modal from "../../shared/ui/Modal/Modal"
-import cover from "../../shared/assets/img/cover-2.png"
-import TextButton from "../../shared/ui/Buttons/TextButton"
+import Modal from "../../../shared/ui/Modal/Modal"
+import cover from "../../../shared/assets/img/cover-2.png"
+import TextButton from "../../../shared/ui/Buttons/TextButton"
+import { EditPlayListProps } from "../types"
 
-function EditPlayList () {
-    // const { isOpen, closeEditModal } = useEditTrackStore()
-
+function EditPlayList ({ isOpen, onClose }: EditPlayListProps) {
     return (
-        <Modal isOpen={true} onClose={() => {}}>
+        <Modal isOpen={isOpen} onClose={onClose}>
             <div className="w-[900px] h-[500px] flex justify-center pt-[64px]">
                 <div className="px-[32px] pb-[32px] flex flex-col justify-between">
                     <div className="flex gap-[32px]">
@@ -22,7 +21,7 @@ function EditPlayList () {
                     </div>
 
                     <div className="flex items-center gap-[16px] ml-auto">
-                        <TextButton onClick={() => {}} text="cancel"/>
+                        <TextButton onClick={onClose} text="cancel"/>
                         <TextButton onClick={() => {}} text="Save"/>
                     </div>
                 </div>

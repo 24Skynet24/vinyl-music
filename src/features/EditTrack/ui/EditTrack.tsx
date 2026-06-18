@@ -1,11 +1,10 @@
-import PlayListItem from "../../shared/ui/Listes/PlayListItem"
-import Modal from "../../shared/ui/Modal/Modal"
+import PlayListItem from "../../../shared/ui/Listes/PlayListItem"
+import Modal from "../../../shared/ui/Modal/Modal"
+import { EditTrackProps } from "../types"
 
-function EditTrack () {
-    // const { isOpen, closeEditModal } = useEditTrackStore()
-
+function EditTrack ({ isOpen, onClose }: EditTrackProps) {
     return (
-        <Modal isOpen={true} onClose={() => {}}>
+        <Modal isOpen={isOpen} onClose={onClose}>
             <div className="w-[800px] min-h-[500px] max-h-[700px] flex justify-center pt-[64px]">
                 <ul className="w-full px-[32px] overflow-y-auto overflow-x-hidden flex flex-col gap-[32px] pb-[32px]">
                     <li>

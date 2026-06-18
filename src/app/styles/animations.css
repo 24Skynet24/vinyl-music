@@ -46,9 +46,36 @@
     animation: show .25s;
 }
 
+.fade-hide {
+    animation: hide .25s forwards;
+}
+
 @keyframes show {
   0% { opacity: 0; }
   100% { opacity: 1; }
+}
+
+.fade-show-panel {
+    animation: show-panel .55s;
+}
+
+.fade-hide-panel {
+    animation: hide-panel .55s forwards;
+}
+
+@keyframes show-panel {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes hide-panel {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes hide {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .right-slide {
@@ -58,4 +85,13 @@
 @keyframes right-slide {
   0% { transform: translateX(100%); }
   100% { transform: translateX(0); }
+}
+
+.right-slide-out {
+    animation: right-slide-out .55s forwards;
+}
+
+@keyframes right-slide-out {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
 }
