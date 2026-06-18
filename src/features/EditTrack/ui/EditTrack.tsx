@@ -6,7 +6,7 @@ function EditTrack ({ isOpen, onClose }: EditTrackProps) {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <div className="w-[800px] min-h-[500px] max-h-[700px] flex justify-center pt-[64px]">
-                <ul className="w-full px-[32px] overflow-y-auto overflow-x-hidden flex flex-col gap-[32px] pb-[32px]">
+                <ul className="w-full overflow-y-auto overflow-x-hidden flex flex-col gap-[32px] mx-[32px] mb-[32px]">
                     <li>
                         <PlayListItem
                             id={0}
