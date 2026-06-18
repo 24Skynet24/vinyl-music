@@ -27,4 +27,5 @@ export interface NavSidebarButtonPros extends DefaultButtonType {
 
 export interface TextButtonProps extends DefaultButtonType {
   text: string
+  minWidth?: number
 }

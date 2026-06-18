@@ -65,5 +65,9 @@ body {
 }
 
 .text-btn {
-  @apply min-w-[130px] w-auto;
+  @apply w-auto;
+}
+
+.text-btn div {
+  @apply pt-1;
 }
