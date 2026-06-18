@@ -1,8 +1,8 @@
-import NavSidebarSearch from "../../shared/ui/Searches/NavSidebarSearch"
+import NavSidebarSearch from "../../../shared/ui/Searches/NavSidebarSearch"
 import SlidingPanelMusics from "./SlidingPanelMusics"
 import SlidingPanelPlaylists from "./SlidingPanelPlaylists"
-import { SlidingPanelProps } from "./model/types"
-import { useNavigationStore } from "../../features/Navigation/model/navigationStore"
+import { SlidingPanelProps } from "../model/types"
+import { useNavigationStore } from "../../../features/Navigation/model/navigationStore"
 
 function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
     const openModal = useNavigationStore((state) => state.openModal)

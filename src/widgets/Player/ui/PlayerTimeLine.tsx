@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
-import { useAudioStore } from "./model/audioStore"
-import { formatTime } from "../../shared/lib"
+import { useAudioStore } from "../model/audioStore"
+import { formatTime } from "../../../shared/lib"
 
 function PlayerTimeLine() {
     const barRef = useRef<HTMLDivElement | null>(null)

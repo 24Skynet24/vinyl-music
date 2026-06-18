@@ -1,8 +1,8 @@
-import { useAudioStore } from "./model/audioStore"
-import PlayButton from "../../shared/ui/Buttons/PlayButton"
-import NextPrevButton from "../../shared/ui/Buttons/NextPrevButton"
-import RepeatButton from "../../shared/ui/Buttons/RepeatButton"
-import RandomButton from "../../shared/ui/Buttons/RandomButton"
+import { useAudioStore } from "../model/audioStore"
+import PlayButton from "../../../shared/ui/Buttons/PlayButton"
+import NextPrevButton from "../../../shared/ui/Buttons/NextPrevButton"
+import RepeatButton from "../../../shared/ui/Buttons/RepeatButton"
+import RandomButton from "../../../shared/ui/Buttons/RandomButton"
 
 function PlayerControls() {
     const { 

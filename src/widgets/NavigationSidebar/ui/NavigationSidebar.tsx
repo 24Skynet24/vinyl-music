@@ -1,5 +1,5 @@
-import { useNavigationStore } from "../../features/Navigation/model/navigationStore"
-import NavSidebarButton from "../../shared/ui/Buttons/NavSidebarButton"
+import { useNavigationStore } from "../../../features/Navigation/model/navigationStore"
+import NavSidebarButton from "../../../shared/ui/Buttons/NavSidebarButton"
 
 function NavigationSidebar () {
     const openPanel = useNavigationStore((state) => state.openPanel)

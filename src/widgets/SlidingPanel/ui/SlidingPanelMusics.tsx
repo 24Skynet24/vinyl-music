@@ -1,6 +1,6 @@
-import { useAudioStore } from "../Player/model/audioStore"
-import PlayListTrack from "../../shared/ui/Lists/PlayListTrack"
-import { SlidingPanelMusicsProps } from "./model/types"
+import { useAudioStore } from "../../Player/model/audioStore"
+import PlayListTrack from "../../../shared/ui/Lists/PlayListTrack"
+import { SlidingPanelMusicsProps } from "../model/types"
 
 function SlidingPanelMusics({ onEditTrack }: SlidingPanelMusicsProps) {
     const playList = useAudioStore((state) => state.playList)

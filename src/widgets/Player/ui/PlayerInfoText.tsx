@@ -1,4 +1,4 @@
-import { PlayerInfoTextProps } from "./model/types"
+import { PlayerInfoTextProps } from "../model/types"
 
 function PlayerInfoText ({title, artist, album, year}: PlayerInfoTextProps) {
     return (
