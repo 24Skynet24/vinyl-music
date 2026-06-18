@@ -23,6 +23,8 @@
 @layer base {
   * {
     font-family: var(--font-bebas);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-orange-main) var(--color-black-main);
   }
 }
 
