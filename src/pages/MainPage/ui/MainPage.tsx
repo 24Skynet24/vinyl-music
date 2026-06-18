@@ -7,7 +7,7 @@ import EditTrack from "../../../features/EditTrack/ui/EditTrack"
 import Blackout from "../../../shared/ui/Overlays/Blackout"
 
 export function MainPage() {
-  const { panelView, modalView, isPanelClosing, closePanel } = useNavigationStore()
+  const { panelView, modalView, isPanelClosing, closePanel, closeModal } = useNavigationStore()
 
   return (
     <main className="w-full pb-[32px]">
@@ -20,8 +20,8 @@ export function MainPage() {
         </>
       )}
 
-      {modalView === "editTrack" && <EditTrack isOpen={true} onClose={() => {}}/>}
-      {modalView === "editPlaylist" && <EditPlayList isOpen={true} onClose={() => {}}/>}
+      {modalView === "editTrack" && <EditTrack isOpen={true} onClose={closeModal}/>}
+      {modalView === "editPlaylist" && <EditPlayList isOpen={true} onClose={closeModal}/>}
 
       <div className="w-full flex justify-between">
         <div className="flex items-center justify-center flex-1">
