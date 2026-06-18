@@ -1,4 +1,4 @@
-import PlayListItem from "../../../shared/ui/Listes/PlayListItem"
+import PlayListItem from "../../../shared/ui/Lists/PlayListItem"
 import Modal from "../../../shared/ui/Modal/Modal"
 import { EditTrackProps } from "../types"
 

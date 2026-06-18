@@ -17,7 +17,7 @@ function PlayListTrack ({title, duration, isSelected, img, artist, album, onClic
                             <h5 className={`${isSelected && "text-orange-main"} text-[24px] text-hidden`}>
                                 {title}
                             </h5>
-                            {artist && 
+                            {artist &&
                                 <span className="text-gray-main text-[10px] text-hidden block">
                                     {artist}
                                 </span>
@@ -25,7 +25,7 @@ function PlayListTrack ({title, duration, isSelected, img, artist, album, onClic
                         </div>
                     </div>
 
-                    {album && 
+                    {album &&
                         <span className="text-[20px] text-hidden w-[260px]">
                             {album}
                         </span>

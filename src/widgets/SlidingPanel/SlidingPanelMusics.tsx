@@ -1,5 +1,5 @@
 import { useAudioStore } from "../Player/model/audioStore"
-import PlayListTrack from "../../shared/ui/Listes/PlayListTrack"
+import PlayListTrack from "../../shared/ui/Lists/PlayListTrack"
 import { SlidingPanelMusicsProps } from "./model/types"
 
 function SlidingPanelMusics({ onEditTrack }: SlidingPanelMusicsProps) {

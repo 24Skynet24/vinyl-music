@@ -1,4 +1,4 @@
-import PlayListItem from "../../shared/ui/Listes/PlayListItem"
+import PlayListItem from "../../shared/ui/Lists/PlayListItem"
 import { SlidingPanelPlaylistsProps } from "./model/types"
 
 function SlidingPanelPlaylists({ onEdit }: SlidingPanelPlaylistsProps) {

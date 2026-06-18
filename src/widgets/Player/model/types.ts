@@ -1,4 +1,4 @@
-import { TrackType } from "../../../shared"
+import { TrackType } from "../../../entities/track"
 
 export interface PlayerDiskProps {
   isPlaying: boolean

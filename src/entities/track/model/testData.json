@@ -5,9 +5,9 @@
         {
             "id": "1",
             "title": "Plastic Love 1 Plastic Love 1 Plastic Love 1 Plastic Love 1 Plastic Love 1",
-            "artist": "Mariya Takeuchi, Mariya Takeuchi, Mariya Takeuchi, Mariya Takeuchi, Mariya Takeuchi, Mariya Takeuchi", 
+            "artist": "Mariya Takeuchi, Mariya Takeuchi, Mariya Takeuchi, Mariya Takeuchi, Mariya Takeuchi, Mariya Takeuchi",
             "duration": 295,
-            "album": "Variety, Variety, Variety, Variety, Variety", 
+            "album": "Variety, Variety, Variety, Variety, Variety",
             "year": "1984",
             "img": "",
             "src": "",
@@ -19,9 +19,9 @@
         {
             "id": "2",
             "title": "Plastic Love 2",
-            "artist": "Mariya Takeuchi", 
+            "artist": "Mariya Takeuchi",
             "duration": 295,
-            "album": "Variety", 
+            "album": "Variety",
             "year": "1984",
             "img": "",
             "src": "",
@@ -33,9 +33,9 @@
         {
             "id": "3",
             "title": "Plastic Love 3",
-            "artist": "Mariya Takeuchi", 
+            "artist": "Mariya Takeuchi",
             "duration": 295,
-            "album": "Variety", 
+            "album": "Variety",
             "year": "1984",
             "img": "",
             "src": "",
@@ -47,9 +47,9 @@
         {
             "id": "4",
             "title": "Plastic Love 4",
-            "artist": "Mariya Takeuchi", 
+            "artist": "Mariya Takeuchi",
             "duration": 295,
-            "album": "Variety", 
+            "album": "Variety",
             "year": "1984",
             "img": "",
             "src": "",
@@ -61,9 +61,9 @@
         {
             "id": "5",
             "title": "Plastic Love 5",
-            "artist": "Mariya Takeuchi", 
+            "artist": "Mariya Takeuchi",
             "duration": 295,
-            "album": "Variety", 
+            "album": "Variety",
             "year": "1984",
             "img": "",
             "src": "",
@@ -72,5 +72,5 @@
             "genre": ["City Pop", "J-Pop"],
             "lyrics": "With a fashionable clip in my hair..."
         }
-    ]    
+    ]
 }
