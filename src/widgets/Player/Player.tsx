@@ -14,7 +14,7 @@ function Player () {
         <section>
             <div className="flex items-center gap-[64px] mb-[64px]">
                 <PlayerDisk />
-                <div className="flex flex-col gap-[32px] min-w-[703px]">
+                <div className="flex flex-col gap-[32px] min-[1440px]:min-w-[703px]">
                     {currentTrack && (
                         <PlayerInfoText
                             title={currentTrack.title}
@@ -27,7 +27,7 @@ function Player () {
                 </div>
             </div>
             <div className="flex items-end justify-between">
-                <div className="pl-[64px]">
+                <div className="min-[1560px]:pl-[64px]">
                     <PlayerControls/>
                 </div>
                 <PlayerVolume/>

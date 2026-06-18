@@ -4,8 +4,8 @@ function PlayerDisk() {
     const isPlaying = useAudioStore((state) => state.isPlaying)
 
     return (
-        <article className="w-[603px] h-[556px] relative">
-            <div className="w-[500px] h-[500px] absolute left-0 bottom-0">
+        <article className="w-[450px] min-[1560px]:w-[603px] h-[415px] min-[1560px]:h-[556px] relative">
+            <div className="w-[375px] min-[1560px]:w-[500px] h-[375px] min-[1560px]:h-[500px] absolute left-0 bottom-0">
                 <svg className={`${isPlaying ? 'disk-playing' : 'disk-stop'} w-full h-full`} viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="150" cy="150" r="145" fill="#181818" stroke="#D7452C" strokeWidth="10"/>
                         <circle cx="150" cy="150" r="50" fill="#D7452C"/>
