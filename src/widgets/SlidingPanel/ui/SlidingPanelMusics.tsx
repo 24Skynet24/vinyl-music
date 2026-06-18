@@ -1,6 +1,7 @@
 import { useAudioStore } from "../../Player/model/audioStore"
 import PlayListTrack from "../../../shared/ui/Lists/PlayListTrack"
 import { SlidingPanelMusicsProps } from "../model/types"
+import TextButton from "../../../shared/ui/Buttons/TextButton"
 
 function SlidingPanelMusics({ onEditTrack }: SlidingPanelMusicsProps) {
     const playList = useAudioStore((state) => state.playList)
@@ -24,6 +25,9 @@ function SlidingPanelMusics({ onEditTrack }: SlidingPanelMusicsProps) {
                     />
                 </li>
             ))}
+            <li className="flex justify-center mt-[32px]">
+                <TextButton text="Show more" onClick={() => {}} minWidth={180} />
+            </li>
         </ul>
     )
 }

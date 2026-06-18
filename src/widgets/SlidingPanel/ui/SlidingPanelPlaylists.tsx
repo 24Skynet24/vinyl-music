@@ -1,5 +1,6 @@
 import PlayListItem from "../../../shared/ui/Lists/PlayListItem"
 import { SlidingPanelPlaylistsProps } from "../model/types"
+import TextButton from "../../../shared/ui/Buttons/TextButton"
 
 function SlidingPanelPlaylists({ onEdit }: SlidingPanelPlaylistsProps) {
     return (
@@ -23,6 +24,9 @@ function SlidingPanelPlaylists({ onEdit }: SlidingPanelPlaylistsProps) {
                     onEdit={onEdit}
                     onDelete={() => {}}
                 />
+            </li>
+            <li className="flex justify-center mt-[32px]">
+                <TextButton text="Show more" onClick={() => {}} minWidth={180} />
             </li>
         </ul>   
     )
