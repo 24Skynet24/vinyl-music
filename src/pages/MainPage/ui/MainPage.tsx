@@ -20,8 +20,8 @@ export function MainPage() {
         </>
       )}
 
-      {modalView === "editTrack" && <EditTrack isOpen={true} onClose={closeModal}/>}
-      {modalView === "editPlaylist" && <EditPlayList isOpen={true} onClose={closeModal}/>}
+      <EditTrack isOpen={modalView === "editTrack"} onClose={closeModal}/>
+      <EditPlayList isOpen={modalView === "editPlaylist"} onClose={closeModal}/>
 
       <div className="w-full flex justify-between">
         <div className="flex items-center justify-center flex-1">
