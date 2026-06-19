@@ -1,9 +1,55 @@
+import { useEffect, useState } from "react"
 import Modal from "../../../shared/ui/Modal/Modal"
 import cover from "../../../shared/assets/img/cover-2.png"
 import TextButton from "../../../shared/ui/Buttons/TextButton"
 import { EditPlayListProps } from "../types"
+import { usePlaylistStore } from "../../../entities/playlist"
 
-function EditPlayList ({ isOpen, onClose }: EditPlayListProps) {
+function EditPlayList ({ isOpen, onClose, playlistId }: EditPlayListProps) {
+    const playlists = usePlaylistStore((state) => state.playlists)
+    const addPlaylist = usePlaylistStore((state) => state.addPlaylist)
+    const updatePlaylist = usePlaylistStore((state) => state.updatePlaylist)
+
+    const [title, setTitle] = useState("")
+    const [description, setDescription] = useState("")
+    const [img, setImg] = useState<string | undefined>(undefined)
+
+    useEffect(() => {
+        if (!isOpen) return
+
+        const editing = playlistId
+            ? playlists.find((playlist) => playlist.id === playlistId)
+            : undefined
+
+        setTitle(editing?.title ?? "")
+        setDescription(editing?.description ?? "")
+        setImg(editing?.img)
+    }, [isOpen, playlistId, playlists])
+
+    const handleImage = (files: FileList | null) => {
+        if (!files || !files[0]) return
+        setImg(URL.createObjectURL(files[0]))
+    }
+
+    const handleSave = () => {
+        const trimmedTitle = title.trim()
+        if (!trimmedTitle) return
+
+        const data = {
+            title: trimmedTitle,
+            description: description.trim() || undefined,
+            img,
+        }
+
+        if (playlistId) {
+            updatePlaylist(playlistId, data)
+        } else {
+            addPlaylist(data)
+        }
+
+        onClose()
+    }
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <div className="w-[900px] h-[500px] flex justify-center pt-[64px]">
@@ -19,19 +65,38 @@ function EditPlayList ({ isOpen, onClose }: EditPlayListProps) {
                                 </div>
                             </div>
 
-                            <img src={cover} alt="" className="w-full h-full relative z-0"/>
+                            <img src={img ?? cover} alt="" className="w-full h-full relative z-0 object-cover"/>
+
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer z-2"
+                                onChange={(event) => handleImage(event.target.files)}
+                            />
                         </div>
                         
                         <div className="flex flex-col w-[600px] gap-[16px] pt-[16px] text-white-main font-futura text-[24px]">
-                            <input type="text" className="w-full px-[16px] py-[16px] bg-black-main rounded-[8px] outline-none" placeholder="Playlist..."/>
+                            <input
+                                type="text"
+                                className="w-full px-[16px] py-[16px] bg-black-main rounded-[8px] outline-none"
+                                placeholder="Playlist..."
+                                value={title}
+                                onChange={(event) => setTitle(event.target.value)}
+                            />
 
-                            <input type="text" className="w-full px-[16px] py-[16px] bg-black-main rounded-[8px] outline-none" placeholder="Description..."/>
+                            <input
+                                type="text"
+                                className="w-full px-[16px] py-[16px] bg-black-main rounded-[8px] outline-none"
+                                placeholder="Description..."
+                                value={description}
+                                onChange={(event) => setDescription(event.target.value)}
+                            />
                         </div>
                     </div>
 
                     <div className="flex items-center gap-[16px] ml-auto">
                         <TextButton onClick={onClose} text="cancel"/>
-                        <TextButton onClick={() => {}} text="Save"/>
+                        <TextButton onClick={handleSave} text="Save"/>
                     </div>
                 </div>
             </div>

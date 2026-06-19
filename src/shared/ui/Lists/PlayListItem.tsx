@@ -1,10 +1,10 @@
 import { PlayListItemProps } from "./types"
 import cover from "../../assets/img/cover-2.png"
 
-function PlayListItem ({img, title, isSelected, musicCount, description, isEditTrack, isHaveTrack, onDelete, onEdit}: PlayListItemProps) {
+function PlayListItem ({img, title, isSelected, musicCount, description, isEditTrack, isHaveTrack, isLocked, onClick, onDelete, onEdit, onAddTrack, onRemoveTrack}: PlayListItemProps) {
     return (
         <article className="w-full h-[200px] flex items-center gap-[16px] text-white-main">
-            <div className="flex h-full gap-[16px] flex-1 cursor-pointer">
+            <div className="flex h-full gap-[16px] flex-1 cursor-pointer" onClick={onClick}>
                 <div className="h-full w-[200px]">
                     <img src={img ? img : cover} alt="" className="w-full h-full"/>
                 </div>
@@ -24,10 +24,10 @@ function PlayListItem ({img, title, isSelected, musicCount, description, isEditT
                 </div>
             </div>
 
-            { isEditTrack ?
+            { !isLocked && (isEditTrack ?
                 <>
                  <div className="flex flex-col gap-[32px] h-full">
-                        <div className="w-[32px] h-[32px] cursor-pointer">
+                        <div className="w-[32px] h-[32px] cursor-pointer" onClick={isHaveTrack ? onRemoveTrack : onAddTrack}>
                             {!isHaveTrack ?
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M16.0001 26.8801C9.98412 26.8801 5.12012 22.0161 5.12012 16.0001C5.12012 9.98412 9.98412 5.12012 16.0001 5.12012C22.0161 5.12012 26.8801 9.98412 26.8801 16.0001C26.8801 22.0161 22.0161 26.8801 16.0001 26.8801ZM16.0001 6.40012C10.6881 6.40012 6.40012 10.6881 6.40012 16.0001C6.40012 21.3121 10.6881 25.6001 16.0001 25.6001C21.3121 25.6001 25.6001 21.3121 25.6001 16.0001C25.6001 10.6881 21.3121 6.40012 16.0001 6.40012Z" fill="#FFFEE9"/>
@@ -65,7 +65,7 @@ function PlayListItem ({img, title, isSelected, musicCount, description, isEditT
                         </div>
                     </div>
                 </>
-            }
+            )}
 
         </article>
     )

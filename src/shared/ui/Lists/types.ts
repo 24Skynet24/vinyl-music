@@ -19,7 +19,9 @@ export interface PlayListItemProps  {
 
     isEditTrack?: boolean
     isHaveTrack?: boolean
+    isLocked?: boolean
 
+    onClick?: () => void
     onDelete?: () => void
     onEdit?: () => void
 
