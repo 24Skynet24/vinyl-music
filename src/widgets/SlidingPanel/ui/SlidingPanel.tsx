@@ -3,19 +3,31 @@ import SlidingPanelMusics from "./SlidingPanelMusics"
 import SlidingPanelPlaylists from "./SlidingPanelPlaylists"
 import { SlidingPanelProps } from "../model/types"
 import { useNavigationStore } from "../../../features/Navigation/model/navigationStore"
+import { useAudioStore } from "../../Player/model/audioStore"
 import SlidingPanelAddMusics from "./SlidingPanelAddMusics"
+import { TrackType } from "../../../entities/track"
 
 function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
-    const openModal = useNavigationStore((state) => state.openModal)
+    const openEditTrack = useNavigationStore((state) => state.openEditTrack)
+    const openEditPlaylist = useNavigationStore((state) => state.openEditPlaylist)
+    const openPlaylistMusics = useNavigationStore((state) => state.openPlaylistMusics)
+    const selectedPlaylistId = useNavigationStore((state) => state.selectedPlaylistId)
+    const closePanel = useNavigationStore((state) => state.closePanel)
+    const addTracks = useAudioStore((state) => state.addTracks)
+
+    const handleSaveNewMusic = (tracks: TrackType[]) => {
+        addTracks(tracks)
+        closePanel()
+    }
 
     const renderContent = (): React.ReactNode => {
         switch (view) {
             case "musics":
-                return <SlidingPanelMusics onEditTrack={() => openModal("editTrack")}/>
+                return <SlidingPanelMusics onEditTrack={openEditTrack} playlistId={selectedPlaylistId}/>
             case "add-music":
-                return <SlidingPanelAddMusics />
+                return <SlidingPanelAddMusics onCancel={closePanel} onSave={handleSaveNewMusic} />
             case "playlists":
-                return <SlidingPanelPlaylists onEdit={() => openModal("editPlaylist")}/>
+                return <SlidingPanelPlaylists onEdit={openEditPlaylist} onCreate={() => openEditPlaylist(null)} onOpenMusics={openPlaylistMusics}/>
             default:
                 return null
         }

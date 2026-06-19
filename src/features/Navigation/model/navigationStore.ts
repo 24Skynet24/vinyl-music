@@ -8,10 +8,18 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
   panelView: null,
   modalView: null,
   isPanelClosing: false,
+  editTrackId: null,
+  editPlaylistId: null,
+  selectedPlaylistId: null,
 
   openPanel: (view) => {
     if (timeoutId) window.clearTimeout(timeoutId)
-    set({ isPanelClosing: false, panelView: view })
+    set({ isPanelClosing: false, panelView: view, selectedPlaylistId: null })
+  },
+
+  openPlaylistMusics: (playlistId) => {
+    if (timeoutId) window.clearTimeout(timeoutId)
+    set({ isPanelClosing: false, panelView: 'musics', selectedPlaylistId: playlistId })
   },
 
   closePanel: () => {
@@ -21,11 +29,12 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     set({ isPanelClosing: true })
 
     timeoutId = window.setTimeout(() => {
-      set({ panelView: null, modalView: null, isPanelClosing: false })
+      set({ panelView: null, modalView: null, isPanelClosing: false, selectedPlaylistId: null })
       timeoutId = null
     }, PANEL_ANIMATION_MS)
   },
 
-  openModal: (view) => set({ modalView: view }),
-  closeModal: () => set({ modalView: null }),
+  openEditTrack: (trackId) => set({ modalView: 'editTrack', editTrackId: trackId }),
+  openEditPlaylist: (playlistId = null) => set({ modalView: 'editPlaylist', editPlaylistId: playlistId }),
+  closeModal: () => set({ modalView: null, editTrackId: null, editPlaylistId: null }),
 }))

@@ -1,17 +1,22 @@
+import { TrackType } from "../../../entities/track"
+
 export interface SlidingPanelProps {
     view: "musics" | "playlists" | "add-music"
     isClosing?: boolean
 }
 
 export interface SlidingPanelMusicsProps {
-    onEditTrack: () => void
+    onEditTrack: (trackId: string) => void
+    playlistId?: string | null
 }
 
 export interface SlidingPanelPlaylistsProps {
-    onEdit: () => void
+    onEdit: (playlistId: string) => void
+    onCreate: () => void
+    onOpenMusics: (playlistId: string) => void
 }
 
 export interface SlidingPanelAddMusicsProps {
     onCancel: () => void
-    onSave: () => void
+    onSave: (tracks: TrackType[]) => void
 }
