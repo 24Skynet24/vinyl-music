@@ -23,6 +23,8 @@ export interface AudioState {
   isRandom: boolean
   isRepeat: boolean
   isRepeatOne: boolean
+  volume: number
+  isMuted: boolean
 
   currentIndex: number
   historyIndex: number
@@ -32,6 +34,10 @@ export interface AudioState {
   togglePlay: () => void
   toggleRandom: () => void
   toggleRepeat: () => void
+  toggleMute: () => void
+  setIsPlaying: (isPlaying: boolean) => void
+  setDuration: (duration: number) => void
+  setVolume: (volume: number) => void
   setCurrentTime: (time: number) => void
   tickProgress: () => void
   

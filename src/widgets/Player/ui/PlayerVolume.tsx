@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import { useAudioStore } from "../model/audioStore";
 
 function PlayerVolume() {
-    const [volume, setVolume] = useState(1);
-    const [isMuted, setIsMuted] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
+    const volume = useAudioStore((state) => state.volume);
+    const isMuted = useAudioStore((state) => state.isMuted);
+    const setVolume = useAudioStore((state) => state.setVolume);
+    const toggleMute = useAudioStore((state) => state.toggleMute);
 
     const barRef = useRef<HTMLDivElement | null>(null);
 
@@ -21,21 +24,13 @@ function PlayerVolume() {
     const updateVolume = (clientX: number) => {
         const v = getPercent(clientX);
         setVolume(v);
-        if (v > 0) setIsMuted(false);
     };
 
-    // 🎯 start drag
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
         setIsDragging(true);
         updateVolume(e.clientX);
     };
 
-    // 🎯 toggle mute
-    const toggleMute = () => {
-        setIsMuted((prev) => !prev);
-    };
-
-    // 🧠 global listeners for smooth drag
     useEffect(() => {
         if (!isDragging) return;
 

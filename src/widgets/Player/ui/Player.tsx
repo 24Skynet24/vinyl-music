@@ -1,5 +1,6 @@
 import { useAudioStore } from "../model/audioStore"
 import PlayerControls from "./PlayerControls"
+import PlayerAudio from "./PlayerAudio"
 import PlayerDisk from "./PlayerDisk"
 import PlayerInfoText from "./PlayerInfoText"
 import PlayerTimeLine from "./PlayerTimeLine"
@@ -12,6 +13,7 @@ function Player () {
 
     return (
         <section>
+            <PlayerAudio />
             <div className="flex items-center gap-[64px] mb-[64px]">
                 <PlayerDisk />
                 <div className="flex flex-col gap-[32px] min-[1440px]:min-w-[703px]">

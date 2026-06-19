@@ -7,28 +7,14 @@ import { TrackType } from "../../../entities/track";
 const initialPlaylist: TrackType[] = [];
 
 export const useAudioStore = create<AudioState>((set, get) => {
-  let timerInterval: NodeJS.Timeout | null = null;
-
-  const clearTimer = () => {
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
-  };
-
-  const startTimer = () => {
-    clearTimer();
-    timerInterval = setInterval(() => {
-      get().tickProgress();
-    }, 1000);
-  };
-
   return {
     // Statuses
     isPlaying: false,
     isRandom: false,
     isRepeat: false,
     isRepeatOne: false,
+    volume: 1,
+    isMuted: false,
 
     // Time & Playlist
     currentTime: 0,
@@ -39,16 +25,10 @@ export const useAudioStore = create<AudioState>((set, get) => {
     historyIndex: 0,
 
     togglePlay: () => {
-      const { isPlaying } = get();
-      const nextState = !isPlaying;
+      const { isPlaying, playList } = get();
+      if (!playList.length) return;
 
-      if (nextState) {
-        startTimer();
-      } else {
-        clearTimer();
-      }
-
-      set({ isPlaying: nextState });
+      set({ isPlaying: !isPlaying });
     },
 
     tickProgress: () => {
@@ -60,7 +40,6 @@ export const useAudioStore = create<AudioState>((set, get) => {
         } else if (isRepeat) {
           nextTrack();
         } else {
-          clearTimer();
           set({ isPlaying: false, currentTime: 0 });
         }
       } else {
@@ -69,7 +48,7 @@ export const useAudioStore = create<AudioState>((set, get) => {
     },
 
     selectTrack: (index: number) => {
-      const { playList, isPlaying } = get();
+      const { playList } = get();
       const targetTrack = playList[index];
       if (!targetTrack) return;
 
@@ -78,8 +57,6 @@ export const useAudioStore = create<AudioState>((set, get) => {
         currentTime: 0,
         duration: targetTrack.duration,
       });
-
-      if (isPlaying) startTimer();
     },
 
     prevTrack: () => {
@@ -175,7 +152,6 @@ export const useAudioStore = create<AudioState>((set, get) => {
         });
         selectTrack(0);
       } else {
-        clearTimer();
         const firstTrack = playList[0];
         set({
           isPlaying: false,
@@ -228,6 +204,10 @@ export const useAudioStore = create<AudioState>((set, get) => {
         };
       }),
 
+    toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
+    setIsPlaying: (isPlaying) => set({ isPlaying }),
+    setDuration: (duration) => set({ duration }),
+    setVolume: (volume) => set({ volume: Math.max(0, Math.min(1, volume)), isMuted: volume === 0 }),
     setCurrentTime: (time) => set({ currentTime: time }),
 
     addTracks: (tracks: TrackType[]) => {

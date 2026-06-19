@@ -12,7 +12,7 @@ function PlayerTimeLine() {
     const [hoverProgress, setHoverProgress] = useState<number | null>(null)
     const [isDragging, setIsDragging] = useState(false)
 
-    const currentProgress = currentTime / duration
+    const currentProgress = duration > 0 ? currentTime / duration : 0
 
     const getPercent = (clientX: number) => {
         if (!barRef.current) return 0
@@ -22,6 +22,8 @@ function PlayerTimeLine() {
     }
 
     const updateFromClientX = (clientX: number) => {
+        if (duration <= 0) return
+
         const percent = getPercent(clientX)
         setCurrentTime(percent * duration)
     }
