@@ -2,9 +2,11 @@ import { TrackType } from "../../../entities/track"
 
 export interface PlayListTrackProps extends TrackType {
     isSelected?: boolean
+    isNewTrack?: boolean
 
-    onClick: () => void
-    editPlaylist: () => void
+    onClick?: () => void
+    editPlaylist?: () => void
+    removeNewTrack?: () => void
 }
 
 export interface PlayListItemProps  {

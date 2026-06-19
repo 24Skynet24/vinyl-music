@@ -1,5 +1,5 @@
 export interface SlidingPanelProps {
-    view: "musics" | "playlists"
+    view: "musics" | "playlists" | "add-music"
     isClosing?: boolean
 }
 
@@ -9,4 +9,9 @@ export interface SlidingPanelMusicsProps {
 
 export interface SlidingPanelPlaylistsProps {
     onEdit: () => void
+}
+
+export interface SlidingPanelAddMusicsProps {
+    onCancel: () => void
+    onSave: () => void
 }

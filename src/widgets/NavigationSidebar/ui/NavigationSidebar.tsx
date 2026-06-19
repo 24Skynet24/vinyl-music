@@ -14,6 +14,10 @@ function NavigationSidebar () {
                 onClick={() => openPanel("playlists")}
                 view="playlists"
             />
+            <NavSidebarButton
+                onClick={() => openPanel("add-music")}
+                view="add-music"
+            />
         </aside>
     )
 }
