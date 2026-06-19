@@ -1,6 +1,7 @@
 import diskPlus from "../../assets/icons/disk-plus.svg"
+import { SelectAddMusicProps } from "./types"
 
-function SelectAddMusic() {
+function SelectAddMusic({ onSelect }: SelectAddMusicProps) {
     return (
         <article className="w-[772px] h-[500px] border-dashed border-2 border-orange-main flex items-center justify-center relative cursor-pointer">
             <div className="flex flex-col items-center gap-[50px]">
@@ -21,7 +22,7 @@ function SelectAddMusic() {
                 type="file" className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
                 accept="audio/*"
                 multiple
-                onChange={() => {}}
+                onChange={(event) => onSelect(event.target.files)}
             />
         </article>
     )

@@ -1,8 +1,10 @@
 import { create } from "zustand";
 import { AudioState } from "./types";
-import testData from "../../../entities/track/model/testData.json";
+import { TrackType } from "../../../entities/track";
+// import testData from "../../../entities/track/model/testData.json";
 
-const initialPlaylist = testData.data;
+// const initialPlaylist = testData.data;
+const initialPlaylist: TrackType[] = [];
 
 export const useAudioStore = create<AudioState>((set, get) => {
   let timerInterval: NodeJS.Timeout | null = null;
@@ -227,5 +229,21 @@ export const useAudioStore = create<AudioState>((set, get) => {
       }),
 
     setCurrentTime: (time) => set({ currentTime: time }),
+
+    addTracks: (tracks: TrackType[]) => {
+      if (!tracks.length) return;
+
+      const { playList, currentIndex } = get();
+      const wasEmpty = playList.length === 0;
+      const newPlayList = [...tracks, ...playList];
+
+      set({
+        playList: newPlayList,
+        // Keep the currently selected track in place by shifting its index,
+        // since the new tracks are prepended to the start of the list.
+        currentIndex: wasEmpty ? 0 : currentIndex + tracks.length,
+        ...(wasEmpty && { duration: tracks[0].duration }),
+      });
+    },
   };
 });

@@ -38,4 +38,5 @@ export interface AudioState {
   prevTrack: () => void
   nextTrack: (autoNext?: boolean) => void
   selectTrack: (index: number) => void
+  addTracks: (tracks: TrackType[]) => void
 }
