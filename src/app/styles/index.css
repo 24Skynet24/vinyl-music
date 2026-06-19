@@ -23,6 +23,8 @@
 @layer base {
   * {
     font-family: var(--font-bebas);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-orange-main) var(--color-black-main);
   }
 }
 
@@ -65,5 +67,9 @@ body {
 }
 
 .text-btn {
-  @apply min-w-[130px] w-auto;
+  @apply w-auto;
+}
+
+.text-btn div {
+  @apply pt-1;
 }

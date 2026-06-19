@@ -23,8 +23,8 @@ function createWindow() {
     height: 800,
 
     // Minimum size of the window
-    minWidth: 1080,
-    minHeight: 650,
+    minWidth: 1280,
+    minHeight: 800,
 
     // Maximum size of the window
     maxWidth: 1920,

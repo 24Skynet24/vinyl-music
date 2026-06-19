@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { AudioState } from "./types";
-import testData from "./testData.json";
+import testData from "../../../entities/track/model/testData.json";
 
 const initialPlaylist = testData.data;
 

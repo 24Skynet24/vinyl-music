@@ -1,1 +1,1 @@
-export { default as SlidingPanel } from './SlidingPanel';
+export { default as SlidingPanel } from './ui/SlidingPanel';

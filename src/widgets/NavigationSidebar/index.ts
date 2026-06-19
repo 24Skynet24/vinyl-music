@@ -1,1 +1,1 @@
-export { default as NavigationSidebar } from './NavigationSidebar';
+export { default as NavigationSidebar } from './ui/NavigationSidebar';

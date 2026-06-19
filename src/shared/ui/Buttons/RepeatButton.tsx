@@ -7,7 +7,7 @@ function RepeatButton({ isRepeat, isRepeatOne, onClick }: RepeatButtonProps) {
                 <svg width="38" height="38" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                     {!isRepeat && !isRepeatOne && (<path d="M8.00004 5.33325H28C28.3537 5.33325 28.6928 5.47373 28.9429 5.72378C29.1929 5.97383 29.3334 6.31296 29.3334 6.66659V15.9999H26.6667V7.99992H8.00004V11.9999L1.33337 6.66659L8.00004 1.33325V5.33325ZM24 26.6666H4.00004C3.64642 26.6666 3.30728 26.5261 3.05723 26.2761C2.80718 26.026 2.66671 25.6869 2.66671 25.3333V15.9999H5.33337V23.9999H24V19.9999L30.6667 25.3333L24 30.6666V26.6666Z" fill="#FFFEE9"/>)}
                     {(isRepeat || isRepeatOne) && <path d="M8.00004 5.33325H28C28.3537 5.33325 28.6928 5.47373 28.9429 5.72378C29.1929 5.97383 29.3334 6.31296 29.3334 6.66659V15.9999H26.6667V7.99992H8.00004V11.9999L1.33337 6.66659L8.00004 1.33325V5.33325ZM24 26.6666H4.00004C3.64642 26.6666 3.30728 26.5261 3.05723 26.2761C2.80718 26.026 2.66671 25.6869 2.66671 25.3333V15.9999H5.33337V23.9999H24V19.9999L30.6667 25.3333L24 30.6666V26.6666Z" fill="#d7452c"/> }
-                    {isRepeatOne && <path d="M16.438 21V11L13 13.5" stroke="#d7452c" strokeWidth="1.5" stroke-linecap="round" stroke-linejoin="round"/>}
+                    {isRepeatOne && <path d="M16.438 21V11L13 13.5" stroke="#d7452c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>}
                 </svg>
             </div>
             <span></span>
