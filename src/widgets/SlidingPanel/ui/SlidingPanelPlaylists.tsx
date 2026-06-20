@@ -4,15 +4,21 @@ import TextButton from "../../../shared/ui/Buttons/TextButton"
 import { usePagination } from "../../../shared/lib"
 import { usePlaylistStore, ALL_MUSIC_ID } from "../../../entities/playlist"
 import { useAudioStore } from "../../Player/model/audioStore"
+import { vinylApi } from "../../../shared/api/vinylApi"
 
 const PLAYLISTS_PER_PAGE = 10
 
 function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics }: SlidingPanelPlaylistsProps) {
     const playlists = usePlaylistStore((state) => state.playlists)
-    const deletePlaylist = usePlaylistStore((state) => state.deletePlaylist)
+    const setPlaylists = usePlaylistStore((state) => state.setPlaylists)
     const allMusicCount = useAudioStore((state) => state.playList.length)
 
     const { visibleItems, hasMore, showMore } = usePagination(playlists, PLAYLISTS_PER_PAGE)
+
+    const handleDelete = async (playlistId: string) => {
+        const library = await vinylApi.deletePlaylist(playlistId)
+        setPlaylists(library.playlists)
+    }
 
     return (
         <div className="flex flex-col gap-[32px]">
@@ -29,7 +35,7 @@ function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics }: SlidingPanelP
                             isLocked={playlist.isLocked}
                             onClick={() => onOpenMusics(playlist.id)}
                             onEdit={playlist.isLocked ? undefined : () => onEdit(playlist.id)}
-                            onDelete={playlist.isLocked ? undefined : () => deletePlaylist(playlist.id)}
+                            onDelete={playlist.isLocked ? undefined : () => handleDelete(playlist.id)}
                         />
                     </li>
                 ))}

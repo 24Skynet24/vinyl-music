@@ -9,10 +9,10 @@ import { TrackType } from "../../../entities/track"
 function SlidingPanelAddMusics({ onCancel, onSave }: SlidingPanelAddMusicsProps) {
     const [newTracks, setNewTracks] = useState<TrackType[]>([])
 
-    const handleFiles = async (files: FileList | null) => {
-        if (!files || files.length === 0) return
+    const handleFiles = async () => {
+        const tracks = await readAudioFiles()
+        if (tracks.length === 0) return
 
-        const tracks = await readAudioFiles(files)
         // New music appears at the start of the list.
         setNewTracks((prev) => [...tracks, ...prev])
     }
@@ -37,19 +37,13 @@ function SlidingPanelAddMusics({ onCancel, onSave }: SlidingPanelAddMusicsProps)
 
     return (
         <div className="flex flex-col gap-[32px]">
-            <div className="flex items-center justify-center relative w-full h-[64px] pt-[8px] border-orange-main border-2 border-dashed cursor-pointer">
+            <div
+                className="flex items-center justify-center relative w-full h-[64px] pt-[8px] border-orange-main border-2 border-dashed cursor-pointer"
+                onClick={handleFiles}
+            >
                 <span className="text-[36px] text-orange-main uppercase text-center select-none">
                     add new music
                 </span>
-                <input
-                    type="file" className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
-                    accept="audio/*"
-                    multiple
-                    onChange={(event) => {
-                        handleFiles(event.target.files)
-                        event.target.value = ""
-                    }}
-                />
             </div>
 
             <ul className="flex flex-col gap-[32px] max-h-[71vh] overflow-y-auto pb-[16px]">

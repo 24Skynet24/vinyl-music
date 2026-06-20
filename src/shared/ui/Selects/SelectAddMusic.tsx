@@ -3,7 +3,10 @@ import { SelectAddMusicProps } from "./types"
 
 function SelectAddMusic({ onSelect }: SelectAddMusicProps) {
     return (
-        <article className="w-[772px] h-[500px] border-dashed border-2 border-orange-main flex items-center justify-center relative cursor-pointer">
+        <article
+            className="w-[772px] h-[500px] border-dashed border-2 border-orange-main flex items-center justify-center relative cursor-pointer"
+            onClick={onSelect}
+        >
             <div className="flex flex-col items-center gap-[50px]">
                 <div className="flex items-center">
                     <img src={diskPlus} alt="disk-plus" />
@@ -18,12 +21,6 @@ function SelectAddMusic({ onSelect }: SelectAddMusicProps) {
                 </div>
             </div>
 
-            <input 
-                type="file" className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
-                accept="audio/*"
-                multiple
-                onChange={(event) => onSelect(event.target.files)}
-            />
         </article>
     )
 }
