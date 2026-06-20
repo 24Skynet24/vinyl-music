@@ -77,7 +77,7 @@ export const useAudioStore = create<AudioState>((set, get) => {
       });
     },
 
-    selectTracksQueueFrom: (tracks: TrackType[], trackId: string) => {
+    selectTracksQueueFrom: (tracks: TrackType[], trackId: string, playlistId = null, preserveProgress = false) => {
       const targetIndex = tracks.findIndex((track) => track.id === trackId);
       const targetTrack = tracks[targetIndex];
       if (!targetTrack) return;
@@ -85,11 +85,11 @@ export const useAudioStore = create<AudioState>((set, get) => {
       set({
         playList: tracks,
         currentIndex: targetIndex,
-        currentTime: 0,
         duration: targetTrack.duration,
         history: [targetIndex],
         historyIndex: 0,
-        activePlaylistId: null,
+        activePlaylistId: playlistId,
+        ...(!preserveProgress && { currentTime: 0 }),
       });
     },
 

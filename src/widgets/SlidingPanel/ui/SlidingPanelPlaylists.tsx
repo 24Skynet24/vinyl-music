@@ -15,7 +15,10 @@ function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics }: SlidingPanelP
     const playlists = usePlaylistStore((state) => state.playlists)
     const setPlaylists = usePlaylistStore((state) => state.setPlaylists)
     const allMusicTracks = useAudioStore((state) => state.libraryTracks)
+    const playList = useAudioStore((state) => state.playList)
+    const currentIndex = useAudioStore((state) => state.currentIndex)
     const playTracksQueue = useAudioStore((state) => state.playTracksQueue)
+    const selectTracksQueueFrom = useAudioStore((state) => state.selectTracksQueueFrom)
     const activePlaylistId = useAudioStore((state) => state.activePlaylistId)
     const isPlaying = useAudioStore((state) => state.isPlaying)
     const setIsPlaying = useAudioStore((state) => state.setIsPlaying)
@@ -36,7 +39,20 @@ function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics }: SlidingPanelP
     )
 
     const handleDelete = async (playlistId: string) => {
+        const shouldResetActiveQueue = activePlaylistId === playlistId
+        const currentTrackId = playList[currentIndex]?.id
         const library = await vinylApi.deletePlaylist(playlistId)
+
+        if (shouldResetActiveQueue) {
+            if (currentTrackId) {
+                selectTracksQueueFrom(allMusicTracks, currentTrackId, ALL_MUSIC_ID, true)
+            } else {
+                playTracksQueue(allMusicTracks, ALL_MUSIC_ID)
+            }
+
+            setIsPlaylistListVisible(true)
+        }
+
         setPlaylists(library.playlists)
     }
 

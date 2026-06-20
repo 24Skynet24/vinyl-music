@@ -48,7 +48,7 @@ export interface AudioState {
   nextTrack: (autoNext?: boolean) => void
   selectTrack: (index: number) => void
   playTracksQueue: (tracks: TrackType[], playlistId?: string | null) => void
-  selectTracksQueueFrom: (tracks: TrackType[], trackId: string) => void
+  selectTracksQueueFrom: (tracks: TrackType[], trackId: string, playlistId?: string | null, preserveProgress?: boolean) => void
   setTracks: (tracks: TrackType[]) => void
   addTracks: (tracks: TrackType[]) => void
 }
