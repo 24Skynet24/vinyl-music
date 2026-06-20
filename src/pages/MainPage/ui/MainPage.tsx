@@ -10,6 +10,7 @@ import EditTrack from "../../../features/EditTrack/ui/EditTrack"
 import Blackout from "../../../shared/ui/Overlays/Blackout"
 import { vinylApi } from "../../../shared/api/vinylApi"
 import { getAudioDuration } from "../../../shared/lib"
+import { Footer } from "../../../widgets/Footer"
 
 export function MainPage() {
   const { panelView, modalView, isPanelClosing, editTrackId, editPlaylistId, closePanel, closeModal } = useNavigationStore()
@@ -52,7 +53,7 @@ export function MainPage() {
   }, [setPlaylists, setTracks, updateTrackDuration])
 
   return (
-    <main className="w-full pb-[32px] h-screen">
+    <main className="w-full pb-[16px] h-screen flex flex-col">
       {panelView && (
         <>
           <Blackout onClick={closePanel} isClosing={isPanelClosing} />
@@ -72,6 +73,9 @@ export function MainPage() {
         <div className="my-[32px] mr-[32px] h-full">
           <NavigationSidebar />
         </div>
+      </div>
+      <div className="w-full mt-auto">
+        <Footer />
       </div>
     </main>
   )
