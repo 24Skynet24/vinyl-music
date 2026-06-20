@@ -52,7 +52,7 @@ export function MainPage() {
   }, [setPlaylists, setTracks, updateTrackDuration])
 
   return (
-    <main className="w-full pb-[32px]">
+    <main className="w-full pb-[32px] h-screen">
       {panelView && (
         <>
           <Blackout onClick={closePanel} isClosing={isPanelClosing} />
@@ -65,11 +65,11 @@ export function MainPage() {
       <EditTrack isOpen={modalView === "editTrack"} onClose={closeModal} trackId={editTrackId}/>
       <EditPlayList isOpen={modalView === "editPlaylist"} onClose={closeModal} playlistId={editPlaylistId}/>
 
-      <div className="w-full flex justify-between">
-        <div className="flex items-center justify-center flex-1">
+      <div className="w-full h-full flex justify-between">
+        <div className="h-full flex items-center justify-center flex-1">
           <Player />
         </div>
-        <div className="my-[32px] mr-[32px]">
+        <div className="my-[32px] mr-[32px] h-full">
           <NavigationSidebar />
         </div>
       </div>
