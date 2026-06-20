@@ -1,24 +1,30 @@
 import { ipcRenderer, contextBridge } from 'electron'
+import type { LibraryData, PlaylistInput, TrackRecord } from './backend/types'
 
-// --------- Expose some API to the Renderer process ---------
-contextBridge.exposeInMainWorld('ipcRenderer', {
-  on(...args: Parameters<typeof ipcRenderer.on>) {
-    const [channel, listener] = args
-    return ipcRenderer.on(channel, (event, ...args) => listener(event, ...args))
-  },
-  off(...args: Parameters<typeof ipcRenderer.off>) {
-    const [channel, ...omit] = args
-    return ipcRenderer.off(channel, ...omit)
-  },
-  send(...args: Parameters<typeof ipcRenderer.send>) {
-    const [channel, ...omit] = args
-    return ipcRenderer.send(channel, ...omit)
-  },
-  invoke(...args: Parameters<typeof ipcRenderer.invoke>) {
-    const [channel, ...omit] = args
-    return ipcRenderer.invoke(channel, ...omit)
-  },
+const vinylApi = {
+  loadLibrary: (): Promise<LibraryData> =>
+    ipcRenderer.invoke('library:load'),
 
-  // You can expose other APTs you need here.
-  // ...
-})
+  selectAudioFiles: (): Promise<TrackRecord[]> =>
+    ipcRenderer.invoke('tracks:select-audio'),
+
+  saveTracks: (tracks: TrackRecord[]): Promise<LibraryData> =>
+    ipcRenderer.invoke('tracks:save', tracks),
+
+  createPlaylist: (data: PlaylistInput): Promise<LibraryData> =>
+    ipcRenderer.invoke('playlists:create', data),
+
+  updatePlaylist: (id: string, data: PlaylistInput): Promise<LibraryData> =>
+    ipcRenderer.invoke('playlists:update', id, data),
+
+  deletePlaylist: (id: string): Promise<LibraryData> =>
+    ipcRenderer.invoke('playlists:delete', id),
+
+  toggleTrackInPlaylist: (playlistId: string, trackId: string): Promise<LibraryData> =>
+    ipcRenderer.invoke('playlists:toggle-track', playlistId, trackId),
+
+  selectPlaylistCover: (): Promise<string | null> =>
+    ipcRenderer.invoke('covers:select'),
+}
+
+contextBridge.exposeInMainWorld('vinylApi', vinylApi)
