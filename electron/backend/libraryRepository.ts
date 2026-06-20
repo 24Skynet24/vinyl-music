@@ -112,3 +112,15 @@ export const saveTracks = async (tracks: TrackRecord[]): Promise<LibraryData> =>
     tracks: [...newTracks, ...updatedTracks],
   })
 }
+
+export const deleteTrack = async (trackId: string): Promise<LibraryData> => {
+  const library = await readLibrary()
+
+  return writeLibrary({
+    tracks: library.tracks.filter((track) => track.id !== trackId),
+    playlists: library.playlists.map((playlist) => ({
+      ...playlist,
+      trackIds: playlist.trackIds.filter((id) => id !== trackId),
+    })),
+  })
+}

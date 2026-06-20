@@ -1,6 +1,6 @@
 import { BrowserWindow, OpenDialogOptions, dialog, ipcMain } from "electron"
 import { randomUUID } from "node:crypto"
-import { ALL_MUSIC_ID, readLibrary, saveTracks, writeLibrary } from "./libraryRepository"
+import { ALL_MUSIC_ID, deleteTrack, readLibrary, saveTracks, writeLibrary } from "./libraryRepository"
 import { importAudioFiles, importCoverFile } from "./mediaService"
 import { PlaylistInput, PlaylistRecord, TrackRecord } from "./types"
 
@@ -39,6 +39,10 @@ export const registerBackendIpc = () => {
 
   ipcMain.handle("tracks:save", async (_event, tracks: TrackRecord[]) =>
     saveTracks(tracks)
+  )
+
+  ipcMain.handle("tracks:delete", async (_event, trackId: string) =>
+    deleteTrack(trackId)
   )
 
   ipcMain.handle("playlists:create", async (_event, data: PlaylistInput) => {

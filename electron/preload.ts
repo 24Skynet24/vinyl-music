@@ -11,6 +11,9 @@ const vinylApi = {
   saveTracks: (tracks: TrackRecord[]): Promise<LibraryData> =>
     ipcRenderer.invoke('tracks:save', tracks),
 
+  deleteTrack: (trackId: string): Promise<LibraryData> =>
+    ipcRenderer.invoke('tracks:delete', trackId),
+
   createPlaylist: (data: PlaylistInput): Promise<LibraryData> =>
     ipcRenderer.invoke('playlists:create', data),
 

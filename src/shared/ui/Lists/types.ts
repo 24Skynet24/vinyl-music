@@ -6,6 +6,7 @@ export interface PlayListTrackProps extends TrackType {
 
     onClick?: () => void
     editPlaylist?: () => void
+    deleteTrack?: () => void
     removeNewTrack?: () => void
 }
 

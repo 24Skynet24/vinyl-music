@@ -51,4 +51,5 @@ export interface AudioState {
   selectTracksQueueFrom: (tracks: TrackType[], trackId: string, playlistId?: string | null, preserveProgress?: boolean) => void
   setTracks: (tracks: TrackType[]) => void
   addTracks: (tracks: TrackType[]) => void
+  removeTrackEverywhere: (trackId: string) => void
 }

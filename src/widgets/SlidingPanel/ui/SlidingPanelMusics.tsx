@@ -4,6 +4,7 @@ import { SlidingPanelMusicsProps } from "../model/types"
 import TextButton from "../../../shared/ui/Buttons/TextButton"
 import { usePagination } from "../../../shared/lib"
 import { usePlaylistStore, ALL_MUSIC_ID } from "../../../entities/playlist"
+import { vinylApi } from "../../../shared/api/vinylApi"
 
 const MUSICS_PER_PAGE = 20
 
@@ -13,6 +14,8 @@ function SlidingPanelMusics({ onEditTrack, playlistId, onBack }: SlidingPanelMus
     const currentIndex = useAudioStore((state) => state.currentIndex)
     const selectTrack = useAudioStore((state) => state.selectTrack)
     const selectTracksQueueFrom = useAudioStore((state) => state.selectTracksQueueFrom)
+    const removeTrackEverywhere = useAudioStore((state) => state.removeTrackEverywhere)
+    const setPlaylists = usePlaylistStore((state) => state.setPlaylists)
     const playlist = usePlaylistStore((state) =>
         playlistId ? state.playlists.find((item) => item.id === playlistId) : undefined
     )
@@ -39,6 +42,12 @@ function SlidingPanelMusics({ onEditTrack, playlistId, onBack }: SlidingPanelMus
         }
 
         selectTracksQueueFrom(tracks.map(({ track }) => track), trackId)
+    }
+
+    const handleDeleteTrack = async (trackId: string) => {
+        const library = await vinylApi.deleteTrack(trackId)
+        removeTrackEverywhere(trackId)
+        setPlaylists(library.playlists)
     }
 
     const { visibleItems, hasMore, showMore } = usePagination(tracks, MUSICS_PER_PAGE)
@@ -74,6 +83,7 @@ function SlidingPanelMusics({ onEditTrack, playlistId, onBack }: SlidingPanelMus
                         img={track.img}
                         onClick={() => handleSelectTrack(track.id)}
                         editPlaylist={() => onEditTrack(track.id)}
+                        deleteTrack={() => handleDeleteTrack(track.id)}
                     />
                 </li>
                 )

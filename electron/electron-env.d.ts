@@ -28,6 +28,7 @@ declare global {
     loadLibrary: () => Promise<LibraryData>
     selectAudioFiles: () => Promise<TrackRecord[]>
     saveTracks: (tracks: TrackRecord[]) => Promise<LibraryData>
+    deleteTrack: (trackId: string) => Promise<LibraryData>
     createPlaylist: (data: PlaylistInput) => Promise<LibraryData>
     updatePlaylist: (id: string, data: PlaylistInput) => Promise<LibraryData>
     deletePlaylist: (id: string) => Promise<LibraryData>

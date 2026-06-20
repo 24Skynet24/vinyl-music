@@ -24,6 +24,9 @@ export const vinylApi = {
     saveTracks: async (tracks: TrackType[]): Promise<LibraryResponse> =>
         ensureApi().saveTracks(tracks) as Promise<LibraryResponse>,
 
+    deleteTrack: async (trackId: string): Promise<LibraryResponse> =>
+        ensureApi().deleteTrack(trackId) as Promise<LibraryResponse>,
+
     createPlaylist: async (data: PlaylistInput): Promise<LibraryResponse> =>
         ensureApi().createPlaylist(data) as Promise<LibraryResponse>,
 

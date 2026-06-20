@@ -298,5 +298,62 @@ export const useAudioStore = create<AudioState>((set, get) => {
         ...(isPlayingLibraryQueue && { activePlaylistId }),
       });
     },
+
+    removeTrackEverywhere: (trackId: string) => {
+      const {
+        libraryTracks,
+        playList,
+        currentIndex,
+        currentTime,
+        isPlaying,
+        activePlaylistId,
+      } = get();
+      const currentTrack = playList[currentIndex];
+      const removedQueueIndex = playList.findIndex((track) => track.id === trackId);
+      const removedLibraryIndex = libraryTracks.findIndex((track) => track.id === trackId);
+      const nextLibraryTracks = libraryTracks.filter((track) => track.id !== trackId);
+      const nextQueue = playList.filter((track) => track.id !== trackId);
+
+      if (removedQueueIndex < 0) {
+        set({ libraryTracks: nextLibraryTracks });
+        return;
+      }
+
+      const isCurrentTrackRemoved = currentTrack?.id === trackId;
+      const nextTrack = isCurrentTrackRemoved
+        ? nextQueue[removedQueueIndex] ?? nextQueue[0] ?? nextLibraryTracks[removedLibraryIndex] ?? nextLibraryTracks[0]
+        : currentTrack;
+
+      if (!nextTrack) {
+        set({
+          libraryTracks: nextLibraryTracks,
+          playList: [],
+          currentIndex: 0,
+          currentTime: 0,
+          duration: 0,
+          history: [0],
+          historyIndex: 0,
+          isPlaying: false,
+          activePlaylistId: null,
+        });
+        return;
+      }
+
+      const shouldFallbackToLibrary = nextQueue.length === 0;
+      const resolvedQueue = shouldFallbackToLibrary ? nextLibraryTracks : nextQueue;
+      const nextIndex = resolvedQueue.findIndex((track) => track.id === nextTrack.id);
+
+      set({
+        libraryTracks: nextLibraryTracks,
+        playList: resolvedQueue,
+        currentIndex: Math.max(0, nextIndex),
+        currentTime: isCurrentTrackRemoved ? 0 : currentTime,
+        duration: nextTrack.duration,
+        history: [Math.max(0, nextIndex)],
+        historyIndex: 0,
+        isPlaying,
+        activePlaylistId: shouldFallbackToLibrary ? null : activePlaylistId,
+      });
+    },
   };
 });
