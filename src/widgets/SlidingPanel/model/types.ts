@@ -8,6 +8,7 @@ export interface SlidingPanelProps {
 export interface SlidingPanelMusicsProps {
     onEditTrack: (trackId: string) => void
     playlistId?: string | null
+    onBack?: () => void
 }
 
 export interface SlidingPanelPlaylistsProps {

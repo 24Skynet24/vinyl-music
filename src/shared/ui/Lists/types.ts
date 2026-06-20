@@ -22,6 +22,7 @@ export interface PlayListItemProps  {
     isLocked?: boolean
 
     onClick?: () => void
+    onPlay?: () => void
     onDelete?: () => void
     onEdit?: () => void
 

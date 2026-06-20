@@ -9,7 +9,7 @@ function SelectAddMusic({ onSelect }: SelectAddMusicProps) {
         >
             <div className="flex flex-col items-center gap-[50px]">
                 <div className="flex items-center">
-                    <img src={diskPlus} alt="disk-plus" />
+                    <img src={diskPlus} alt="disk-plus" className="object-cover w-full h-full"/>
                 </div>
                 <div className="flex flex-col items-center gap-[16px]">
                     <h4 className="text-[64px] text-orange-main uppercase">

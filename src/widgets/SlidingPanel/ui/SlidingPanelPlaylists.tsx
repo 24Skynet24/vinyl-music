@@ -11,13 +11,25 @@ const PLAYLISTS_PER_PAGE = 10
 function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics }: SlidingPanelPlaylistsProps) {
     const playlists = usePlaylistStore((state) => state.playlists)
     const setPlaylists = usePlaylistStore((state) => state.setPlaylists)
-    const allMusicCount = useAudioStore((state) => state.playList.length)
+    const allMusicTracks = useAudioStore((state) => state.libraryTracks)
+    const playTracksQueue = useAudioStore((state) => state.playTracksQueue)
 
     const { visibleItems, hasMore, showMore } = usePagination(playlists, PLAYLISTS_PER_PAGE)
 
     const handleDelete = async (playlistId: string) => {
         const library = await vinylApi.deletePlaylist(playlistId)
         setPlaylists(library.playlists)
+    }
+
+    const handlePlay = (playlistId: string) => {
+        const playlist = playlists.find((item) => item.id === playlistId)
+        if (!playlist) return
+
+        const tracks = playlist.id === ALL_MUSIC_ID
+            ? allMusicTracks
+            : allMusicTracks.filter((track) => playlist.trackIds.includes(track.id))
+
+        playTracksQueue(tracks)
     }
 
     return (
@@ -30,10 +42,11 @@ function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics }: SlidingPanelP
                             title={playlist.title}
                             description={playlist.description}
                             img={playlist.img}
-                            musicCount={playlist.id === ALL_MUSIC_ID ? allMusicCount : playlist.trackIds.length}
+                            musicCount={playlist.id === ALL_MUSIC_ID ? allMusicTracks.length : playlist.trackIds.length}
                             isSelected={playlist.id === ALL_MUSIC_ID}
                             isLocked={playlist.isLocked}
                             onClick={() => onOpenMusics(playlist.id)}
+                            onPlay={() => handlePlay(playlist.id)}
                             onEdit={playlist.isLocked ? undefined : () => onEdit(playlist.id)}
                             onDelete={playlist.isLocked ? undefined : () => handleDelete(playlist.id)}
                         />

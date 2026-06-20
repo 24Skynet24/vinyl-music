@@ -11,6 +11,7 @@ import { vinylApi } from "../../../shared/api/vinylApi"
 function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
     const openEditTrack = useNavigationStore((state) => state.openEditTrack)
     const openEditPlaylist = useNavigationStore((state) => state.openEditPlaylist)
+    const openPanel = useNavigationStore((state) => state.openPanel)
     const openPlaylistMusics = useNavigationStore((state) => state.openPlaylistMusics)
     const selectedPlaylistId = useNavigationStore((state) => state.selectedPlaylistId)
     const closePanel = useNavigationStore((state) => state.closePanel)
@@ -25,7 +26,7 @@ function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
     const renderContent = (): React.ReactNode => {
         switch (view) {
             case "musics":
-                return <SlidingPanelMusics onEditTrack={openEditTrack} playlistId={selectedPlaylistId}/>
+                return <SlidingPanelMusics onEditTrack={openEditTrack} playlistId={selectedPlaylistId} onBack={() => openPanel("playlists")}/>
             case "add-music":
                 return <SlidingPanelAddMusics onCancel={closePanel} onSave={handleSaveNewMusic} />
             case "playlists":

@@ -19,6 +19,7 @@ export const useAudioStore = create<AudioState>((set, get) => {
     // Time & Playlist
     currentTime: 0,
     duration: initialPlaylist[0]?.duration ?? 0,
+    libraryTracks: initialPlaylist,
     playList: initialPlaylist,
     currentIndex: 0,
     history: [0],
@@ -56,6 +57,36 @@ export const useAudioStore = create<AudioState>((set, get) => {
         currentIndex: index,
         currentTime: 0,
         duration: targetTrack.duration,
+      });
+    },
+
+    playTracksQueue: (tracks: TrackType[]) => {
+      const firstTrack = tracks[0];
+      if (!firstTrack) return;
+
+      set({
+        playList: tracks,
+        currentIndex: 0,
+        currentTime: 0,
+        duration: firstTrack.duration,
+        history: [0],
+        historyIndex: 0,
+        isPlaying: true,
+      });
+    },
+
+    selectTracksQueueFrom: (tracks: TrackType[], trackId: string) => {
+      const targetIndex = tracks.findIndex((track) => track.id === trackId);
+      const targetTrack = tracks[targetIndex];
+      if (!targetTrack) return;
+
+      set({
+        playList: tracks,
+        currentIndex: targetIndex,
+        currentTime: 0,
+        duration: targetTrack.duration,
+        history: [targetIndex],
+        historyIndex: 0,
       });
     },
 
@@ -220,6 +251,9 @@ export const useAudioStore = create<AudioState>((set, get) => {
       })),
     updateTrackDuration: (trackId, duration) =>
       set((state) => ({
+        libraryTracks: state.libraryTracks.map((track) =>
+          track.id === trackId ? { ...track, duration } : track
+        ),
         playList: state.playList.map((track) =>
           track.id === trackId ? { ...track, duration } : track
         ),
@@ -230,6 +264,7 @@ export const useAudioStore = create<AudioState>((set, get) => {
       const firstTrack = tracks[0];
 
       set({
+        libraryTracks: tracks,
         playList: tracks,
         currentIndex: 0,
         currentTime: 0,
@@ -243,15 +278,18 @@ export const useAudioStore = create<AudioState>((set, get) => {
     addTracks: (tracks: TrackType[]) => {
       if (!tracks.length) return;
 
-      const { playList, currentIndex } = get();
-      const wasEmpty = playList.length === 0;
-      const newPlayList = [...tracks, ...playList];
+      const { libraryTracks, playList, currentIndex } = get();
+      const wasEmpty = libraryTracks.length === 0;
+      const isPlayingLibraryQueue =
+        playList.length === libraryTracks.length &&
+        playList.every((track, index) => track.id === libraryTracks[index]?.id);
+      const updatedLibraryTracks = [...tracks, ...libraryTracks];
+      const newPlayList = isPlayingLibraryQueue || wasEmpty ? updatedLibraryTracks : playList;
 
       set({
+        libraryTracks: updatedLibraryTracks,
         playList: newPlayList,
-        // Keep the currently selected track in place by shifting its index,
-        // since the new tracks are prepended to the start of the list.
-        currentIndex: wasEmpty ? 0 : currentIndex + tracks.length,
+        currentIndex: isPlayingLibraryQueue && !wasEmpty ? currentIndex + tracks.length : currentIndex,
         ...(wasEmpty && { duration: tracks[0].duration }),
       });
     },

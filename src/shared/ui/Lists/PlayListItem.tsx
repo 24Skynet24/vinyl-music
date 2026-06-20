@@ -1,26 +1,36 @@
 import { PlayListItemProps } from "./types"
 import cover from "../../assets/img/cover-2.png"
 
-function PlayListItem ({img, title, isSelected, musicCount, description, isEditTrack, isHaveTrack, isLocked, onClick, onDelete, onEdit, onAddTrack, onRemoveTrack}: PlayListItemProps) {
+function PlayListItem ({img, title, isSelected, musicCount, description, isEditTrack, isHaveTrack, isLocked, onClick, onDelete, onEdit, onAddTrack, onRemoveTrack, onPlay}: PlayListItemProps) {
     return (
         <article className="w-full h-[200px] flex items-center gap-[16px] text-white-main">
-            <div className="flex h-full gap-[16px] flex-1 cursor-pointer" onClick={onClick}>
-                <div className="h-full w-[200px]">
-                    <img src={img ? img : cover} alt="" className="w-full h-full"/>
+            <div className="flex h-full flex-1">
+                <div className="h-full w-[200px] relative cursor-pointer" onClick={onPlay}>
+                    <div className="absolute top-0 left-0 w-full h-full bg-black-main/70 z-1 flex items-center justify-center opacity-0 transition-opacity duration-300 hover:opacity-100">
+                        <div className="w-[64px] h-[64px]">
+                            <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10.6666 6.85327V25.5199L25.3333 16.1866L10.6666 6.85327Z" fill="#D7452C"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <img src={img ? img : cover} alt="" className="w-full h-full object-cover z-0"/>
                 </div>
 
-                <div className="flex flex-col h-full gap-[8px] max-w-[450px] py-[8px]">
-                    <h6 className={`${isSelected ? 'text-orange-main' : 'text-white-main'} text-[32px]`}>
-                        {title}
-                    </h6>
-                    { description &&
-                        <span className="font-futura">
-                            {description}
+                <div className="flex flex-col h-full gap-[8px] flex-1 py-[8px] cursor-pointer pl-[16px]" onClick={onClick}>
+                    <div className="flex flex-col h-full gap-[8px]">
+                        <h6 className={`${isSelected ? 'text-orange-main' : 'text-white-main'} text-[32px]`}>
+                            {title}
+                        </h6>
+                        { description &&
+                            <span className="font-futura">
+                                {description}
+                            </span>
+                        }
+                        <span className="block mt-auto font-futura">
+                            {musicCount || 0} musicks
                         </span>
-                    }
-                    <span className="block mt-auto font-futura">
-                        {musicCount || 0} musicks
-                    </span>
+                    </div>
                 </div>
             </div>
 

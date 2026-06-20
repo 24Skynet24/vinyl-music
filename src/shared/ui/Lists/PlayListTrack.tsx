@@ -10,7 +10,7 @@ function PlayListTrack ({title, duration, isSelected, img, artist, album, onClic
                 <div className={`flex-1 flex items-center justify-between mr-[16px] ${isNewTrack ? "cursor-default" : "cursor-pointer"}`} onClick={onClick}>
                     <div className={`flex items-center gap-[16px] ${isNewTrack ? "cursor-default" : "cursor-pointer"}`}>
                         <div className="w-[64px] h-full">
-                            <img src={img ? img : cover} alt="" />
+                            <img src={img ? img : cover} alt="" className="object-cover w-full h-full"/>
                         </div>
 
                         <div className="w-[357px]">
