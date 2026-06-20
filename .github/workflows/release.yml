@@ -27,7 +27,7 @@ jobs:
         run: npm ci
 
       - name: Build app
-        run: npm run build
+        run: npm run build -- --publish never
 
       - name: Publish GitHub Release
         uses: ncipollo/release-action@v1
