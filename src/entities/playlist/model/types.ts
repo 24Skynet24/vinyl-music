@@ -16,6 +16,7 @@ export interface PlaylistInput {
 export interface PlaylistState {
     playlists: PlaylistType[]
 
+    setPlaylists: (playlists: PlaylistType[]) => void
     addPlaylist: (data: PlaylistInput) => void
     updatePlaylist: (id: string, data: PlaylistInput) => void
     deletePlaylist: (id: string) => void

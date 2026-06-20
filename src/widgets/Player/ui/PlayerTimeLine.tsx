@@ -12,7 +12,8 @@ function PlayerTimeLine() {
     const [hoverProgress, setHoverProgress] = useState<number | null>(null)
     const [isDragging, setIsDragging] = useState(false)
 
-    const currentProgress = duration > 0 ? currentTime / duration : 0
+    const safeCurrentTime = duration > 0 ? Math.min(currentTime, duration) : currentTime
+    const currentProgress = duration > 0 ? Math.min(safeCurrentTime / duration, 1) : 0
 
     const getPercent = (clientX: number) => {
         if (!barRef.current) return 0
@@ -61,7 +62,7 @@ function PlayerTimeLine() {
     return (
         <article className="flex flex-col gap-[12px] w-full">
             <div className="flex items-center justify-between w-full text-[32px] tracking-[1px] select-none">
-                <span className="text-orange-main">{formatTime(currentTime)}</span>
+                <span className="text-orange-main">{formatTime(safeCurrentTime)}</span>
                 <span className="text-white-main">{formatTime(duration)}</span>
             </div>
 
@@ -83,7 +84,7 @@ function PlayerTimeLine() {
                 <span
                     className="absolute z-0 h-full bg-gray-main left-0 top-0"
                     style={{
-                        width: `${(activeProgress ?? 0) * 100}%`,
+                        width: `${Math.min(activeProgress ?? 0, 1) * 100}%`,
                         opacity: activeProgress !== null ? 1 : 0,
                     }}
                 />
@@ -91,7 +92,7 @@ function PlayerTimeLine() {
                 {activeProgress !== null && (
                     <div
                         className="absolute bottom-[18px] -translate-x-1/2 text-[12px] text-white-main bg-black-main px-2 py-1 rounded"
-                        style={{ left: `${activeProgress * 100}%` }}
+                        style={{ left: `${Math.min(activeProgress, 1) * 100}%` }}
                     >
                         {formatTime(activeTime!)}
                     </div>

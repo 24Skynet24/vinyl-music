@@ -18,7 +18,7 @@ export const useAudioStore = create<AudioState>((set, get) => {
 
     // Time & Playlist
     currentTime: 0,
-    duration: initialPlaylist[0]?.duration ?? 180,
+    duration: initialPlaylist[0]?.duration ?? 0,
     playList: initialPlaylist,
     currentIndex: 0,
     history: [0],
@@ -157,7 +157,7 @@ export const useAudioStore = create<AudioState>((set, get) => {
           isPlaying: false,
           currentIndex: 0,
           currentTime: 0,
-          duration: firstTrack?.duration ?? 180,
+          duration: firstTrack?.duration ?? 0,
           history: [0],
           historyIndex: 0,
         });
@@ -206,9 +206,39 @@ export const useAudioStore = create<AudioState>((set, get) => {
 
     toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
     setIsPlaying: (isPlaying) => set({ isPlaying }),
-    setDuration: (duration) => set({ duration }),
+    setDuration: (duration) =>
+      set((state) => ({
+        duration,
+        currentTime: duration > 0 ? Math.min(state.currentTime, duration) : state.currentTime,
+      })),
     setVolume: (volume) => set({ volume: Math.max(0, Math.min(1, volume)), isMuted: volume === 0 }),
-    setCurrentTime: (time) => set({ currentTime: time }),
+    setCurrentTime: (time) =>
+      set((state) => ({
+        currentTime: state.duration > 0
+          ? Math.max(0, Math.min(time, state.duration))
+          : Math.max(0, time),
+      })),
+    updateTrackDuration: (trackId, duration) =>
+      set((state) => ({
+        playList: state.playList.map((track) =>
+          track.id === trackId ? { ...track, duration } : track
+        ),
+        ...(state.playList[state.currentIndex]?.id === trackId && { duration }),
+      })),
+
+    setTracks: (tracks: TrackType[]) => {
+      const firstTrack = tracks[0];
+
+      set({
+        playList: tracks,
+        currentIndex: 0,
+        currentTime: 0,
+        duration: firstTrack?.duration ?? 0,
+        history: [0],
+        historyIndex: 0,
+        isPlaying: false,
+      });
+    },
 
     addTracks: (tracks: TrackType[]) => {
       if (!tracks.length) return;

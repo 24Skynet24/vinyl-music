@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from "react"
+import { vinylApi } from "../../../shared/api/vinylApi"
 import { useAudioStore } from "../model/audioStore"
 
 function PlayerAudio() {
@@ -14,6 +15,7 @@ function PlayerAudio() {
     const setCurrentTime = useAudioStore((state) => state.setCurrentTime)
     const setDuration = useAudioStore((state) => state.setDuration)
     const setIsPlaying = useAudioStore((state) => state.setIsPlaying)
+    const updateTrackDuration = useAudioStore((state) => state.updateTrackDuration)
     const nextTrack = useAudioStore((state) => state.nextTrack)
 
     const currentTrack = playList[currentIndex]
@@ -67,11 +69,35 @@ function PlayerAudio() {
         audio.pause()
     }, [isPlaying, setIsPlaying, src])
 
-    const handleLoadedMetadata = () => {
+    const handleDurationUpdate = () => {
         const audio = audioRef.current
-        if (!audio) return
+        if (!audio || !currentTrack) return
 
-        setDuration(audio.duration || currentTrack?.duration || 0)
+        const nextDuration = Math.floor(audio.duration)
+        if (!Number.isFinite(nextDuration) || nextDuration <= 0) return
+
+        const duration = nextDuration
+        setDuration(duration)
+
+        if (duration > 0 && duration !== currentTrack.duration) {
+            const updatedTrack = { ...currentTrack, duration }
+            updateTrackDuration(currentTrack.id, duration)
+            vinylApi.saveTracks([updatedTrack]).catch((error) => {
+                console.error("Failed to persist track duration", error)
+            })
+        }
+    }
+
+    const handleTimeUpdate = (event: React.SyntheticEvent<HTMLAudioElement>) => {
+        handleDurationUpdate()
+
+        const audio = event.currentTarget
+        const duration = Number.isFinite(audio.duration) && audio.duration > 0
+            ? audio.duration
+            : currentTrack?.duration ?? 0
+        const time = duration > 0 ? Math.min(audio.currentTime, duration) : audio.currentTime
+
+        setCurrentTime(time)
     }
 
     const handleEnded = () => {
@@ -91,8 +117,10 @@ function PlayerAudio() {
     return (
         <audio
             ref={audioRef}
-            onLoadedMetadata={handleLoadedMetadata}
-            onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
+            onLoadedMetadata={handleDurationUpdate}
+            onDurationChange={handleDurationUpdate}
+            onCanPlay={handleDurationUpdate}
+            onTimeUpdate={handleTimeUpdate}
             onEnded={handleEnded}
         />
     )

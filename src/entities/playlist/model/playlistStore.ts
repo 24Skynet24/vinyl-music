@@ -15,6 +15,8 @@ const allMusicPlaylist: PlaylistType = {
 export const usePlaylistStore = create<PlaylistState>((set) => ({
     playlists: [allMusicPlaylist],
 
+    setPlaylists: (playlists) => set({ playlists }),
+
     addPlaylist: ({ title, description, img }) =>
         set((state) => ({
             playlists: [

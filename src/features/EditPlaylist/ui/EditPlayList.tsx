@@ -4,11 +4,11 @@ import cover from "../../../shared/assets/img/cover-2.png"
 import TextButton from "../../../shared/ui/Buttons/TextButton"
 import { EditPlayListProps } from "../types"
 import { usePlaylistStore } from "../../../entities/playlist"
+import { vinylApi } from "../../../shared/api/vinylApi"
 
 function EditPlayList ({ isOpen, onClose, playlistId }: EditPlayListProps) {
     const playlists = usePlaylistStore((state) => state.playlists)
-    const addPlaylist = usePlaylistStore((state) => state.addPlaylist)
-    const updatePlaylist = usePlaylistStore((state) => state.updatePlaylist)
+    const setPlaylists = usePlaylistStore((state) => state.setPlaylists)
 
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
@@ -26,12 +26,14 @@ function EditPlayList ({ isOpen, onClose, playlistId }: EditPlayListProps) {
         setImg(editing?.img)
     }, [isOpen, playlistId, playlists])
 
-    const handleImage = (files: FileList | null) => {
-        if (!files || !files[0]) return
-        setImg(URL.createObjectURL(files[0]))
+    const handleImage = async () => {
+        const coverUrl = await vinylApi.selectPlaylistCover()
+        if (!coverUrl) return
+
+        setImg(coverUrl)
     }
 
-    const handleSave = () => {
+    const handleSave = async () => {
         const trimmedTitle = title.trim()
         if (!trimmedTitle) return
 
@@ -42,9 +44,11 @@ function EditPlayList ({ isOpen, onClose, playlistId }: EditPlayListProps) {
         }
 
         if (playlistId) {
-            updatePlaylist(playlistId, data)
+            const library = await vinylApi.updatePlaylist(playlistId, data)
+            setPlaylists(library.playlists)
         } else {
-            addPlaylist(data)
+            const library = await vinylApi.createPlaylist(data)
+            setPlaylists(library.playlists)
         }
 
         onClose()
@@ -55,7 +59,7 @@ function EditPlayList ({ isOpen, onClose, playlistId }: EditPlayListProps) {
             <div className="w-[900px] h-[500px] flex justify-center pt-[64px]">
                 <div className="px-[32px] pb-[32px] flex flex-col justify-between">
                     <div className="flex gap-[32px]">
-                        <div className="w-[200px] h-[200px] cursor-pointer relative">
+                        <div className="w-[200px] h-[200px] cursor-pointer relative" onClick={handleImage}>
                             <div className="absolute top-0 left-0 w-full h-full bg-black-main/70 z-1 flex items-center justify-center opacity-0 transition-opacity duration-300 hover:opacity-100">
                                 <div className="w-[64px] h-[64px]">
                                     <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -67,12 +71,6 @@ function EditPlayList ({ isOpen, onClose, playlistId }: EditPlayListProps) {
 
                             <img src={img ?? cover} alt="" className="w-full h-full relative z-0 object-cover"/>
 
-                            <input
-                                type="file"
-                                accept="image/*"
-                                className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer z-2"
-                                onChange={(event) => handleImage(event.target.files)}
-                            />
                         </div>
                         
                         <div className="flex flex-col w-[600px] gap-[16px] pt-[16px] text-white-main font-futura text-[24px]">

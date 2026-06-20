@@ -6,6 +6,7 @@ import { useNavigationStore } from "../../../features/Navigation/model/navigatio
 import { useAudioStore } from "../../Player/model/audioStore"
 import SlidingPanelAddMusics from "./SlidingPanelAddMusics"
 import { TrackType } from "../../../entities/track"
+import { vinylApi } from "../../../shared/api/vinylApi"
 
 function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
     const openEditTrack = useNavigationStore((state) => state.openEditTrack)
@@ -13,10 +14,11 @@ function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
     const openPlaylistMusics = useNavigationStore((state) => state.openPlaylistMusics)
     const selectedPlaylistId = useNavigationStore((state) => state.selectedPlaylistId)
     const closePanel = useNavigationStore((state) => state.closePanel)
-    const addTracks = useAudioStore((state) => state.addTracks)
+    const setTracks = useAudioStore((state) => state.setTracks)
 
-    const handleSaveNewMusic = (tracks: TrackType[]) => {
-        addTracks(tracks)
+    const handleSaveNewMusic = async (tracks: TrackType[]) => {
+        const library = await vinylApi.saveTracks(tracks)
+        setTracks(library.tracks)
         closePanel()
     }
 

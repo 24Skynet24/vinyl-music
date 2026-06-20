@@ -39,10 +39,12 @@ export interface AudioState {
   setDuration: (duration: number) => void
   setVolume: (volume: number) => void
   setCurrentTime: (time: number) => void
+  updateTrackDuration: (trackId: string, duration: number) => void
   tickProgress: () => void
   
   prevTrack: () => void
   nextTrack: (autoNext?: boolean) => void
   selectTrack: (index: number) => void
+  setTracks: (tracks: TrackType[]) => void
   addTracks: (tracks: TrackType[]) => void
 }
