@@ -16,7 +16,7 @@ function Player () {
             <PlayerAudio />
             <div className="flex items-center gap-[64px] mb-[64px]">
                 <PlayerDisk />
-                <div className="flex flex-col gap-[32px] min-[1440px]:min-w-[703px]">
+                <div className="flex flex-col gap-[32px] min-[1440px]:min-w-[703px] min-w-[500px]">
                     {currentTrack && (
                         <PlayerInfoText
                             title={currentTrack.title}
