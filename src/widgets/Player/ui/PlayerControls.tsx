@@ -1,4 +1,4 @@
-import { useAudioStore } from "../model/audioStore"
+import { useAudioStore } from "../../../entities/audio"
 import PlayButton from "../../../shared/ui/Buttons/PlayButton"
 import NextPrevButton from "../../../shared/ui/Buttons/NextPrevButton"
 import RepeatButton from "../../../shared/ui/Buttons/RepeatButton"

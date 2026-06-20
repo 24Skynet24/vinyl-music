@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from "react"
 import { vinylApi } from "../../../shared/api/vinylApi"
-import { useAudioStore } from "../model/audioStore"
+import { useAudioStore } from "../../../entities/audio"
 
 function PlayerAudio() {
     const audioRef = useRef<HTMLAudioElement | null>(null)

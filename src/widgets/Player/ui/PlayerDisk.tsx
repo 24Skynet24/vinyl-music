@@ -1,4 +1,4 @@
-import { useAudioStore } from "../model/audioStore"
+import { useAudioStore } from "../../../entities/audio"
 
 function PlayerDisk() {
     const isPlaying = useAudioStore((state) => state.isPlaying)

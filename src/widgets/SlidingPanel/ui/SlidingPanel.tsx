@@ -3,24 +3,18 @@ import SlidingPanelMusics from "./SlidingPanelMusics"
 import SlidingPanelPlaylists from "./SlidingPanelPlaylists"
 import { SlidingPanelProps } from "../model/types"
 import { useNavigationStore } from "../../../features/Navigation/model/navigationStore"
-import { useAudioStore } from "../../Player/model/audioStore"
+import { useAudioStore } from "../../../entities/audio"
 import SlidingPanelAddMusics from "./SlidingPanelAddMusics"
 import { TrackType } from "../../../entities/track"
 import { vinylApi } from "../../../shared/api/vinylApi"
 import { useEffect, useState } from "react"
 import { MusicSortType, PlaylistSortType } from "../model/types"
-
-const musicSortOptions: { value: MusicSortType, label: string }[] = [
-    { value: "title", label: "Title" },
-    { value: "artist", label: "Artist" },
-    { value: "album", label: "Album" },
-    { value: "duration", label: "Duration" },
-]
-
-const playlistSortOptions: { value: PlaylistSortType, label: string }[] = [
-    { value: "title", label: "Title" },
-    { value: "tracksCount", label: "Tracks" },
-]
+import {
+    MUSIC_SEARCH_PLACEHOLDER,
+    PLAYLIST_SEARCH_PLACEHOLDER,
+    musicSortOptions,
+    playlistSortOptions,
+} from "../model/constants"
 
 function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
     const openEditTrack = useNavigationStore((state) => state.openEditTrack)
@@ -48,8 +42,8 @@ function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
 
     const isMusicSearch = view === "musics" || isPlaylistMusicView
     const placeholder = isMusicSearch
-        ? "Search by title, year, album or artist..."
-        : "Search by playlist name..."
+        ? MUSIC_SEARCH_PLACEHOLDER
+        : PLAYLIST_SEARCH_PLACEHOLDER
     const sortOptions = isMusicSearch ? musicSortOptions : playlistSortOptions
     const selectedSort = isMusicSearch ? musicSortType : playlistSortType
 

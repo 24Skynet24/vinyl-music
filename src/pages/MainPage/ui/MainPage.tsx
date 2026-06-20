@@ -3,7 +3,7 @@ import { useNavigationStore } from "../../../features/Navigation/model/navigatio
 import { usePlaylistStore } from "../../../entities/playlist"
 import { NavigationSidebar } from "../../../widgets/NavigationSidebar"
 import { Player } from "../../../widgets/Player"
-import { useAudioStore } from "../../../widgets/Player/model/audioStore"
+import { useAudioStore } from "../../../entities/audio"
 import { SlidingPanel } from "../../../widgets/SlidingPanel"
 import EditPlayList from "../../../features/EditPlaylist/ui/EditPlayList"
 import EditTrack from "../../../features/EditTrack/ui/EditTrack"

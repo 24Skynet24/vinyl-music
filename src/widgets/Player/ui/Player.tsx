@@ -1,4 +1,4 @@
-import { useAudioStore } from "../model/audioStore"
+import { useAudioStore } from "../../../entities/audio"
 import PlayerControls from "./PlayerControls"
 import PlayerAudio from "./PlayerAudio"
 import PlayerDisk from "./PlayerDisk"

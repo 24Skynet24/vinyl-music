@@ -4,33 +4,12 @@ import { SlidingPanelPlaylistsProps } from "../model/types"
 import TextButton from "../../../shared/ui/Buttons/TextButton"
 import { usePagination } from "../../../shared/lib"
 import { usePlaylistStore, ALL_MUSIC_ID } from "../../../entities/playlist"
-import { useAudioStore } from "../../Player/model/audioStore"
+import { useAudioStore } from "../../../entities/audio"
 import { vinylApi } from "../../../shared/api/vinylApi"
 import { useEffect, useState } from "react"
 import { useNavigationStore } from "../../../features/Navigation/model/navigationStore"
-import { PlaylistType } from "../../../entities/playlist"
-
-const PLAYLISTS_PER_PAGE = 10
-
-const getComparableText = (value?: string | number) => String(value ?? "").toLowerCase()
-
-const getTrackCount = (playlist: PlaylistType, allMusicCount: number) =>
-    playlist.id === ALL_MUSIC_ID ? allMusicCount : playlist.trackIds.length
-
-const sortPlaylists = (playlists: PlaylistType[], allMusicCount: number, sortType: SlidingPanelPlaylistsProps["playlistSortType"]) => {
-    const allMusic = playlists.find((playlist) => playlist.id === ALL_MUSIC_ID)
-    const rest = playlists.filter((playlist) => playlist.id !== ALL_MUSIC_ID)
-
-    const sorted = [...rest].sort((first, second) => {
-        if (sortType === "tracksCount") {
-            return getTrackCount(second, allMusicCount) - getTrackCount(first, allMusicCount)
-        }
-
-        return getComparableText(second.title).localeCompare(getComparableText(first.title))
-    })
-
-    return allMusic ? [allMusic, ...sorted] : sorted
-}
+import { PLAYLISTS_PER_PAGE } from "../model/constants"
+import { getFilteredSortedPlaylists } from "../lib/searchSort"
 
 function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics, searchQuery = "", playlistSortType = "title", musicSortType = "title", onActivePlaylistViewChange }: SlidingPanelPlaylistsProps) {
     const playlists = usePlaylistStore((state) => state.playlists)
@@ -50,12 +29,12 @@ function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics, searchQuery = "
         setIsPlaylistListVisible(false)
     }, [activePlaylistId])
 
-    const normalizedSearch = searchQuery.trim().toLowerCase()
-    const shouldSearch = normalizedSearch.length >= 3
-    const filteredPlaylists = playlists.filter((playlist) =>
-        !shouldSearch || getComparableText(playlist.title).includes(normalizedSearch)
-    )
-    const sortedPlaylists = sortPlaylists(filteredPlaylists, allMusicTracks.length, playlistSortType)
+    const sortedPlaylists = getFilteredSortedPlaylists({
+        playlists,
+        allMusicCount: allMusicTracks.length,
+        searchQuery,
+        sortType: playlistSortType,
+    })
 
     const { visibleItems, hasMore, showMore } = usePagination(sortedPlaylists, PLAYLISTS_PER_PAGE)
     const activePlaylist = playlists.find((playlist) => playlist.id === activePlaylistId)

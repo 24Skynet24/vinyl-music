@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { useAudioStore } from "../model/audioStore";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useAudioStore } from "../../../entities/audio";
 
 function PlayerVolume() {
     const [isDragging, setIsDragging] = useState(false);
@@ -12,19 +12,19 @@ function PlayerVolume() {
 
     const currentVolume = isMuted ? 0 : volume;
 
-    const getPercent = (clientX: number) => {
+    const getPercent = useCallback((clientX: number) => {
         if (!barRef.current) return 0;
 
         const rect = barRef.current.getBoundingClientRect();
         const x = clientX - rect.left;
 
         return Math.max(0, Math.min(1, x / rect.width));
-    };
+    }, []);
 
-    const updateVolume = (clientX: number) => {
+    const updateVolume = useCallback((clientX: number) => {
         const v = getPercent(clientX);
         setVolume(v);
-    };
+    }, [getPercent, setVolume]);
 
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
         setIsDragging(true);
@@ -49,7 +49,7 @@ function PlayerVolume() {
             window.removeEventListener("mousemove", onMove);
             window.removeEventListener("mouseup", onUp);
         };
-    }, [isDragging]);
+    }, [isDragging, updateVolume]);
 
     const getIcon = () => {
         if (currentVolume === 0)

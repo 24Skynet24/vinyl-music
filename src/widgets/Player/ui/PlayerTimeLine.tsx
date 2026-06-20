@@ -1,5 +1,5 @@
 import { useRef, useState } from "react"
-import { useAudioStore } from "../model/audioStore"
+import { useAudioStore } from "../../../entities/audio"
 import { formatTime } from "../../../shared/lib"
 
 function PlayerTimeLine() {
