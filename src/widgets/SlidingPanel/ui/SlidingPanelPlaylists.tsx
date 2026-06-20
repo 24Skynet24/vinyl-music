@@ -1,10 +1,13 @@
 import PlayListItem from "../../../shared/ui/Lists/PlayListItem"
+import SlidingPanelMusics from "./SlidingPanelMusics"
 import { SlidingPanelPlaylistsProps } from "../model/types"
 import TextButton from "../../../shared/ui/Buttons/TextButton"
 import { usePagination } from "../../../shared/lib"
 import { usePlaylistStore, ALL_MUSIC_ID } from "../../../entities/playlist"
 import { useAudioStore } from "../../Player/model/audioStore"
 import { vinylApi } from "../../../shared/api/vinylApi"
+import { useEffect, useState } from "react"
+import { useNavigationStore } from "../../../features/Navigation/model/navigationStore"
 
 const PLAYLISTS_PER_PAGE = 10
 
@@ -13,8 +16,24 @@ function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics }: SlidingPanelP
     const setPlaylists = usePlaylistStore((state) => state.setPlaylists)
     const allMusicTracks = useAudioStore((state) => state.libraryTracks)
     const playTracksQueue = useAudioStore((state) => state.playTracksQueue)
+    const activePlaylistId = useAudioStore((state) => state.activePlaylistId)
+    const isPlaying = useAudioStore((state) => state.isPlaying)
+    const setIsPlaying = useAudioStore((state) => state.setIsPlaying)
+    const openEditTrack = useNavigationStore((state) => state.openEditTrack)
+    const [isPlaylistListVisible, setIsPlaylistListVisible] = useState(false)
+
+    useEffect(() => {
+        setIsPlaylistListVisible(false)
+    }, [activePlaylistId])
 
     const { visibleItems, hasMore, showMore } = usePagination(playlists, PLAYLISTS_PER_PAGE)
+    const activePlaylist = playlists.find((playlist) => playlist.id === activePlaylistId)
+    const isActivePlaylistVisible = Boolean(
+        activePlaylist &&
+        activePlaylist.id !== ALL_MUSIC_ID &&
+        isPlaying &&
+        !isPlaylistListVisible
+    )
 
     const handleDelete = async (playlistId: string) => {
         const library = await vinylApi.deletePlaylist(playlistId)
@@ -25,11 +44,30 @@ function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics }: SlidingPanelP
         const playlist = playlists.find((item) => item.id === playlistId)
         if (!playlist) return
 
+        if (activePlaylistId === playlistId) {
+            if (!isPlaying && playlistId !== ALL_MUSIC_ID) {
+                setIsPlaylistListVisible(false)
+            }
+            setIsPlaying(!isPlaying)
+            return
+        }
+
         const tracks = playlist.id === ALL_MUSIC_ID
             ? allMusicTracks
             : allMusicTracks.filter((track) => playlist.trackIds.includes(track.id))
 
-        playTracksQueue(tracks)
+        playTracksQueue(tracks, playlist.id)
+        setIsPlaylistListVisible(playlist.id === ALL_MUSIC_ID)
+    }
+
+    if (isActivePlaylistVisible) {
+        return (
+            <SlidingPanelMusics
+                onEditTrack={openEditTrack}
+                playlistId={activePlaylistId}
+                onBack={() => setIsPlaylistListVisible(true)}
+            />
+        )
     }
 
     return (
@@ -43,7 +81,8 @@ function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics }: SlidingPanelP
                             description={playlist.description}
                             img={playlist.img}
                             musicCount={playlist.id === ALL_MUSIC_ID ? allMusicTracks.length : playlist.trackIds.length}
-                            isSelected={playlist.id === ALL_MUSIC_ID}
+                            isSelected={activePlaylistId === playlist.id && isPlaying}
+                            isPlaying={activePlaylistId === playlist.id && isPlaying}
                             isLocked={playlist.isLocked}
                             onClick={() => onOpenMusics(playlist.id)}
                             onPlay={() => handlePlay(playlist.id)}

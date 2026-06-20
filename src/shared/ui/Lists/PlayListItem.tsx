@@ -1,16 +1,23 @@
 import { PlayListItemProps } from "./types"
 import cover from "../../assets/img/cover-2.png"
 
-function PlayListItem ({img, title, isSelected, musicCount, description, isEditTrack, isHaveTrack, isLocked, onClick, onDelete, onEdit, onAddTrack, onRemoveTrack, onPlay}: PlayListItemProps) {
+function PlayListItem ({img, title, isSelected, musicCount, description, isEditTrack, isHaveTrack, isLocked, isPlaying, onClick, onDelete, onEdit, onAddTrack, onRemoveTrack, onPlay}: PlayListItemProps) {
     return (
         <article className="w-full h-[200px] flex items-center gap-[16px] text-white-main">
             <div className="flex h-full flex-1">
                 <div className="h-full w-[200px] relative cursor-pointer" onClick={onPlay}>
                     <div className="absolute top-0 left-0 w-full h-full bg-black-main/70 z-1 flex items-center justify-center opacity-0 transition-opacity duration-300 hover:opacity-100">
                         <div className="w-[64px] h-[64px]">
-                            <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M10.6666 6.85327V25.5199L25.3333 16.1866L10.6666 6.85327Z" fill="#D7452C"/>
-                            </svg>
+                            {isPlaying ?
+                                <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9.6 7.4668H13.8667V24.5335H9.6V7.4668Z" fill="#D7452C"/>
+                                    <path d="M18.1333 7.4668H22.4V24.5335H18.1333V7.4668Z" fill="#D7452C"/>
+                                </svg>
+                                :
+                                <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10.6666 6.85327V25.5199L25.3333 16.1866L10.6666 6.85327Z" fill="#D7452C"/>
+                                </svg>
+                            }
                         </div>
                     </div>
 

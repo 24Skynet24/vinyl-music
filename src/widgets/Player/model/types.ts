@@ -31,6 +31,7 @@ export interface AudioState {
   history: number[]
   libraryTracks: TrackType[]
   playList: TrackType[]
+  activePlaylistId: string | null
   
   togglePlay: () => void
   toggleRandom: () => void
@@ -46,7 +47,7 @@ export interface AudioState {
   prevTrack: () => void
   nextTrack: (autoNext?: boolean) => void
   selectTrack: (index: number) => void
-  playTracksQueue: (tracks: TrackType[]) => void
+  playTracksQueue: (tracks: TrackType[], playlistId?: string | null) => void
   selectTracksQueueFrom: (tracks: TrackType[], trackId: string) => void
   setTracks: (tracks: TrackType[]) => void
   addTracks: (tracks: TrackType[]) => void

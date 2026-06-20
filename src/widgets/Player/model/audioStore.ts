@@ -21,6 +21,7 @@ export const useAudioStore = create<AudioState>((set, get) => {
     duration: initialPlaylist[0]?.duration ?? 0,
     libraryTracks: initialPlaylist,
     playList: initialPlaylist,
+    activePlaylistId: null,
     currentIndex: 0,
     history: [0],
     historyIndex: 0,
@@ -60,7 +61,7 @@ export const useAudioStore = create<AudioState>((set, get) => {
       });
     },
 
-    playTracksQueue: (tracks: TrackType[]) => {
+    playTracksQueue: (tracks: TrackType[], playlistId = null) => {
       const firstTrack = tracks[0];
       if (!firstTrack) return;
 
@@ -72,6 +73,7 @@ export const useAudioStore = create<AudioState>((set, get) => {
         history: [0],
         historyIndex: 0,
         isPlaying: true,
+        activePlaylistId: playlistId,
       });
     },
 
@@ -87,6 +89,7 @@ export const useAudioStore = create<AudioState>((set, get) => {
         duration: targetTrack.duration,
         history: [targetIndex],
         historyIndex: 0,
+        activePlaylistId: null,
       });
     },
 
@@ -272,13 +275,14 @@ export const useAudioStore = create<AudioState>((set, get) => {
         history: [0],
         historyIndex: 0,
         isPlaying: false,
+        activePlaylistId: null,
       });
     },
 
     addTracks: (tracks: TrackType[]) => {
       if (!tracks.length) return;
 
-      const { libraryTracks, playList, currentIndex } = get();
+      const { libraryTracks, playList, currentIndex, activePlaylistId } = get();
       const wasEmpty = libraryTracks.length === 0;
       const isPlayingLibraryQueue =
         playList.length === libraryTracks.length &&
@@ -291,6 +295,7 @@ export const useAudioStore = create<AudioState>((set, get) => {
         playList: newPlayList,
         currentIndex: isPlayingLibraryQueue && !wasEmpty ? currentIndex + tracks.length : currentIndex,
         ...(wasEmpty && { duration: tracks[0].duration }),
+        ...(isPlayingLibraryQueue && { activePlaylistId }),
       });
     },
   };
