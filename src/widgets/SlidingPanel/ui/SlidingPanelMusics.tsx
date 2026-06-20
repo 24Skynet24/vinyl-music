@@ -5,10 +5,25 @@ import TextButton from "../../../shared/ui/Buttons/TextButton"
 import { usePagination } from "../../../shared/lib"
 import { usePlaylistStore, ALL_MUSIC_ID } from "../../../entities/playlist"
 import { vinylApi } from "../../../shared/api/vinylApi"
+import { TrackType } from "../../../entities/track"
 
 const MUSICS_PER_PAGE = 20
 
-function SlidingPanelMusics({ onEditTrack, playlistId, onBack }: SlidingPanelMusicsProps) {
+const getComparableText = (value?: string | number) => String(value ?? "").toLowerCase()
+
+const sortTracks = (tracks: { track: TrackType, index: number }[], sortType: SlidingPanelMusicsProps["sortType"]) =>
+    [...tracks].sort((first, second) => {
+        if (sortType === "duration") {
+            return first.track.duration - second.track.duration
+        }
+
+        const firstValue = getComparableText(first.track[sortType ?? "title"])
+        const secondValue = getComparableText(second.track[sortType ?? "title"])
+
+        return firstValue.localeCompare(secondValue)
+    })
+
+function SlidingPanelMusics({ onEditTrack, playlistId, onBack, searchQuery = "", sortType = "title" }: SlidingPanelMusicsProps) {
     const libraryTracks = useAudioStore((state) => state.libraryTracks)
     const playList = useAudioStore((state) => state.playList)
     const currentIndex = useAudioStore((state) => state.currentIndex)
@@ -20,13 +35,26 @@ function SlidingPanelMusics({ onEditTrack, playlistId, onBack }: SlidingPanelMus
         playlistId ? state.playlists.find((item) => item.id === playlistId) : undefined
     )
 
-    const tracks = libraryTracks
+    const normalizedSearch = searchQuery.trim().toLowerCase()
+    const shouldSearch = normalizedSearch.length >= 3
+
+    const tracks = sortTracks(libraryTracks
         .map((track, index) => ({ track, index }))
         .filter(({ track }) => {
             if (!playlist || playlist.id === ALL_MUSIC_ID) return true
 
             return playlist.trackIds.includes(track.id)
         })
+        .filter(({ track }) => {
+            if (!shouldSearch) return true
+
+            return [
+                track.title,
+                track.year,
+                track.album,
+                track.artist,
+            ].some((value) => getComparableText(value).includes(normalizedSearch))
+        }), sortType)
 
     const getQueueIndex = (trackId: string) =>
         playList.findIndex((track) => track.id === trackId)
@@ -41,7 +69,7 @@ function SlidingPanelMusics({ onEditTrack, playlistId, onBack }: SlidingPanelMus
             return
         }
 
-        selectTracksQueueFrom(tracks.map(({ track }) => track), trackId)
+        selectTracksQueueFrom(tracks.map(({ track }) => track), trackId, playlist?.id ?? null)
     }
 
     const handleDeleteTrack = async (trackId: string) => {
