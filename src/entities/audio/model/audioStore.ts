@@ -1,6 +1,17 @@
 import { create } from "zustand"
 import { TrackType } from "../../track"
 import { AudioState } from "./types"
+import {
+  EQUALIZER_GAIN_MAX,
+  EQUALIZER_GAIN_MIN,
+  EqualizerBandId,
+  EqualizerPreset,
+  EqualizerBandValues,
+  EqualizerPresetId,
+  createCustomEqualizerPreset,
+  createFlatEqualizerValues,
+  getEqualizerPreset,
+} from "./equalizer"
 
 const initialPlaylist: TrackType[] = []
 const PLAYBACK_STORAGE_KEY = "vinyl-music:playback-state"
@@ -18,6 +29,10 @@ interface PlaybackSnapshot {
   queueTrackIds: string[]
   historyTrackIds: string[]
   historyIndex: number
+  equalizerPreset?: EqualizerPresetId
+  equalizerPresetId?: EqualizerPresetId | null
+  equalizerValues?: EqualizerBandValues
+  customEqualizerPresets?: EqualizerPreset[]
 }
 
 const canUseStorage = () => typeof window !== "undefined" && Boolean(window.localStorage)
@@ -55,7 +70,15 @@ const createHistoryFromIds = (queue: TrackType[], historyTrackIds: string[]) =>
 const clampTime = (time: number, duration: number) =>
   duration > 0 ? Math.max(0, Math.min(time, duration)) : Math.max(0, time)
 
+const clampEqualizerGain = (gain: number) =>
+  Math.max(EQUALIZER_GAIN_MIN, Math.min(EQUALIZER_GAIN_MAX, gain))
+
 const initialSnapshot = readPlaybackSnapshot()
+const initialEqualizerValues = {
+  ...createFlatEqualizerValues(),
+  ...initialSnapshot?.equalizerValues,
+}
+const initialEqualizerPresetId = initialSnapshot?.equalizerPresetId ?? initialSnapshot?.equalizerPreset ?? "flat"
 
 export const useAudioStore = create<AudioState>((set, get) => ({
   isPlaying: false,
@@ -64,6 +87,9 @@ export const useAudioStore = create<AudioState>((set, get) => ({
   isRepeatOne: initialSnapshot?.isRepeatOne ?? false,
   volume: initialSnapshot?.volume ?? 1,
   isMuted: initialSnapshot?.isMuted ?? false,
+  equalizerPresetId: initialEqualizerPresetId,
+  equalizerValues: initialEqualizerValues,
+  customEqualizerPresets: initialSnapshot?.customEqualizerPresets ?? [],
 
   currentTime: 0,
   duration: initialPlaylist[0]?.duration ?? 0,
@@ -296,6 +322,72 @@ export const useAudioStore = create<AudioState>((set, get) => ({
         ? Math.max(0, Math.min(time, state.duration))
         : Math.max(0, time),
     })),
+  setEqualizerBand: (bandId: EqualizerBandId, gain: number) =>
+    set((state) => ({
+      equalizerPresetId: state.customEqualizerPresets.some((preset) => preset.id === state.equalizerPresetId)
+        ? state.equalizerPresetId
+        : null,
+      equalizerValues: {
+        ...state.equalizerValues,
+        [bandId]: clampEqualizerGain(gain),
+      },
+      customEqualizerPresets: state.customEqualizerPresets.map((preset) =>
+        preset.id === state.equalizerPresetId
+          ? {
+              ...preset,
+              values: {
+                ...state.equalizerValues,
+                [bandId]: clampEqualizerGain(gain),
+              },
+            }
+          : preset
+      ),
+    })),
+  setEqualizerPreset: (presetId) => {
+    const customPreset = get().customEqualizerPresets.find((preset) => preset.id === presetId)
+    const preset = customPreset ?? getEqualizerPreset(presetId)
+
+    set({
+      equalizerPresetId: preset.id,
+      equalizerValues: { ...preset.values },
+    })
+  },
+  createEqualizerPreset: (label) => {
+    const trimmedLabel = label.trim()
+    if (!trimmedLabel) return
+
+    set((state) => {
+      const preset = createCustomEqualizerPreset(trimmedLabel, state.equalizerValues)
+
+      return {
+        equalizerPresetId: preset.id,
+        customEqualizerPresets: [...state.customEqualizerPresets, preset],
+      }
+    })
+  },
+  renameEqualizerPreset: (presetId, label) => {
+    const trimmedLabel = label.trim()
+    if (!trimmedLabel) return
+
+    set((state) => ({
+      customEqualizerPresets: state.customEqualizerPresets.map((preset) =>
+        preset.id === presetId ? { ...preset, label: trimmedLabel } : preset
+      ),
+    }))
+  },
+  deleteEqualizerPreset: (presetId) =>
+    set((state) => ({
+      customEqualizerPresets: state.customEqualizerPresets.filter((preset) => preset.id !== presetId),
+      ...(state.equalizerPresetId === presetId && {
+        equalizerPresetId: "flat",
+        equalizerValues: createFlatEqualizerValues(),
+      }),
+    })),
+  resetEqualizer: () =>
+    set({
+      equalizerPresetId: "flat",
+      equalizerValues: createFlatEqualizerValues(),
+    }),
   updateTrackDuration: (trackId, duration) =>
     set((state) => ({
       libraryTracks: state.libraryTracks.map((track) =>
@@ -343,6 +435,12 @@ export const useAudioStore = create<AudioState>((set, get) => ({
       isRepeatOne: snapshot?.isRepeatOne ?? false,
       volume: snapshot?.volume ?? 1,
       isMuted: snapshot?.isMuted ?? false,
+      equalizerPresetId: snapshot?.equalizerPresetId ?? snapshot?.equalizerPreset ?? "flat",
+      equalizerValues: {
+        ...createFlatEqualizerValues(),
+        ...snapshot?.equalizerValues,
+      },
+      customEqualizerPresets: snapshot?.customEqualizerPresets ?? [],
       activePlaylistId: snapshot?.activePlaylistId ?? null,
     })
   },
@@ -438,6 +536,9 @@ useAudioStore.subscribe((state) => {
     isRandom: state.isRandom,
     isRepeat: state.isRepeat,
     isRepeatOne: state.isRepeatOne,
+    equalizerPresetId: state.equalizerPresetId,
+    equalizerValues: state.equalizerValues,
+    customEqualizerPresets: state.customEqualizerPresets,
     currentTrackId: shouldPersistTrackState
       ? currentTrack?.id ?? null
       : shouldClearTrackState ? null : previousSnapshot?.currentTrackId ?? null,

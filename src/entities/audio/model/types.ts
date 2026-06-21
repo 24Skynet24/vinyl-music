@@ -1,4 +1,5 @@
 import { TrackType } from "../../track"
+import { EqualizerBandId, EqualizerBandValues, EqualizerPreset, EqualizerPresetId } from "./equalizer"
 
 export interface AudioState {
   isPlaying: boolean
@@ -9,6 +10,9 @@ export interface AudioState {
   isRepeatOne: boolean
   volume: number
   isMuted: boolean
+  equalizerPresetId: EqualizerPresetId | null
+  equalizerValues: EqualizerBandValues
+  customEqualizerPresets: EqualizerPreset[]
 
   currentIndex: number
   historyIndex: number
@@ -25,6 +29,12 @@ export interface AudioState {
   setDuration: (duration: number) => void
   setVolume: (volume: number) => void
   setCurrentTime: (time: number) => void
+  setEqualizerBand: (bandId: EqualizerBandId, gain: number) => void
+  setEqualizerPreset: (presetId: EqualizerPresetId) => void
+  createEqualizerPreset: (label: string) => void
+  renameEqualizerPreset: (presetId: EqualizerPresetId, label: string) => void
+  deleteEqualizerPreset: (presetId: EqualizerPresetId) => void
+  resetEqualizer: () => void
   updateTrackDuration: (trackId: string, duration: number) => void
   tickProgress: () => void
   

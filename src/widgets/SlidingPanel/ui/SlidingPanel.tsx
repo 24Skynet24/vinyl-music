@@ -1,6 +1,7 @@
 import NavSidebarSearch from "../../../shared/ui/Searches/NavSidebarSearch"
 import SlidingPanelMusics from "./SlidingPanelMusics"
 import SlidingPanelPlaylists from "./SlidingPanelPlaylists"
+import SlidingPanelEqualizer from "./SlidingPanelEqualizer"
 import { SlidingPanelProps } from "../model/types"
 import { useNavigationStore } from "../../../features/Navigation/model/navigationStore"
 import { useAudioStore } from "../../../entities/audio"
@@ -68,16 +69,20 @@ function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
                 return <SlidingPanelAddMusics onCancel={closePanel} onSave={handleSaveNewMusic} />
             case "playlists":
                 return <SlidingPanelPlaylists onEdit={openEditPlaylist} onCreate={() => openEditPlaylist(null)} onOpenMusics={openPlaylistMusics} searchQuery={searchQuery} playlistSortType={playlistSortType} musicSortType={musicSortType} onActivePlaylistViewChange={setIsPlaylistMusicView}/>
+            case "equalizer":
+                return <SlidingPanelEqualizer />
             default:
                 return null
         }
     }
+
+    const searchExceptions = new Set<string>(["equalizer", "add-music"])
     
     return (
         <section className={`w-[900px] h-screen bg-gradient-1 absolute z-200 top-0 right-0 ${isClosing ? "right-slide-out" : "right-slide"}`}>
             <div className="p-[32px] flex flex-col gap-[48px]">
                 {
-                    view !== "add-music" && <div>
+                    !searchExceptions.has(view) && <div>
                         <NavSidebarSearch 
                             placeholder={placeholder}
                             value={searchQuery}

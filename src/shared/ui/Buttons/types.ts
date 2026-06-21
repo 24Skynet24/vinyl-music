@@ -22,7 +22,7 @@ export interface RandomButtonProps extends DefaultButtonType {
 
 export interface NavSidebarButtonPros extends DefaultButtonType {
   isPlaying?: boolean
-  view?: string // playlists, musics (current playlist), add-music
+  view?: string // playlists, musics (current playlist), add-music, equalizer
 }
 
 export interface TextButtonProps extends DefaultButtonType {

@@ -19,6 +19,10 @@ function NavigationSidebar () {
                 onClick={() => openPanel("add-music")}
                 view="add-music"
             />
+            <NavSidebarButton
+                onClick={() => openPanel("equalizer")}
+                view="equalizer"
+            />
         </aside>
     )
 }

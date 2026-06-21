@@ -1,9 +1,16 @@
-import { useEffect, useMemo, useRef } from "react"
+import { useCallback, useEffect, useMemo, useRef } from "react"
 import { vinylApi } from "../../../shared/api/vinylApi"
-import { useAudioStore } from "../../../entities/audio"
+import { equalizerBands, useAudioStore } from "../../../entities/audio"
+
+interface EqualizerAudioGraph {
+    context: AudioContext
+    source: MediaElementAudioSourceNode
+    filters: BiquadFilterNode[]
+}
 
 function PlayerAudio() {
     const audioRef = useRef<HTMLAudioElement | null>(null)
+    const equalizerGraphRef = useRef<EqualizerAudioGraph | null>(null)
 
     const playList = useAudioStore((state) => state.playList)
     const currentIndex = useAudioStore((state) => state.currentIndex)
@@ -12,6 +19,7 @@ function PlayerAudio() {
     const isRepeatOne = useAudioStore((state) => state.isRepeatOne)
     const volume = useAudioStore((state) => state.volume)
     const isMuted = useAudioStore((state) => state.isMuted)
+    const equalizerValues = useAudioStore((state) => state.equalizerValues)
     const setCurrentTime = useAudioStore((state) => state.setCurrentTime)
     const setDuration = useAudioStore((state) => state.setDuration)
     const setIsPlaying = useAudioStore((state) => state.setIsPlaying)
@@ -22,6 +30,71 @@ function PlayerAudio() {
     const src = currentTrack?.src ?? ""
 
     const audioVolume = useMemo(() => isMuted ? 0 : volume, [isMuted, volume])
+
+    const createEqualizerGraph = useCallback(() => {
+        const audio = audioRef.current
+        if (!audio) return null
+        if (equalizerGraphRef.current) return equalizerGraphRef.current
+
+        const context = new AudioContext()
+        const source = context.createMediaElementSource(audio)
+        const filters = equalizerBands.map((band, index) => {
+            const filter = context.createBiquadFilter()
+
+            filter.frequency.value = band.frequency
+            filter.gain.value = 0
+            filter.Q.value = 1
+
+            if (index === 0) {
+                filter.type = "lowshelf"
+            } else if (index === equalizerBands.length - 1) {
+                filter.type = "highshelf"
+            } else {
+                filter.type = "peaking"
+            }
+
+            return filter
+        })
+
+        source.connect(filters[0])
+        filters.forEach((filter, index) => {
+            const nextNode = filters[index + 1] ?? context.destination
+            filter.connect(nextNode)
+        })
+
+        const graph = { context, source, filters }
+        equalizerGraphRef.current = graph
+
+        return graph
+    }, [])
+
+    const applyEqualizerValues = useCallback((graph: EqualizerAudioGraph) => {
+        equalizerBands.forEach((band, index) => {
+            const filter = graph.filters[index]
+            const gain = equalizerValues[band.id]
+
+            filter.gain.setTargetAtTime(gain, graph.context.currentTime, 0.01)
+        })
+    }, [equalizerValues])
+
+    useEffect(() => {
+        return () => {
+            const graph = equalizerGraphRef.current
+            if (!graph) return
+
+            graph.source.disconnect()
+            graph.filters.forEach((filter) => filter.disconnect())
+            graph.context.close()
+            equalizerGraphRef.current = null
+        }
+    }, [])
+
+    useEffect(() => {
+        const graph = equalizerGraphRef.current
+        if (!graph) return
+
+        applyEqualizerValues(graph)
+    }, [applyEqualizerValues])
 
     useEffect(() => {
         const audio = audioRef.current
@@ -61,12 +134,17 @@ function PlayerAudio() {
         if (!audio || !src) return
 
         if (isPlaying) {
+            const graph = createEqualizerGraph()
+            if (graph) {
+                applyEqualizerValues(graph)
+                graph.context.resume().catch(() => undefined)
+            }
             audio.play().catch(() => setIsPlaying(false))
             return
         }
 
         audio.pause()
-    }, [isPlaying, setIsPlaying, src])
+    }, [applyEqualizerValues, createEqualizerGraph, isPlaying, setIsPlaying, src])
 
     const handleDurationUpdate = () => {
         const audio = audioRef.current
