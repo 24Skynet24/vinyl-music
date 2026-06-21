@@ -3,14 +3,67 @@ import { TrackType } from "../../track"
 import { AudioState } from "./types"
 
 const initialPlaylist: TrackType[] = []
+const PLAYBACK_STORAGE_KEY = "vinyl-music:playback-state"
+let hasLoadedLibrary = false
+
+interface PlaybackSnapshot {
+  volume: number
+  isMuted: boolean
+  isRandom: boolean
+  isRepeat: boolean
+  isRepeatOne: boolean
+  currentTrackId: string | null
+  currentTime: number
+  activePlaylistId: string | null
+  queueTrackIds: string[]
+  historyTrackIds: string[]
+  historyIndex: number
+}
+
+const canUseStorage = () => typeof window !== "undefined" && Boolean(window.localStorage)
+
+const readPlaybackSnapshot = (): PlaybackSnapshot | null => {
+  if (!canUseStorage()) return null
+
+  try {
+    const raw = window.localStorage.getItem(PLAYBACK_STORAGE_KEY)
+    return raw ? JSON.parse(raw) as PlaybackSnapshot : null
+  } catch {
+    return null
+  }
+}
+
+const writePlaybackSnapshot = (snapshot: PlaybackSnapshot) => {
+  if (!canUseStorage()) return
+
+  window.localStorage.setItem(PLAYBACK_STORAGE_KEY, JSON.stringify(snapshot))
+}
+
+const getTracksByIds = (tracks: TrackType[], ids: string[]) => {
+  const tracksById = new Map(tracks.map((track) => [track.id, track]))
+
+  return ids
+    .map((id) => tracksById.get(id))
+    .filter((track): track is TrackType => Boolean(track))
+}
+
+const createHistoryFromIds = (queue: TrackType[], historyTrackIds: string[]) =>
+  historyTrackIds
+    .map((trackId) => queue.findIndex((track) => track.id === trackId))
+    .filter((index) => index >= 0)
+
+const clampTime = (time: number, duration: number) =>
+  duration > 0 ? Math.max(0, Math.min(time, duration)) : Math.max(0, time)
+
+const initialSnapshot = readPlaybackSnapshot()
 
 export const useAudioStore = create<AudioState>((set, get) => ({
   isPlaying: false,
-  isRandom: false,
-  isRepeat: false,
-  isRepeatOne: false,
-  volume: 1,
-  isMuted: false,
+  isRandom: initialSnapshot?.isRandom ?? false,
+  isRepeat: initialSnapshot?.isRepeat ?? false,
+  isRepeatOne: initialSnapshot?.isRepeatOne ?? false,
+  volume: initialSnapshot?.volume ?? 1,
+  isMuted: initialSnapshot?.isMuted ?? false,
 
   currentTime: 0,
   duration: initialPlaylist[0]?.duration ?? 0,
@@ -255,18 +308,42 @@ export const useAudioStore = create<AudioState>((set, get) => ({
     })),
 
   setTracks: (tracks) => {
+    hasLoadedLibrary = true
+
+    const snapshot = readPlaybackSnapshot()
+    const restoredQueue = snapshot?.queueTrackIds.length
+      ? getTracksByIds(tracks, snapshot.queueTrackIds)
+      : []
+    const playList = restoredQueue.length ? restoredQueue : tracks
+    const restoredTrackIndex = snapshot?.currentTrackId
+      ? playList.findIndex((track) => track.id === snapshot.currentTrackId)
+      : -1
+    const currentIndex = restoredTrackIndex >= 0 ? restoredTrackIndex : 0
+    const currentTrack = playList[currentIndex]
+    const restoredHistory = snapshot
+      ? createHistoryFromIds(playList, snapshot.historyTrackIds)
+      : []
+    const history = restoredHistory.length ? restoredHistory : [currentIndex]
+    const historyIndex = Math.max(0, Math.min(snapshot?.historyIndex ?? 0, history.length - 1))
     const firstTrack = tracks[0]
 
     set({
       libraryTracks: tracks,
-      playList: tracks,
-      currentIndex: 0,
-      currentTime: 0,
-      duration: firstTrack?.duration ?? 0,
-      history: [0],
-      historyIndex: 0,
+      playList,
+      currentIndex,
+      currentTime: currentTrack && snapshot
+        ? clampTime(snapshot.currentTime, currentTrack.duration)
+        : 0,
+      duration: currentTrack?.duration ?? firstTrack?.duration ?? 0,
+      history,
+      historyIndex,
       isPlaying: false,
-      activePlaylistId: null,
+      isRandom: snapshot?.isRandom ?? false,
+      isRepeat: snapshot?.isRepeat ?? false,
+      isRepeatOne: snapshot?.isRepeatOne ?? false,
+      volume: snapshot?.volume ?? 1,
+      isMuted: snapshot?.isMuted ?? false,
+      activePlaylistId: snapshot?.activePlaylistId ?? null,
     })
   },
 
@@ -347,3 +424,39 @@ export const useAudioStore = create<AudioState>((set, get) => ({
     })
   },
 }))
+
+useAudioStore.subscribe((state) => {
+  const currentTrack = state.playList[state.currentIndex]
+  const previousSnapshot = readPlaybackSnapshot()
+  const hasLibraryTracks = state.libraryTracks.length > 0
+  const shouldPersistTrackState = hasLoadedLibrary && hasLibraryTracks
+  const shouldClearTrackState = hasLoadedLibrary && !hasLibraryTracks
+
+  writePlaybackSnapshot({
+    volume: state.volume,
+    isMuted: state.isMuted,
+    isRandom: state.isRandom,
+    isRepeat: state.isRepeat,
+    isRepeatOne: state.isRepeatOne,
+    currentTrackId: shouldPersistTrackState
+      ? currentTrack?.id ?? null
+      : shouldClearTrackState ? null : previousSnapshot?.currentTrackId ?? null,
+    currentTime: shouldPersistTrackState
+      ? state.currentTime
+      : shouldClearTrackState ? 0 : previousSnapshot?.currentTime ?? 0,
+    activePlaylistId: shouldPersistTrackState
+      ? state.activePlaylistId
+      : shouldClearTrackState ? null : previousSnapshot?.activePlaylistId ?? null,
+    queueTrackIds: shouldPersistTrackState
+      ? state.playList.map((track) => track.id)
+      : shouldClearTrackState ? [] : previousSnapshot?.queueTrackIds ?? [],
+    historyTrackIds: shouldPersistTrackState
+      ? state.history
+        .map((index) => state.playList[index]?.id)
+        .filter((trackId): trackId is string => Boolean(trackId))
+      : shouldClearTrackState ? [] : previousSnapshot?.historyTrackIds ?? [],
+    historyIndex: shouldPersistTrackState
+      ? state.historyIndex
+      : shouldClearTrackState ? 0 : previousSnapshot?.historyIndex ?? 0,
+  })
+})

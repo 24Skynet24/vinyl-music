@@ -44,7 +44,6 @@ function PlayerAudio() {
 
         audio.src = src
         audio.load()
-        setCurrentTime(0)
         setDuration(currentTrack?.duration ?? 0)
     }, [currentTrack?.duration, setCurrentTime, setDuration, setIsPlaying, src])
 
