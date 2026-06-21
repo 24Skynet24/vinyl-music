@@ -4,7 +4,7 @@ export type MusicSortType = "title" | "artist" | "album" | "duration"
 export type PlaylistSortType = "title" | "tracksCount"
 
 export interface SlidingPanelProps {
-    view: "musics" | "playlists" | "add-music"
+    view: "musics" | "playlists" | "add-music" | "equalizer"
     isClosing?: boolean
 }
 

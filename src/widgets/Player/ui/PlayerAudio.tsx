@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from "react"
 import { vinylApi } from "../../../shared/api/vinylApi"
 import { useAudioStore } from "../../../entities/audio"
+import { useEqualizerAudioGraph } from "../lib/useEqualizerAudioGraph"
 
 function PlayerAudio() {
     const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -12,6 +13,7 @@ function PlayerAudio() {
     const isRepeatOne = useAudioStore((state) => state.isRepeatOne)
     const volume = useAudioStore((state) => state.volume)
     const isMuted = useAudioStore((state) => state.isMuted)
+    const equalizerValues = useAudioStore((state) => state.equalizerValues)
     const setCurrentTime = useAudioStore((state) => state.setCurrentTime)
     const setDuration = useAudioStore((state) => state.setDuration)
     const setIsPlaying = useAudioStore((state) => state.setIsPlaying)
@@ -22,6 +24,7 @@ function PlayerAudio() {
     const src = currentTrack?.src ?? ""
 
     const audioVolume = useMemo(() => isMuted ? 0 : volume, [isMuted, volume])
+    const resumeEqualizerGraph = useEqualizerAudioGraph(audioRef, equalizerValues)
 
     useEffect(() => {
         const audio = audioRef.current
@@ -61,12 +64,13 @@ function PlayerAudio() {
         if (!audio || !src) return
 
         if (isPlaying) {
+            resumeEqualizerGraph()
             audio.play().catch(() => setIsPlaying(false))
             return
         }
 
         audio.pause()
-    }, [isPlaying, setIsPlaying, src])
+    }, [isPlaying, resumeEqualizerGraph, setIsPlaying, src])
 
     const handleDurationUpdate = () => {
         const audio = audioRef.current
