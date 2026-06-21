@@ -9,6 +9,6 @@ export interface NavSidebarSearchProps {
     sortOptions: SortOption[]
     selectedSort: string
     onChange: (value: string) => void
-    onSearch: () => void
+    // onSearch: () => void
     onSort: (value: string) => void
 }
