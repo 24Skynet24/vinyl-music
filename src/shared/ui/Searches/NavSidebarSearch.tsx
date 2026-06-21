@@ -44,19 +44,19 @@ function NavSidebarSearch ({onSort, onChange, placeholder, value, sortOptions, s
             
             <div className="relative" ref={sortRef}>
                 <button type="button" className="flex items-center justify-center w-[32px] h-[32px] cursor-pointer" onClick={() => setIsSortOpen((isOpen) => !isOpen)}>
-                <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4 24V21.3333H12V24H4ZM4 17.3333V14.6667H20V17.3333H4ZM4 10.6667V8H28V10.6667H4Z" fill="#FFFEE9"/>
-                </svg>
+                    <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 24V21.3333H12V24H4ZM4 17.3333V14.6667H20V17.3333H4ZM4 10.6667V8H28V10.6667H4Z" fill="#FFFEE9"/>
+                    </svg>
                 </button>
 
                 {isSortOpen && (
-                    <div className="sort-dropdown absolute right-0 top-[calc(100%+16px)] z-20 min-w-[180px] bg-black-main border border-orange-main shadow-[0_0_10px_var(--color-orange-main)]">
+                    <div className="sort-dropdown absolute right-0 top-[calc(100%+16px)] z-20 min-w-[180px] bg-black-main border border-orange-main">
                         {sortOptions.map((option) => (
                             <button
                                 key={option.value}
                                 type="button"
                                 onClick={() => handleSortSelect(option.value)}
-                                className={`${option.value === selectedSort ? "text-orange-main" : "text-white-main"} block w-full px-[16px] py-[10px] text-left text-[20px] uppercase transition-colors duration-200 hover:text-orange-main cursor-pointer`}
+                                className={`${option.value === selectedSort ? "text-orange-main" : "text-white-main"} block sleect-none w-full px-[16px] py-[8px] text-left text-[20px] uppercase transition-colors duration-200 hover:text-orange-main cursor-pointer`}
                             >
                                 {option.label}
                             </button>
