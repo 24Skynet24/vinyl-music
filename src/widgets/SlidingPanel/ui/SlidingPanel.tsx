@@ -84,7 +84,6 @@ function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
                             sortOptions={sortOptions}
                             selectedSort={selectedSort}
                             onChange={setSearchQuery}
-                            onSearch={() => {}}
                             onSort={handleSort}
                         />
                     </div>
