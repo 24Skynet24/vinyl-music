@@ -30,7 +30,7 @@ function SlidingPanelEqualizer() {
     const getPresetButtonClassName = (isSelected: boolean) =>
         `${isSelected ? "bg-orange-main text-black-main" : "bg-black-main text-white-main hover:text-orange-main"} rounded-[8px] border border-orange-main px-[18px] py-[10px] text-[18px] uppercase transition-colors duration-200 cursor-pointer`
 
-    const actionButtonClassName = "rounded-[8px] border border-orange-main bg-black-main px-[18px] py-[10px] text-[18px] uppercase text-white-main transition-colors duration-200 hover:enabled:text-orange-main disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
+    const actionButtonClassName = "press-btn rounded-[8px] border border-orange-main bg-black-main px-[18px] py-[10px] text-[18px] uppercase text-white-main transition-colors duration-200 hover:enabled:text-orange-main disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
 
     const openCreateModal = () => {
         setPresetName("")
