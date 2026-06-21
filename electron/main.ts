@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Menu } from 'electron'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { registerBackendIpc } from './backend/ipcHandlers'
@@ -17,6 +17,7 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 
 registerMediaProtocolPrivileges()
 
 let win: BrowserWindow | null
+Menu.setApplicationMenu(null)
 
 function createWindow() {
   win = new BrowserWindow({
