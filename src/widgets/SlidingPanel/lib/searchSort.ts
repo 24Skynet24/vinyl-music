@@ -23,8 +23,35 @@ interface GetFilteredPlaylistsParams {
 
 const MIN_SEARCH_LENGTH = 3
 
+const textCollator = new Intl.Collator(undefined, {
+    numeric: true,
+    sensitivity: "base",
+})
+
 const getComparableText = (value?: string | number) =>
-    String(value ?? "").toLowerCase()
+    String(value ?? "").trim().toLowerCase()
+
+const compareOptionalText = (first?: string | number, second?: string | number) => {
+    const firstValue = getComparableText(first)
+    const secondValue = getComparableText(second)
+
+    if (!firstValue && !secondValue) return 0
+    if (!firstValue) return 1
+    if (!secondValue) return -1
+
+    return textCollator.compare(firstValue, secondValue)
+}
+
+const compareDuration = (first: number, second: number) => {
+    const firstHasDuration = first > 0
+    const secondHasDuration = second > 0
+
+    if (!firstHasDuration && !secondHasDuration) return 0
+    if (!firstHasDuration) return 1
+    if (!secondHasDuration) return -1
+
+    return second - first
+}
 
 const shouldSearch = (searchQuery: string) =>
     searchQuery.trim().length >= MIN_SEARCH_LENGTH
@@ -62,14 +89,15 @@ export const getFilteredSortedTracks = ({
             ].some((value) => includesSearch(value, normalizedSearch))
         })
         .sort((first, second) => {
+            let result = 0
+
             if (sortType === "duration") {
-                return first.track.duration - second.track.duration
+                result = compareDuration(first.track.duration, second.track.duration)
+            } else {
+                result = compareOptionalText(first.track[sortType], second.track[sortType])
             }
 
-            const firstValue = getComparableText(first.track[sortType])
-            const secondValue = getComparableText(second.track[sortType])
-
-            return firstValue.localeCompare(secondValue)
+            return result || first.index - second.index
         })
 }
 
