@@ -44,8 +44,8 @@ jobs:
       - name: Publish GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          tag: latest
-          name: Latest build
+          tag: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
           artifacts: "release/**/*.exe"
           allowUpdates: true
           replacesArtifacts: true
