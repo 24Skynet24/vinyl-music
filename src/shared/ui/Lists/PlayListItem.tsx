@@ -1,7 +1,10 @@
 import { PlayListItemProps } from "./types"
 import cover from "../../assets/img/cover-2.png"
+import { useTranslation } from "react-i18next"
 
 function PlayListItem ({img, title, isSelected, musicCount, description, isEditTrack, isHaveTrack, isLocked, isPlaying, onClick, onDelete, onEdit, onAddTrack, onRemoveTrack, onPlay}: PlayListItemProps) {
+    const { t } = useTranslation()
+
     return (
         <article className="w-full h-[200px] flex items-center gap-[16px] text-white-main">
             <div className="flex h-full flex-1">
@@ -35,7 +38,7 @@ function PlayListItem ({img, title, isSelected, musicCount, description, isEditT
                             </span>
                         }
                         <span className="block mt-auto font-futura">
-                            {musicCount || 0} musicks
+                            {t("playlist.trackCount", { count: musicCount || 0 })}
                         </span>
                     </div>
                 </div>

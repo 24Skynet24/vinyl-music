@@ -1,4 +1,5 @@
 import { EqualizerPreset, EqualizerPresetId, equalizerPresets } from "../../../../entities/audio"
+import { useTranslation } from "react-i18next"
 
 interface EqualizerPresetGroupsProps {
     selectedPresetId: EqualizerPresetId | null
@@ -7,6 +8,7 @@ interface EqualizerPresetGroupsProps {
 }
 
 function EqualizerPresetGroups({ selectedPresetId, customPresets, onSelect }: EqualizerPresetGroupsProps) {
+    const { t } = useTranslation()
     const getPresetButtonClassName = (isSelected: boolean) =>
         `${isSelected ? "bg-orange-main text-black-main" : "bg-black-main text-white-main hover:text-orange-main"} rounded-[8px] border border-orange-main px-[18px] py-[10px] text-[18px] uppercase transition-colors duration-200 cursor-pointer`
 
@@ -20,7 +22,7 @@ function EqualizerPresetGroups({ selectedPresetId, customPresets, onSelect }: Eq
                         onClick={() => onSelect(preset.id)}
                         className={getPresetButtonClassName(selectedPresetId === preset.id)}
                     >
-                        {preset.label}
+                        {t(`equalizer.presets.${preset.id}`, { defaultValue: preset.label })}
                     </button>
                 ))}
             </div>

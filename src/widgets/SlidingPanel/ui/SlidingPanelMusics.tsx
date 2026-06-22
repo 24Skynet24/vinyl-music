@@ -8,8 +8,10 @@ import { vinylApi } from "../../../shared/api/vinylApi"
 import { MUSICS_PER_PAGE } from "../model/constants"
 import { getFilteredSortedTracks } from "../lib/searchSort"
 import { useEffect } from "react"
+import { useTranslation } from "react-i18next"
 
 function SlidingPanelMusics({ onEditTrack, playlistId, onBack, searchQuery = "", sortType = "title" }: SlidingPanelMusicsProps) {
+    const { t } = useTranslation()
     const libraryTracks = useAudioStore((state) => state.libraryTracks)
     const playList = useAudioStore((state) => state.playList)
     const currentIndex = useAudioStore((state) => state.currentIndex)
@@ -86,7 +88,7 @@ function SlidingPanelMusics({ onEditTrack, playlistId, onBack, searchQuery = "",
                     <svg className="w-[32px] h-[32px]" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M20.8 25.6L11.2 16L20.8 6.4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    <span className="text-[24px] uppercase">back to playlists</span>
+                    <span className="text-[24px] uppercase">{t("music.backToPlaylists")}</span>
                 </button>
             )}
 
@@ -113,7 +115,7 @@ function SlidingPanelMusics({ onEditTrack, playlistId, onBack, searchQuery = "",
             })}
             {hasMore && (
                 <li className="flex justify-center mt-[32px]">
-                    <TextButton text="Show more" onClick={showMore} minWidth={180} />
+                    <TextButton text={t("actions.showMore")} onClick={showMore} minWidth={180} />
                 </li>
             )}
             </ul>

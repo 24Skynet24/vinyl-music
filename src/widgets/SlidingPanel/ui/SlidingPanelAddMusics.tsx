@@ -5,8 +5,10 @@ import TextButton from "../../../shared/ui/Buttons/TextButton"
 import { SlidingPanelAddMusicsProps } from "../model/types"
 import { readAudioFiles } from "../lib/readAudioFiles"
 import { TrackType } from "../../../entities/track"
+import { useTranslation } from "react-i18next"
 
 function SlidingPanelAddMusics({ onCancel, onSave }: SlidingPanelAddMusicsProps) {
+    const { t } = useTranslation()
     const [newTracks, setNewTracks] = useState<TrackType[]>([])
 
     const handleFiles = async () => {
@@ -42,7 +44,7 @@ function SlidingPanelAddMusics({ onCancel, onSave }: SlidingPanelAddMusicsProps)
                 onClick={handleFiles}
             >
                 <span className="text-[36px] text-orange-main uppercase text-center select-none">
-                    add new music
+                    {t("music.addNew")}
                 </span>
             </div>
 
@@ -64,8 +66,8 @@ function SlidingPanelAddMusics({ onCancel, onSave }: SlidingPanelAddMusicsProps)
             </ul>
 
             <div className="ml-auto flex items-center gap-[16px]">
-                <TextButton onClick={handleCancel} text="cancel"/>
-                <TextButton onClick={handleSave} text="Save"/>
+                <TextButton onClick={handleCancel} text={t("actions.cancel")}/>
+                <TextButton onClick={handleSave} text={t("actions.save")}/>
             </div>
         </div>
     )

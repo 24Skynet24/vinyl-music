@@ -10,8 +10,10 @@ import { useEffect, useState } from "react"
 import { useNavigationStore } from "../../../features/Navigation/model/navigationStore"
 import { PLAYLISTS_PER_PAGE } from "../model/constants"
 import { getFilteredSortedPlaylists, getFilteredSortedTracks } from "../lib/searchSort"
+import { useTranslation } from "react-i18next"
 
 function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics, searchQuery = "", playlistSortType = "title", musicSortType = "title", onActivePlaylistViewChange }: SlidingPanelPlaylistsProps) {
+    const { t } = useTranslation()
     const playlists = usePlaylistStore((state) => state.playlists)
     const setPlaylists = usePlaylistStore((state) => state.setPlaylists)
     const allMusicTracks = useAudioStore((state) => state.libraryTracks)
@@ -118,8 +120,8 @@ function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics, searchQuery = "
                     <li key={playlist.id}>
                         <PlayListItem
                             id={playlist.id}
-                            title={playlist.title}
-                            description={playlist.description}
+                            title={playlist.id === ALL_MUSIC_ID ? t("playlist.allMusic") : playlist.title}
+                            description={playlist.id === ALL_MUSIC_ID ? t("playlist.allMusicDescription") : playlist.description}
                             img={playlist.img}
                             musicCount={playlist.id === ALL_MUSIC_ID ? allMusicTracks.length : playlist.trackIds.length}
                             isSelected={activePlaylistId === playlist.id && isPlaying}
@@ -134,7 +136,7 @@ function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics, searchQuery = "
                 ))}
                 {hasMore && (
                     <li className="flex justify-center mt-[32px]">
-                        <TextButton text="Show more" onClick={showMore} minWidth={180} />
+                        <TextButton text={t("actions.showMore")} onClick={showMore} minWidth={180} />
                     </li>
                 )}
             </ul>
@@ -144,7 +146,7 @@ function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics, searchQuery = "
                 className="flex items-center justify-center w-full h-[64px] border-orange-main border-2 border-dashed cursor-pointer"
             >
                 <span className="text-[36px] text-orange-main uppercase text-center select-none">
-                    add new playlist
+                    {t("playlist.addNew")}
                 </span>
             </button>
         </div>

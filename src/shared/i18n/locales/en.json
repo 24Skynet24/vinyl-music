@@ -1,0 +1,65 @@
+{
+  "language": {
+    "toggle": "EN"
+  },
+  "navigation": {
+    "musics": "Musics",
+    "playlists": "Playlists",
+    "addMusic": "Add Music",
+    "equalizer": "Equalizer"
+  },
+  "playlist": {
+    "allMusic": "All music",
+    "allMusicDescription": "All your music",
+    "trackCount_one": "{{count}} music",
+    "trackCount_other": "{{count}} musics",
+    "addNew": "add new playlist",
+    "empty": "You don't have any playlists",
+    "titlePlaceholder": "Playlist...",
+    "descriptionPlaceholder": "Description..."
+  },
+  "music": {
+    "addNew": "add new music",
+    "select": "Select your music",
+    "dropHere": "or drop your file here",
+    "backToPlaylists": "back to playlists"
+  },
+  "search": {
+    "musicPlaceholder": "Search by title, year, album or artist...",
+    "playlistPlaceholder": "Search by playlist name..."
+  },
+  "sort": {
+    "title": "Title",
+    "artist": "Artist",
+    "album": "Album",
+    "duration": "Duration",
+    "dateAdded": "Date added",
+    "tracksCount": "Tracks"
+  },
+  "equalizer": {
+    "title": "Equalizer",
+    "description": "Shape the sound with frequency bands, presets, and a flat reset",
+    "gain": "Gain",
+    "warning": "Boosting many bands can make audio louder and distorted. Custom presets are saved automatically",
+    "saveAsPreset": "Save as preset",
+    "rename": "Rename",
+    "delete": "Delete",
+    "reset": "Reset",
+    "renamePreset": "Rename preset",
+    "createPreset": "Create preset",
+    "presetNamePlaceholder": "Preset name...",
+    "presets": {
+      "flat": "Flat",
+      "bassBoost": "Bass Boost",
+      "rock": "Rock",
+      "pop": "Pop",
+      "vocal": "Vocal",
+      "electronic": "Electronic"
+    }
+  },
+  "actions": {
+    "cancel": "cancel",
+    "save": "Save",
+    "showMore": "Show more"
+  }
+}

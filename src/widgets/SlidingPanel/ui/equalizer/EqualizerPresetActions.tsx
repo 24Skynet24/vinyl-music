@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next"
+
 interface EqualizerPresetActionsProps {
     hasSelectedCustomPreset: boolean
     onCreate: () => void
@@ -13,12 +15,13 @@ function EqualizerPresetActions({
     onDelete,
     onReset,
 }: EqualizerPresetActionsProps) {
+    const { t } = useTranslation()
     const actionButtonClassName = "press-btn rounded-[8px] border border-orange-main bg-black-main px-[18px] py-[10px] text-[18px] uppercase text-white-main transition-colors duration-200 hover:enabled:text-orange-main disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
 
     return (
         <footer className="flex flex-col gap-[16px]">
             <p className="text-[16px] text-gray-main font-futura">
-                Boosting many bands can make audio louder and distorted. Custom presets are saved automatically
+                {t("equalizer.warning")}
             </p>
 
             <div className="flex flex-wrap items-center gap-[12px]">
@@ -27,7 +30,7 @@ function EqualizerPresetActions({
                     onClick={onCreate}
                     className={actionButtonClassName}
                 >
-                    Save as preset
+                    {t("equalizer.saveAsPreset")}
                 </button>
                 <button
                     type="button"
@@ -35,7 +38,7 @@ function EqualizerPresetActions({
                     disabled={!hasSelectedCustomPreset}
                     className={actionButtonClassName}
                 >
-                    Rename
+                    {t("equalizer.rename")}
                 </button>
                 <button
                     type="button"
@@ -43,14 +46,14 @@ function EqualizerPresetActions({
                     disabled={!hasSelectedCustomPreset}
                     className={actionButtonClassName}
                 >
-                    Delete
+                    {t("equalizer.delete")}
                 </button>
                 <button
                     type="button"
                     onClick={onReset}
                     className={actionButtonClassName}
                 >
-                    Reset
+                    {t("equalizer.reset")}
                 </button>
             </div>
         </footer>

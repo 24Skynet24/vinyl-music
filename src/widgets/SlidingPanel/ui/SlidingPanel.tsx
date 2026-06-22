@@ -10,10 +10,9 @@ import SlidingPanelAddMusics from "./SlidingPanelAddMusics"
 import { TrackType } from "../../../entities/track"
 import { vinylApi } from "../../../shared/api/vinylApi"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { MusicSortType, PlaylistSortType } from "../model/types"
 import {
-    MUSIC_SEARCH_PLACEHOLDER,
-    PLAYLIST_SEARCH_PLACEHOLDER,
     musicSortOptions,
     playlistSortOptions,
 } from "../model/constants"
@@ -34,6 +33,7 @@ const readSavedMusicSortType = (): MusicSortType => {
 }
 
 function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
+    const { t } = useTranslation()
     const openEditTrack = useNavigationStore((state) => state.openEditTrack)
     const openEditPlaylist = useNavigationStore((state) => state.openEditPlaylist)
     const openPanel = useNavigationStore((state) => state.openPanel)
@@ -61,9 +61,13 @@ function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
 
     const isMusicSearch = view === "musics" || isPlaylistMusicView
     const placeholder = isMusicSearch
-        ? MUSIC_SEARCH_PLACEHOLDER
-        : PLAYLIST_SEARCH_PLACEHOLDER
-    const sortOptions = isMusicSearch ? musicSortOptions : playlistSortOptions
+        ? t("search.musicPlaceholder")
+        : t("search.playlistPlaceholder")
+    const sortOptions = (isMusicSearch ? musicSortOptions : playlistSortOptions)
+        .map((option) => ({
+            ...option,
+            label: t(option.label),
+        }))
     const selectedSort = isMusicSearch ? musicSortType : playlistSortType
 
     const handleSort = (value: string) => {

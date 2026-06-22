@@ -5,8 +5,10 @@ import TextButton from "../../../shared/ui/Buttons/TextButton"
 import { EditPlayListProps } from "../types"
 import { usePlaylistStore } from "../../../entities/playlist"
 import { vinylApi } from "../../../shared/api/vinylApi"
+import { useTranslation } from "react-i18next"
 
 function EditPlayList ({ isOpen, onClose, playlistId }: EditPlayListProps) {
+    const { t } = useTranslation()
     const playlists = usePlaylistStore((state) => state.playlists)
     const setPlaylists = usePlaylistStore((state) => state.setPlaylists)
 
@@ -77,7 +79,7 @@ function EditPlayList ({ isOpen, onClose, playlistId }: EditPlayListProps) {
                             <input
                                 type="text"
                                 className="w-full px-[16px] py-[16px] bg-black-main rounded-[8px] outline-none"
-                                placeholder="Playlist..."
+                                placeholder={t("playlist.titlePlaceholder")}
                                 value={title}
                                 onChange={(event) => setTitle(event.target.value)}
                             />
@@ -85,7 +87,7 @@ function EditPlayList ({ isOpen, onClose, playlistId }: EditPlayListProps) {
                             <input
                                 type="text"
                                 className="w-full px-[16px] py-[16px] bg-black-main rounded-[8px] outline-none"
-                                placeholder="Description..."
+                                placeholder={t("playlist.descriptionPlaceholder")}
                                 value={description}
                                 onChange={(event) => setDescription(event.target.value)}
                             />
@@ -93,8 +95,8 @@ function EditPlayList ({ isOpen, onClose, playlistId }: EditPlayListProps) {
                     </div>
 
                     <div className="flex items-center gap-[16px] ml-auto">
-                        <TextButton onClick={onClose} text="cancel"/>
-                        <TextButton onClick={handleSave} text="Save"/>
+                        <TextButton onClick={onClose} text={t("actions.cancel")}/>
+                        <TextButton onClick={handleSave} text={t("actions.save")}/>
                     </div>
                 </div>
             </div>

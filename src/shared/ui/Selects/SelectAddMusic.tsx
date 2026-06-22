@@ -1,7 +1,10 @@
 import diskPlus from "../../assets/icons/disk-plus.svg"
 import { SelectAddMusicProps } from "./types"
+import { useTranslation } from "react-i18next"
 
 function SelectAddMusic({ onSelect }: SelectAddMusicProps) {
+    const { t } = useTranslation()
+
     return (
         <article
             className="w-[772px] h-[500px] border-dashed border-2 border-orange-main flex items-center justify-center relative cursor-pointer"
@@ -13,10 +16,10 @@ function SelectAddMusic({ onSelect }: SelectAddMusicProps) {
                 </div>
                 <div className="flex flex-col items-center gap-[16px]">
                     <h4 className="text-[64px] text-orange-main uppercase">
-                        Select your music
+                        {t("music.select")}
                     </h4>
                     <span className="text-[36px] text-gray-main">
-                        or drop your file here
+                        {t("music.dropHere")}
                     </span>
                 </div>
             </div>

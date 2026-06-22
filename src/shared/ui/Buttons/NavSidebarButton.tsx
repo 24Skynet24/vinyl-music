@@ -1,6 +1,6 @@
 import { NavSidebarButtonPros } from "./types"
 
-function NavSidebarButton ({onClick, isPlaying, view}: NavSidebarButtonPros) {
+function NavSidebarButton ({onClick, isPlaying, view, title}: NavSidebarButtonPros) {
     
     const checkIcon = (): React.ReactNode => {
         switch (view) {
@@ -73,6 +73,8 @@ function NavSidebarButton ({onClick, isPlaying, view}: NavSidebarButtonPros) {
     return (
         <button
             onClick={onClick}
+            title={title}
+            aria-label={title}
             className="w-[72px] h-[72px] rounded-[16px] bg-black-main cursor-pointer flex items-center justify-center outline-none"
         >
             {checkIcon()}

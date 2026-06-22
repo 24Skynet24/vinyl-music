@@ -7,14 +7,14 @@ export const MUSIC_SEARCH_PLACEHOLDER = "Search by title, year, album or artist.
 export const PLAYLIST_SEARCH_PLACEHOLDER = "Search by playlist name..."
 
 export const musicSortOptions: { value: MusicSortType, label: string }[] = [
-    { value: "title", label: "Title" },
-    { value: "artist", label: "Artist" },
-    { value: "album", label: "Album" },
-    { value: "duration", label: "Duration" },
-    { value: "dateAdded", label: "Date added" },
+    { value: "title", label: "sort.title" },
+    { value: "artist", label: "sort.artist" },
+    { value: "album", label: "sort.album" },
+    { value: "duration", label: "sort.duration" },
+    { value: "dateAdded", label: "sort.dateAdded" },
 ]
 
 export const playlistSortOptions: { value: PlaylistSortType, label: string }[] = [
-    { value: "title", label: "Title" },
-    { value: "tracksCount", label: "Tracks" },
+    { value: "title", label: "sort.title" },
+    { value: "tracksCount", label: "sort.tracksCount" },
 ]

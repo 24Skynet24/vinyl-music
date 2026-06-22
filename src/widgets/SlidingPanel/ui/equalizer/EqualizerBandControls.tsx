@@ -5,6 +5,7 @@ import {
     EqualizerBandValues,
     equalizerBands,
 } from "../../../../entities/audio"
+import { useTranslation } from "react-i18next"
 
 interface EqualizerBandControlsProps {
     values: EqualizerBandValues
@@ -12,11 +13,13 @@ interface EqualizerBandControlsProps {
 }
 
 function EqualizerBandControls({ values, onChange }: EqualizerBandControlsProps) {
+    const { t } = useTranslation()
+
     return (
         <section className="rounded-[16px] bg-black-main/40 px-[28px] py-[32px]">
             <div className="mb-[24px] flex items-center justify-between text-[16px] uppercase text-white-main/60">
                 <span>{EQUALIZER_GAIN_MAX} dB</span>
-                <span>Gain</span>
+                <span>{t("equalizer.gain")}</span>
                 <span>{EQUALIZER_GAIN_MIN} dB</span>
             </div>
 

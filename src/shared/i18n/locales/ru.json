@@ -1,0 +1,67 @@
+{
+  "language": {
+    "toggle": "RU"
+  },
+  "navigation": {
+    "musics": "Музыка",
+    "playlists": "Плейлисты",
+    "addMusic": "Добавить музыку",
+    "equalizer": "Эквалайзер"
+  },
+  "playlist": {
+    "allMusic": "Вся музыка",
+    "allMusicDescription": "Вся твоя музыка",
+    "trackCount_one": "{{count}} трек",
+    "trackCount_few": "{{count}} трека",
+    "trackCount_many": "{{count}} треков",
+    "trackCount_other": "{{count}} трека",
+    "addNew": "добавить плейлист",
+    "empty": "У тебя пока нет плейлистов",
+    "titlePlaceholder": "Плейлист...",
+    "descriptionPlaceholder": "Описание..."
+  },
+  "music": {
+    "addNew": "добавить музыку",
+    "select": "Выберите музыку",
+    "dropHere": "или перетащите файл сюда",
+    "backToPlaylists": "назад к плейлистам"
+  },
+  "search": {
+    "musicPlaceholder": "Поиск по названию, году, альбому или артисту...",
+    "playlistPlaceholder": "Поиск по названию плейлиста..."
+  },
+  "sort": {
+    "title": "Название",
+    "artist": "Артист",
+    "album": "Альбом",
+    "duration": "Длительность",
+    "dateAdded": "Дата добавления",
+    "tracksCount": "Треки"
+  },
+  "equalizer": {
+    "title": "Эквалайзер",
+    "description": "Настрой звук через частоты, пресеты и сброс в flat",
+    "gain": "Усиление",
+    "warning": "Сильное усиление многих частот может сделать звук громче и добавить искажения. Пользовательские пресеты сохраняются автоматически",
+    "saveAsPreset": "Сохранить пресет",
+    "rename": "Переименовать",
+    "delete": "Удалить",
+    "reset": "Сбросить",
+    "renamePreset": "Переименовать пресет",
+    "createPreset": "Создать пресет",
+    "presetNamePlaceholder": "Название пресета...",
+    "presets": {
+      "flat": "Flat",
+      "bassBoost": "Bass Boost",
+      "rock": "Rock",
+      "pop": "Pop",
+      "vocal": "Vocal",
+      "electronic": "Electronic"
+    }
+  },
+  "actions": {
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "showMore": "Показать еще"
+  }
+}

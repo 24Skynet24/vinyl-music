@@ -10,6 +10,7 @@ import EqualizerBandControls from "./equalizer/EqualizerBandControls"
 import EqualizerPresetActions from "./equalizer/EqualizerPresetActions"
 import EqualizerPresetGroups from "./equalizer/EqualizerPresetGroups"
 import EqualizerPresetModal, { EqualizerPresetModalMode } from "./equalizer/EqualizerPresetModal"
+import { useTranslation } from "react-i18next"
 
 const areEqualizerValuesEqual = (first: EqualizerBandValues, second: EqualizerBandValues) =>
     equalizerBands.every((band) => first[band.id] === second[band.id])
@@ -27,6 +28,7 @@ const getMatchingPresetId = (
 }
 
 function SlidingPanelEqualizer() {
+    const { t } = useTranslation()
     const equalizerPresetId = useAudioStore((state) => state.equalizerPresetId)
     const equalizerValues = useAudioStore((state) => state.equalizerValues)
     const customEqualizerPresets = useAudioStore((state) => state.customEqualizerPresets)
@@ -84,10 +86,10 @@ function SlidingPanelEqualizer() {
                 <header className="flex items-start justify-between gap-[24px]">
                     <div className="flex flex-col gap-[8px]">
                         <h2 className="text-[48px] leading-none uppercase text-orange-main">
-                            Equalizer
+                            {t("equalizer.title")}
                         </h2>
                         <p className="max-w-[560px] text-[18px] text-gray-main font-futura">
-                            Shape the sound with frequency bands, presets, and a flat reset
+                            {t("equalizer.description")}
                         </p>
                     </div>
                 </header>

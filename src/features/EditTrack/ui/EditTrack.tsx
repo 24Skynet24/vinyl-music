@@ -5,10 +5,12 @@ import { EditTrackProps } from "../types"
 import { usePlaylistStore, ALL_MUSIC_ID } from "../../../entities/playlist"
 import { usePagination } from "../../../shared/lib"
 import { vinylApi } from "../../../shared/api/vinylApi"
+import { useTranslation } from "react-i18next"
 
 const PLAYLISTS_PER_PAGE = 5
 
 function EditTrack ({ isOpen, onClose, trackId }: EditTrackProps) {
+    const { t } = useTranslation()
     const playlists = usePlaylistStore((state) => state.playlists)
     const setPlaylists = usePlaylistStore((state) => state.setPlaylists)
     const editablePlaylists = playlists.filter((playlist) => playlist.id !== ALL_MUSIC_ID)
@@ -26,7 +28,7 @@ function EditTrack ({ isOpen, onClose, trackId }: EditTrackProps) {
                 {editablePlaylists.length === 0 ? (
                     <div className="w-full flex items-center justify-center px-[32px] pb-[64px]">
                         <span className="text-[36px] text-orange-main uppercase text-center">
-                            You don't have any playlists
+                            {t("playlist.empty")}
                         </span>
                     </div>
                 ) : (
@@ -57,7 +59,7 @@ function EditTrack ({ isOpen, onClose, trackId }: EditTrackProps) {
 
                     {hasMore && (
                         <li className="flex justify-center">
-                            <TextButton text="Show more" onClick={showMore} minWidth={180} />
+                            <TextButton text={t("actions.showMore")} onClick={showMore} minWidth={180} />
                         </li>
                     )}
                 </ul>
