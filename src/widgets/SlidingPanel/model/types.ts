@@ -1,10 +1,11 @@
 import { TrackType } from "../../../entities/track"
+import { PanelView } from "../../../features/Navigation/model/views"
 
 export type MusicSortType = "title" | "artist" | "album" | "duration" | "dateAdded"
 export type PlaylistSortType = "title" | "tracksCount"
 
 export interface SlidingPanelProps {
-    view: "musics" | "playlists" | "add-music" | "equalizer"
+    view: PanelView
     isClosing?: boolean
 }
 

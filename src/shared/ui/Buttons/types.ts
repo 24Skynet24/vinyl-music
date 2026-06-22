@@ -1,4 +1,6 @@
 import { ButtonHTMLAttributes } from 'react'
+import { PanelView } from '../../../features/Navigation/model/views'
+
 export interface DefaultButtonType extends ButtonHTMLAttributes<HTMLButtonElement> {
   onClick: () => void
 }
@@ -22,7 +24,7 @@ export interface RandomButtonProps extends DefaultButtonType {
 
 export interface NavSidebarButtonPros extends DefaultButtonType {
   isPlaying?: boolean
-  view?: string // playlists, musics (current playlist), add-music, equalizer
+  view?: PanelView
   title?: string
 }
 

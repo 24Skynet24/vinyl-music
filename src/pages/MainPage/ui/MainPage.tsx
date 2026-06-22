@@ -11,6 +11,7 @@ import Blackout from "../../../shared/ui/Overlays/Blackout"
 import { vinylApi } from "../../../shared/api/vinylApi"
 import { getAudioDuration } from "../../../shared/lib"
 import { Footer } from "../../../widgets/Footer"
+import { MODAL_VIEWS } from "../../../features/Navigation/model/views"
 
 export function MainPage() {
   const { panelView, modalView, isPanelClosing, editTrackId, editPlaylistId, closePanel, closeModal } = useNavigationStore()
@@ -63,8 +64,8 @@ export function MainPage() {
         </>
       )}
 
-      <EditTrack isOpen={modalView === "editTrack"} onClose={closeModal} trackId={editTrackId}/>
-      <EditPlayList isOpen={modalView === "editPlaylist"} onClose={closeModal} playlistId={editPlaylistId}/>
+      <EditTrack isOpen={modalView === MODAL_VIEWS.editTrack} onClose={closeModal} trackId={editTrackId}/>
+      <EditPlayList isOpen={modalView === MODAL_VIEWS.editPlaylist} onClose={closeModal} playlistId={editPlaylistId}/>
 
       <div className="w-full h-full flex justify-between">
         <div className="h-full flex items-center justify-center flex-1">

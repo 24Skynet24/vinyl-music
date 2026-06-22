@@ -1,10 +1,11 @@
 import { NavSidebarButtonPros } from "./types"
+import { PANEL_VIEWS } from "../../../features/Navigation/model/views"
 
 function NavSidebarButton ({onClick, isPlaying, view, title}: NavSidebarButtonPros) {
     
     const checkIcon = (): React.ReactNode => {
         switch (view) {
-            case "musics":
+            case PANEL_VIEWS.musics:
                 return (
                     // May be in the feature - isPlaying ? 'music-playing' : ''
                     <svg className={`${isPlaying ? '' : ''}`} width="48" height="48" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,7 +21,7 @@ function NavSidebarButton ({onClick, isPlaying, view, title}: NavSidebarButtonPr
 
                 )
             
-            case "playlists":
+            case PANEL_VIEWS.playlists:
                 return <>
                     <svg width="58" viewBox="0 0 81 54" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="64" y="12" width="17" height="2" fill="#999999"/>
@@ -39,7 +40,7 @@ function NavSidebarButton ({onClick, isPlaying, view, title}: NavSidebarButtonPr
                     </svg>
                 </>
 
-            case "add-music":
+            case PANEL_VIEWS.addMusic:
                 return <>
                     <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0_141_804)">
@@ -58,7 +59,7 @@ function NavSidebarButton ({onClick, isPlaying, view, title}: NavSidebarButtonPr
 
                 </>
 
-            case "equalizer":
+            case PANEL_VIEWS.equalizer:
                 return <>
                     <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M13.2917 19.3333V50.75M29.0001 35.0417V50.75M29.0001 22.9583V7.25M44.7084 7.25V38.6667" stroke="#D7452C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

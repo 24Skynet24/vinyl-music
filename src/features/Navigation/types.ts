@@ -1,12 +1,14 @@
+import { ModalView, PanelView } from "./model/views"
+
 export interface NavigationState {
-  panelView: 'musics' | 'playlists' | 'add-music' | 'equalizer' | null
-  modalView: 'editTrack' | 'editPlaylist' | null
+  panelView: PanelView | null
+  modalView: ModalView | null
   isPanelClosing: boolean
   editTrackId: string | null
   editPlaylistId: string | null
   selectedPlaylistId: string | null
 
-  openPanel: (view: 'musics' | 'playlists' | 'add-music' | 'equalizer') => void
+  openPanel: (view: PanelView) => void
   openPlaylistMusics: (playlistId: string) => void
   closePanel: () => void
   openEditTrack: (trackId: string) => void

@@ -1,10 +1,8 @@
-export interface NavigationSidebarProps {
-    onOpenPanel: (view: "musics" | "playlists") => void
-}
+import { PanelView } from "../../../features/Navigation/model/views"
 
 export interface NavigationSidebarItemType {
     id: number
     name: string
     isPlaying?: boolean
-    view: "musics" | "playlists" | "add-music" | "equalizer"
+    view: PanelView
 }

@@ -11,6 +11,7 @@ import { TrackType } from "../../../entities/track"
 import { vinylApi } from "../../../shared/api/vinylApi"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { PANEL_VIEWS, PanelView } from "../../../features/Navigation/model/views"
 import { MusicSortType, PlaylistSortType } from "../model/types"
 import {
     musicSortOptions,
@@ -59,7 +60,7 @@ function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
         closePanel()
     }
 
-    const isMusicSearch = view === "musics" || isPlaylistMusicView
+    const isMusicSearch = view === PANEL_VIEWS.musics || isPlaylistMusicView
     const placeholder = isMusicSearch
         ? t("search.musicPlaceholder")
         : t("search.playlistPlaceholder")
@@ -90,20 +91,20 @@ function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
 
     const renderContent = (): React.ReactNode => {
         switch (view) {
-            case "musics":
-                return <SlidingPanelMusics onEditTrack={openEditTrack} playlistId={selectedPlaylistId} onBack={() => openPanel("playlists")} searchQuery={searchQuery} sortType={musicSortType}/>
-            case "add-music":
+            case PANEL_VIEWS.musics:
+                return <SlidingPanelMusics onEditTrack={openEditTrack} playlistId={selectedPlaylistId} onBack={() => openPanel(PANEL_VIEWS.playlists)} searchQuery={searchQuery} sortType={musicSortType}/>
+            case PANEL_VIEWS.addMusic:
                 return <SlidingPanelAddMusics onCancel={closePanel} onSave={handleSaveNewMusic} />
-            case "playlists":
+            case PANEL_VIEWS.playlists:
                 return <SlidingPanelPlaylists onEdit={openEditPlaylist} onCreate={() => openEditPlaylist(null)} onOpenMusics={openPlaylistMusics} searchQuery={searchQuery} playlistSortType={playlistSortType} musicSortType={musicSortType} onActivePlaylistViewChange={setIsPlaylistMusicView}/>
-            case "equalizer":
+            case PANEL_VIEWS.equalizer:
                 return <SlidingPanelEqualizer />
             default:
                 return null
         }
     }
 
-    const searchExceptions = new Set<string>(["equalizer", "add-music"])
+    const searchExceptions = new Set<PanelView>([PANEL_VIEWS.equalizer, PANEL_VIEWS.addMusic])
     
     return (
         <section className={`w-[900px] h-screen bg-gradient-1 absolute z-200 top-0 right-0 ${isClosing ? "right-slide-out" : "right-slide"}`}>

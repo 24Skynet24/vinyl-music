@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { NavigationState } from '../types'
+import { MODAL_VIEWS, PANEL_VIEWS } from './views'
 
 const PANEL_ANIMATION_MS = 550
 let timeoutId: number | null = null
@@ -19,7 +20,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
 
   openPlaylistMusics: (playlistId) => {
     if (timeoutId) window.clearTimeout(timeoutId)
-    set({ isPanelClosing: false, panelView: 'musics', selectedPlaylistId: playlistId })
+    set({ isPanelClosing: false, panelView: PANEL_VIEWS.musics, selectedPlaylistId: playlistId })
   },
 
   closePanel: () => {
@@ -34,7 +35,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     }, PANEL_ANIMATION_MS)
   },
 
-  openEditTrack: (trackId) => set({ modalView: 'editTrack', editTrackId: trackId }),
-  openEditPlaylist: (playlistId = null) => set({ modalView: 'editPlaylist', editPlaylistId: playlistId }),
+  openEditTrack: (trackId) => set({ modalView: MODAL_VIEWS.editTrack, editTrackId: trackId }),
+  openEditPlaylist: (playlistId = null) => set({ modalView: MODAL_VIEWS.editPlaylist, editPlaylistId: playlistId }),
   closeModal: () => set({ modalView: null, editTrackId: null, editPlaylistId: null }),
 }))

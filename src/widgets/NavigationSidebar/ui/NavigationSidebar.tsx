@@ -3,6 +3,7 @@ import { NavigationSidebarItemType } from "../model/types"
 import NavSidebarButton from "../../../shared/ui/Buttons/NavSidebarButton"
 import { useTranslation } from "react-i18next"
 import { AppLanguage, LANGUAGE_STORAGE_KEY, isAppLanguage } from "../../../shared/i18n"
+import { PANEL_VIEWS } from "../../../features/Navigation/model/views"
 
 function NavigationSidebar () {
     const openPanel = useNavigationStore((state) => state.openPanel)
@@ -14,25 +15,25 @@ function NavigationSidebar () {
             id: 1,
             name: t("navigation.musics"),
             isPlaying: true,
-            view: "musics",
+            view: PANEL_VIEWS.musics,
         },
         {
             id: 2,
             name: t("navigation.playlists"),
             isPlaying: false,
-            view: "playlists",
+            view: PANEL_VIEWS.playlists,
         },
         {
             id: 3,
             name: t("navigation.addMusic"),
             isPlaying: false,
-            view: "add-music",
+            view: PANEL_VIEWS.addMusic,
         },
         {
             id: 4,
             name: t("navigation.equalizer"),
             isPlaying: false,
-            view: "equalizer",
+            view: PANEL_VIEWS.equalizer,
         },
     ]
 
