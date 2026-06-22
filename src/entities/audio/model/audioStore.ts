@@ -448,20 +448,26 @@ export const useAudioStore = create<AudioState>((set, get) => ({
   addTracks: (tracks) => {
     if (!tracks.length) return
 
-    const { libraryTracks, playList, currentIndex, activePlaylistId } = get()
+    const { libraryTracks, playList, currentIndex, history, activePlaylistId } = get()
     const wasEmpty = libraryTracks.length === 0
+    const libraryTrackIds = new Set(libraryTracks.map((track) => track.id))
     const isPlayingLibraryQueue =
       playList.length === libraryTracks.length &&
-      playList.every((track, index) => track.id === libraryTracks[index]?.id)
+      playList.every((track) => libraryTrackIds.has(track.id))
     const updatedLibraryTracks = [...tracks, ...libraryTracks]
-    const newPlayList = isPlayingLibraryQueue || wasEmpty ? updatedLibraryTracks : playList
+    const shouldUpdateQueue = isPlayingLibraryQueue || wasEmpty
+    const newPlayList = shouldUpdateQueue
+      ? wasEmpty ? updatedLibraryTracks : [...tracks, ...playList]
+      : playList
+    const indexOffset = shouldUpdateQueue && !wasEmpty ? tracks.length : 0
 
     set({
       libraryTracks: updatedLibraryTracks,
       playList: newPlayList,
-      currentIndex: isPlayingLibraryQueue && !wasEmpty ? currentIndex + tracks.length : currentIndex,
+      currentIndex: currentIndex + indexOffset,
+      history: history.map((index) => index + indexOffset),
       ...(wasEmpty && { duration: tracks[0].duration }),
-      ...(isPlayingLibraryQueue && { activePlaylistId }),
+      ...(shouldUpdateQueue && { activePlaylistId }),
     })
   },
 

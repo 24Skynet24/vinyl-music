@@ -53,6 +53,18 @@ const compareDuration = (first: number, second: number) => {
     return second - first
 }
 
+const getAddedAtTime = (track: TrackType) =>
+    track.addedAt ? Date.parse(track.addedAt) || 0 : 0
+
+const compareDateAdded = (first: IndexedTrack, second: IndexedTrack) => {
+    const firstTime = getAddedAtTime(first.track)
+    const secondTime = getAddedAtTime(second.track)
+
+    if (!firstTime && !secondTime) return first.index - second.index
+
+    return secondTime - firstTime
+}
+
 const shouldSearch = (searchQuery: string) =>
     searchQuery.trim().length >= MIN_SEARCH_LENGTH
 
@@ -93,6 +105,8 @@ export const getFilteredSortedTracks = ({
 
             if (sortType === "duration") {
                 result = compareDuration(first.track.duration, second.track.duration)
+            } else if (sortType === "dateAdded") {
+                result = compareDateAdded(first, second)
             } else {
                 result = compareOptionalText(first.track[sortType], second.track[sortType])
             }

@@ -5,6 +5,7 @@ import SlidingPanelEqualizer from "./SlidingPanelEqualizer"
 import { SlidingPanelProps } from "../model/types"
 import { useNavigationStore } from "../../../features/Navigation/model/navigationStore"
 import { useAudioStore } from "../../../entities/audio"
+import { usePlaylistStore } from "../../../entities/playlist"
 import SlidingPanelAddMusics from "./SlidingPanelAddMusics"
 import { TrackType } from "../../../entities/track"
 import { vinylApi } from "../../../shared/api/vinylApi"
@@ -17,6 +18,21 @@ import {
     playlistSortOptions,
 } from "../model/constants"
 
+const MUSIC_SORT_STORAGE_KEY = "vinyl-music:music-sort"
+
+const canUseStorage = () => typeof window !== "undefined" && Boolean(window.localStorage)
+
+const isMusicSortType = (value: string): value is MusicSortType =>
+    musicSortOptions.some((option) => option.value === value)
+
+const readSavedMusicSortType = (): MusicSortType => {
+    if (!canUseStorage()) return "title"
+
+    const savedSort = window.localStorage.getItem(MUSIC_SORT_STORAGE_KEY)
+
+    return savedSort && isMusicSortType(savedSort) ? savedSort : "title"
+}
+
 function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
     const openEditTrack = useNavigationStore((state) => state.openEditTrack)
     const openEditPlaylist = useNavigationStore((state) => state.openEditPlaylist)
@@ -24,9 +40,10 @@ function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
     const openPlaylistMusics = useNavigationStore((state) => state.openPlaylistMusics)
     const selectedPlaylistId = useNavigationStore((state) => state.selectedPlaylistId)
     const closePanel = useNavigationStore((state) => state.closePanel)
-    const setTracks = useAudioStore((state) => state.setTracks)
+    const addTracks = useAudioStore((state) => state.addTracks)
+    const setPlaylists = usePlaylistStore((state) => state.setPlaylists)
     const [searchQuery, setSearchQuery] = useState("")
-    const [musicSortType, setMusicSortType] = useState<MusicSortType>("title")
+    const [musicSortType, setMusicSortType] = useState<MusicSortType>(readSavedMusicSortType)
     const [playlistSortType, setPlaylistSortType] = useState<PlaylistSortType>("title")
     const [isPlaylistMusicView, setIsPlaylistMusicView] = useState(false)
 
@@ -37,7 +54,8 @@ function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
     
     const handleSaveNewMusic = async (tracks: TrackType[]) => {
         const library = await vinylApi.saveTracks(tracks)
-        setTracks(library.tracks)
+        addTracks(tracks)
+        setPlaylists(library.playlists)
         closePanel()
     }
 
@@ -50,7 +68,12 @@ function SlidingPanel ({ view, isClosing = false }: SlidingPanelProps) {
 
     const handleSort = (value: string) => {
         if (isMusicSearch) {
-            setMusicSortType(value as MusicSortType)
+            if (!isMusicSortType(value)) return
+
+            setMusicSortType(value)
+            if (canUseStorage()) {
+                window.localStorage.setItem(MUSIC_SORT_STORAGE_KEY, value)
+            }
             return
         }
 

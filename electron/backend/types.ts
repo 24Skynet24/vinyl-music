@@ -12,6 +12,7 @@ export interface TrackRecord {
   genre?: string[]
   lyrics?: string
   isLiked?: boolean
+  addedAt?: string
 }
 
 export interface PlaylistRecord {

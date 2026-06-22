@@ -70,6 +70,7 @@ export const enrichTrackMetadata = async (track: TrackRecord): Promise<TrackReco
 
 export const importAudioFiles = async (filePaths: string[]): Promise<TrackRecord[]> => {
   const { audioDir } = getLibraryPaths()
+  const addedAt = new Date().toISOString()
 
   return Promise.all(
     filePaths.map(async (sourcePath) => {
@@ -88,6 +89,7 @@ export const importAudioFiles = async (filePaths: string[]): Promise<TrackRecord
         duration: metadata.duration ?? 0,
         bitrate: metadata.bitrate,
         src: createMediaUrl("audio", fileName),
+        addedAt,
       }
     })
   )
