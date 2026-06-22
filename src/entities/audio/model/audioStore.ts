@@ -184,7 +184,7 @@ export const useAudioStore = create<AudioState>((set, get) => ({
       return
     }
 
-    if (historyIndex > 0) {
+    if (isRandom && historyIndex > 0) {
       const nextHistoryIndex = historyIndex - 1
       const targetTrackIndex = history[nextHistoryIndex]
 
