@@ -1,6 +1,6 @@
 import { TrackType } from "../../../entities/track"
 
-export type MusicSortType = "title" | "artist" | "album" | "duration"
+export type MusicSortType = "title" | "artist" | "album" | "duration" | "dateAdded"
 export type PlaylistSortType = "title" | "tracksCount"
 
 export interface SlidingPanelProps {

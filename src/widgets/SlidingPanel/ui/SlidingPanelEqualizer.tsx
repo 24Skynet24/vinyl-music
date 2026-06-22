@@ -1,9 +1,30 @@
 import { useState } from "react"
-import { useAudioStore } from "../../../entities/audio"
+import {
+    EqualizerBandValues,
+    EqualizerPreset,
+    equalizerBands,
+    equalizerPresets,
+    useAudioStore,
+} from "../../../entities/audio"
 import EqualizerBandControls from "./equalizer/EqualizerBandControls"
 import EqualizerPresetActions from "./equalizer/EqualizerPresetActions"
 import EqualizerPresetGroups from "./equalizer/EqualizerPresetGroups"
 import EqualizerPresetModal, { EqualizerPresetModalMode } from "./equalizer/EqualizerPresetModal"
+
+const areEqualizerValuesEqual = (first: EqualizerBandValues, second: EqualizerBandValues) =>
+    equalizerBands.every((band) => first[band.id] === second[band.id])
+
+const getMatchingPresetId = (
+    presetId: string | null,
+    values: EqualizerBandValues,
+    customPresets: EqualizerPreset[]
+) => {
+    if (!presetId) return null
+
+    const preset = [...equalizerPresets, ...customPresets].find((item) => item.id === presetId)
+
+    return preset && areEqualizerValuesEqual(preset.values, values) ? preset.id : null
+}
 
 function SlidingPanelEqualizer() {
     const equalizerPresetId = useAudioStore((state) => state.equalizerPresetId)
@@ -19,6 +40,11 @@ function SlidingPanelEqualizer() {
     const [presetName, setPresetName] = useState("")
 
     const selectedCustomPreset = customEqualizerPresets.find((preset) => preset.id === equalizerPresetId)
+    const visibleSelectedPresetId = getMatchingPresetId(
+        equalizerPresetId,
+        equalizerValues,
+        customEqualizerPresets
+    )
 
     const openCreateModal = () => {
         setPresetName("")
@@ -67,7 +93,7 @@ function SlidingPanelEqualizer() {
                 </header>
 
                 <EqualizerPresetGroups
-                    selectedPresetId={equalizerPresetId}
+                    selectedPresetId={visibleSelectedPresetId}
                     customPresets={customEqualizerPresets}
                     onSelect={setEqualizerPreset}
                 />

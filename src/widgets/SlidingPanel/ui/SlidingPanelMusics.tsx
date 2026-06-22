@@ -7,6 +7,7 @@ import { usePlaylistStore } from "../../../entities/playlist"
 import { vinylApi } from "../../../shared/api/vinylApi"
 import { MUSICS_PER_PAGE } from "../model/constants"
 import { getFilteredSortedTracks } from "../lib/searchSort"
+import { useEffect } from "react"
 
 function SlidingPanelMusics({ onEditTrack, playlistId, onBack, searchQuery = "", sortType = "title" }: SlidingPanelMusicsProps) {
     const libraryTracks = useAudioStore((state) => state.libraryTracks)
@@ -14,6 +15,7 @@ function SlidingPanelMusics({ onEditTrack, playlistId, onBack, searchQuery = "",
     const currentIndex = useAudioStore((state) => state.currentIndex)
     const selectTrack = useAudioStore((state) => state.selectTrack)
     const selectTracksQueueFrom = useAudioStore((state) => state.selectTracksQueueFrom)
+    const setIsPlaying = useAudioStore((state) => state.setIsPlaying)
     const removeTrackEverywhere = useAudioStore((state) => state.removeTrackEverywhere)
     const setPlaylists = usePlaylistStore((state) => state.setPlaylists)
     const playlist = usePlaylistStore((state) =>
@@ -26,6 +28,26 @@ function SlidingPanelMusics({ onEditTrack, playlistId, onBack, searchQuery = "",
         searchQuery,
         sortType,
     })
+    const sortedQueue = tracks.map(({ track }) => track)
+    const currentTrack = playList[currentIndex]
+    const queueTrackIds = new Set(playList.map((track) => track.id))
+    const isSameQueueTracks = sortedQueue.length === playList.length &&
+        sortedQueue.every((track) => queueTrackIds.has(track.id))
+    const isSameQueueOrder = sortedQueue.length === playList.length &&
+        sortedQueue.every((track, index) => track.id === playList[index]?.id)
+
+    useEffect(() => {
+        if (!currentTrack || !isSameQueueTracks || isSameQueueOrder) return
+
+        selectTracksQueueFrom(sortedQueue, currentTrack.id, playlist?.id ?? null, true)
+    }, [
+        currentTrack,
+        isSameQueueOrder,
+        isSameQueueTracks,
+        playlist?.id,
+        selectTracksQueueFrom,
+        sortedQueue,
+    ])
 
     const getQueueIndex = (trackId: string) =>
         playList.findIndex((track) => track.id === trackId)
@@ -37,10 +59,12 @@ function SlidingPanelMusics({ onEditTrack, playlistId, onBack, searchQuery = "",
         const queueIndex = getQueueIndex(trackId)
         if (isCurrentQueue && queueIndex >= 0) {
             selectTrack(queueIndex)
+            setIsPlaying(true)
             return
         }
 
-        selectTracksQueueFrom(tracks.map(({ track }) => track), trackId, playlist?.id ?? null)
+        selectTracksQueueFrom(sortedQueue, trackId, playlist?.id ?? null)
+        setIsPlaying(true)
     }
 
     const handleDeleteTrack = async (trackId: string) => {

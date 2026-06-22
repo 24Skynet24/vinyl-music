@@ -11,6 +11,7 @@ export const musicSortOptions: { value: MusicSortType, label: string }[] = [
     { value: "artist", label: "Artist" },
     { value: "album", label: "Album" },
     { value: "duration", label: "Duration" },
+    { value: "dateAdded", label: "Date added" },
 ]
 
 export const playlistSortOptions: { value: PlaylistSortType, label: string }[] = [

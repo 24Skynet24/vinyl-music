@@ -12,4 +12,5 @@ export interface TrackType {
     genre?: string[]
     lyrics?: string
     isLiked?: boolean
+    addedAt?: string
 }

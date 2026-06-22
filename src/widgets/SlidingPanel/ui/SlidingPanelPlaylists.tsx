@@ -9,7 +9,7 @@ import { vinylApi } from "../../../shared/api/vinylApi"
 import { useEffect, useState } from "react"
 import { useNavigationStore } from "../../../features/Navigation/model/navigationStore"
 import { PLAYLISTS_PER_PAGE } from "../model/constants"
-import { getFilteredSortedPlaylists } from "../lib/searchSort"
+import { getFilteredSortedPlaylists, getFilteredSortedTracks } from "../lib/searchSort"
 
 function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics, searchQuery = "", playlistSortType = "title", musicSortType = "title", onActivePlaylistViewChange }: SlidingPanelPlaylistsProps) {
     const playlists = usePlaylistStore((state) => state.playlists)
@@ -38,6 +38,18 @@ function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics, searchQuery = "
 
     const { visibleItems, hasMore, showMore } = usePagination(sortedPlaylists, PLAYLISTS_PER_PAGE)
     const activePlaylist = playlists.find((playlist) => playlist.id === activePlaylistId)
+    const getSortedPlaylistTracks = (playlistId: string) => {
+        const playlist = playlists.find((item) => item.id === playlistId)
+
+        if (!playlist) return []
+
+        return getFilteredSortedTracks({
+            tracks: allMusicTracks,
+            playlist,
+            searchQuery: "",
+            sortType: musicSortType,
+        }).map(({ track }) => track)
+    }
     const isActivePlaylistVisible = Boolean(
         activePlaylist &&
         activePlaylist.id !== ALL_MUSIC_ID &&
@@ -55,10 +67,12 @@ function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics, searchQuery = "
         const library = await vinylApi.deletePlaylist(playlistId)
 
         if (shouldResetActiveQueue) {
+            const allMusicQueue = getSortedPlaylistTracks(ALL_MUSIC_ID)
+
             if (currentTrackId) {
-                selectTracksQueueFrom(allMusicTracks, currentTrackId, ALL_MUSIC_ID, true)
+                selectTracksQueueFrom(allMusicQueue, currentTrackId, ALL_MUSIC_ID, true)
             } else {
-                playTracksQueue(allMusicTracks, ALL_MUSIC_ID)
+                playTracksQueue(allMusicQueue, ALL_MUSIC_ID)
             }
 
             setIsPlaylistListVisible(true)
@@ -79,9 +93,7 @@ function SlidingPanelPlaylists({ onEdit, onCreate, onOpenMusics, searchQuery = "
             return
         }
 
-        const tracks = playlist.id === ALL_MUSIC_ID
-            ? allMusicTracks
-            : allMusicTracks.filter((track) => playlist.trackIds.includes(track.id))
+        const tracks = getSortedPlaylistTracks(playlist.id)
 
         playTracksQueue(tracks, playlist.id)
         setIsPlaylistListVisible(playlist.id === ALL_MUSIC_ID)
