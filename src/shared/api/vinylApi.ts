@@ -21,6 +21,12 @@ export const vinylApi = {
     selectAudioFiles: async (): Promise<TrackType[]> =>
         ensureApi().selectAudioFiles() as Promise<TrackType[]>,
 
+    importAudioFiles: async (filePaths: string[]): Promise<TrackType[]> =>
+        ensureApi().importAudioFiles(filePaths) as Promise<TrackType[]>,
+
+    getDroppedFilePath: (file: File): string =>
+        ensureApi().getDroppedFilePath(file),
+
     saveTracks: async (tracks: TrackType[]): Promise<LibraryResponse> =>
         ensureApi().saveTracks(tracks) as Promise<LibraryResponse>,
 

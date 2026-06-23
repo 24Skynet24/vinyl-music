@@ -1,11 +1,11 @@
 import { BrowserWindow, OpenDialogOptions, dialog, ipcMain } from "electron"
 import { randomUUID } from "node:crypto"
 import { ALL_MUSIC_ID, deleteTrack, readLibrary, saveTracks, writeLibrary } from "./libraryRepository"
-import { importAudioFiles, importCoverFile } from "./mediaService"
+import { AUDIO_FILE_EXTENSIONS, importAudioFiles, importCoverFile } from "./mediaService"
 import { PlaylistInput, PlaylistRecord, TrackRecord } from "./types"
 
 const audioFilters = [
-  { name: "Audio", extensions: ["mp3", "wav", "ogg", "flac", "m4a", "aac"] },
+  { name: "Audio", extensions: AUDIO_FILE_EXTENSIONS },
 ]
 
 const imageFilters = [
@@ -36,6 +36,10 @@ export const registerBackendIpc = () => {
 
     return importAudioFiles(result.filePaths)
   })
+
+  ipcMain.handle("tracks:import-audio-files", async (_event, filePaths: string[]) =>
+    importAudioFiles(filePaths)
+  )
 
   ipcMain.handle("tracks:save", async (_event, tracks: TrackRecord[]) =>
     saveTracks(tracks)

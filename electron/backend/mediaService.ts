@@ -6,6 +6,10 @@ import { getLibraryPaths } from "./paths"
 import { createMediaUrl, MEDIA_PROTOCOL, resolveMediaFilePath } from "./mediaProtocol"
 import { TrackRecord } from "./types"
 
+export const AUDIO_FILE_EXTENSIONS = ["mp3", "wav", "ogg", "flac", "m4a", "aac"]
+
+const AUDIO_FILE_EXTENSION_SET = new Set(AUDIO_FILE_EXTENSIONS.map((extension) => `.${extension}`))
+
 const safeFileName = (name: string) =>
   name
     .replace(/\.[^/.]+$/, "")
@@ -48,6 +52,43 @@ const getTrackMetadata = async (filePath: string) => {
 const needsMetadata = (track: TrackRecord) =>
   !track.artist || !track.album || !track.year || !track.genre?.length || !track.duration
 
+const isAudioFilePath = (filePath: string) =>
+  AUDIO_FILE_EXTENSION_SET.has(path.extname(filePath).toLowerCase())
+
+const collectAudioFilePaths = async (sourcePaths: string[]) => {
+  const audioFilePaths: string[] = []
+
+  const visitPath = async (sourcePath: string) => {
+    let stats
+
+    try {
+      stats = await fs.stat(sourcePath)
+    } catch {
+      return
+    }
+
+    if (stats.isDirectory()) {
+      const entries = await fs.readdir(sourcePath, { withFileTypes: true })
+
+      for (const entry of entries) {
+        await visitPath(path.join(sourcePath, entry.name))
+      }
+
+      return
+    }
+
+    if (stats.isFile() && isAudioFilePath(sourcePath)) {
+      audioFilePaths.push(sourcePath)
+    }
+  }
+
+  for (const sourcePath of sourcePaths) {
+    await visitPath(sourcePath)
+  }
+
+  return audioFilePaths
+}
+
 export const enrichTrackMetadata = async (track: TrackRecord): Promise<TrackRecord> => {
   if (!track.src?.startsWith(`${MEDIA_PROTOCOL}://`) || !needsMetadata(track)) {
     return track
@@ -70,10 +111,11 @@ export const enrichTrackMetadata = async (track: TrackRecord): Promise<TrackReco
 
 export const importAudioFiles = async (filePaths: string[]): Promise<TrackRecord[]> => {
   const { audioDir } = getLibraryPaths()
+  const audioFilePaths = await collectAudioFilePaths(filePaths)
   const addedAt = new Date().toISOString()
 
   return Promise.all(
-    filePaths.map(async (sourcePath) => {
+    audioFilePaths.map(async (sourcePath) => {
       const fileName = await copyMediaFile(sourcePath, audioDir)
       const title = path.basename(sourcePath, path.extname(sourcePath))
       const metadata = await getTrackMetadata(path.join(audioDir, fileName))

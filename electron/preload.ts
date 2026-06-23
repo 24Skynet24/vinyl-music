@@ -1,4 +1,4 @@
-import { ipcRenderer, contextBridge } from 'electron'
+import { ipcRenderer, contextBridge, webUtils } from 'electron'
 import type { LibraryData, PlaylistInput, TrackRecord } from './backend/types'
 
 const vinylApi = {
@@ -7,6 +7,12 @@ const vinylApi = {
 
   selectAudioFiles: (): Promise<TrackRecord[]> =>
     ipcRenderer.invoke('tracks:select-audio'),
+
+  importAudioFiles: (filePaths: string[]): Promise<TrackRecord[]> =>
+    ipcRenderer.invoke('tracks:import-audio-files', filePaths),
+
+  getDroppedFilePath: (file: File): string =>
+    webUtils.getPathForFile(file),
 
   saveTracks: (tracks: TrackRecord[]): Promise<LibraryData> =>
     ipcRenderer.invoke('tracks:save', tracks),

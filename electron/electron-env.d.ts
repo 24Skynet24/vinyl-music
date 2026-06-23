@@ -27,6 +27,8 @@ declare global {
   interface VinylApi {
     loadLibrary: () => Promise<LibraryData>
     selectAudioFiles: () => Promise<TrackRecord[]>
+    importAudioFiles: (filePaths: string[]) => Promise<TrackRecord[]>
+    getDroppedFilePath: (file: File) => string
     saveTracks: (tracks: TrackRecord[]) => Promise<LibraryData>
     deleteTrack: (trackId: string) => Promise<LibraryData>
     createPlaylist: (data: PlaylistInput) => Promise<LibraryData>
