@@ -25,7 +25,7 @@ Vinyl Music is a desktop music player built with Electron, React, TypeScript, an
 - music-metadata
 
 ## Download
-- [Windows](https://github.com/24Skynet24/vinyl-music/releases)
+- [Windows](https://github.com/24Skynet24/vinyl-music/releases) 
 
 ## Local Storage
 
