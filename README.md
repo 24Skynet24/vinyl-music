@@ -24,6 +24,9 @@ Vinyl Music is a desktop music player built with Electron, React, TypeScript, an
 - Tailwind CSS
 - music-metadata
 
+## Download
+- [Windows](https://github.com/24Skynet24/vinyl-music/releases) 
+
 ## Local Storage
 
 Vinyl Music does not use a shared cloud backend. Imported tracks, covers, playlists, and library data are stored locally in Electron's `userData` directory for the current OS user.
